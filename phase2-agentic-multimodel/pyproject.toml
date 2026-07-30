@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sdiq-phase2"
+version = "0.2.0"
+description = "SafeDriver-IQ Phase 2 — agentic multi-model driver safety scoring (POC)"
+requires-python = ">=3.12"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# Self-contained pytest config so this project never inherits the Phase 1 repo's
+# pytest.ini (which injects --cov=src flags the POC venv does not have).
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+python_files = "test_*.py"
+python_functions = "test_*"

@@ -1,0 +1,7 @@
+{
+    "DockerRun.DisableDockerrc": true,
+    "python.analysis.typeCheckingMode": "off",
+    "python.defaultInterpreterPath": "/home/samaresh/src/.venv/bin/python",
+    "jupyter.notebookFileRoot": "${workspaceFolder}",
+    "python.terminal.activateEnvironment": true
+}

@@ -315,9 +315,185 @@ class ScenarioSimulator:
                     'ROAD_COND': 1,
                     'VRU_PRESENT': 1  # Always present
                 }
+
+            # ----------------------------------------------------------
+            # New patterns — contextual risk factors
+            # ----------------------------------------------------------
+
+            elif pattern == 'rush_hour_aggressive':
+                # Peak commute + high nearby lane-change + tailgating frequency
+                scenario = {
+                    'HOUR': np.random.choice([7, 8, 9, 16, 17, 18]),
+                    'DAY_WEEK': np.random.choice([2, 3, 4, 5, 6]),
+                    'WEATHER': np.random.choice([1, 1, 2]),
+                    'LGT_COND': np.random.choice([1, 2]),
+                    'SPEED_REL': np.random.choice([3, 4, 5]),
+                    'ROAD_COND': np.random.choice([1, 2]),
+                    'VRU_PRESENT': np.random.choice([0, 1], p=[0.80, 0.20]),
+                    # Contextual overrides
+                    'TRAFFIC_DENSITY_INDEX': np.random.uniform(3.5, 5.0),
+                    'LANE_CHANGE_FREQ_PER_MILE': np.random.uniform(4, 10),
+                    'TAILGATING_DETECTED_NEARBY': 1,
+                    'NEARBY_AGGRESSIVE_DRIVER_COUNT': np.random.randint(2, 7),
+                    'SPEED_VARIANCE_NEARBY_MPH': np.random.uniform(8, 20),
+                }
+
+            elif pattern == 'work_zone':
+                # Active construction — lane reduction, workers present
+                scenario = {
+                    'HOUR': np.random.choice(list(range(6, 19))),
+                    'DAY_WEEK': np.random.choice([2, 3, 4, 5, 6]),
+                    'WEATHER': np.random.choice([1, 1, 2]),
+                    'LGT_COND': np.random.choice([1, 2]),
+                    'SPEED_REL': np.random.choice([3, 4]),
+                    'ROAD_COND': np.random.choice([1, 2]),
+                    'VRU_PRESENT': 0,
+                    # Contextual overrides
+                    'WORK_ZONE_PRESENT': 1,
+                    'WORK_ZONE_WORKERS_PRESENT': np.random.choice([0, 1], p=[0.35, 0.65]),
+                    'WORK_ZONE_LANE_REDUCTION': np.random.choice([1, 2]),
+                    'WORK_ZONE_LENGTH_MILES': np.random.uniform(0.3, 3.0),
+                    'LANE_WIDTH_FT': np.random.choice([9, 10, 11]),
+                    'SIGNAGE_VISIBILITY_SCORE': np.random.uniform(2, 4),
+                }
+
+            elif pattern == 'school_zone_active':
+                # School dismissal / arrival during school session hours
+                scenario = {
+                    'HOUR': np.random.choice([7, 8, 14, 15, 16]),
+                    'DAY_WEEK': np.random.choice([2, 3, 4, 5, 6]),
+                    'WEATHER': np.random.choice([1, 1, 2]),
+                    'LGT_COND': 1,
+                    'SPEED_REL': np.random.choice([1, 2, 3]),
+                    'ROAD_COND': 1,
+                    'VRU_PRESENT': np.random.choice([0, 1], p=[0.40, 0.60]),
+                    # Contextual overrides
+                    'SCHOOL_ZONE': 1,
+                    'SCHOOL_HOURS_ACTIVE': 1,
+                    'RESIDENTIAL_DENSITY_INDEX': np.random.uniform(5, 9),
+                    'PEDESTRIAN_COUNT': np.random.randint(1, 5),
+                }
+
+            elif pattern == 'dui_risk_night':
+                # Late-night weekend near bar-dense area — high DUI probability
+                scenario = {
+                    'HOUR': np.random.choice([21, 22, 23, 0, 1, 2]),
+                    'DAY_WEEK': np.random.choice([1, 7, 6]),  # Fri/Sat/Sun
+                    'WEATHER': np.random.choice([1, 1, 2]),
+                    'LGT_COND': np.random.choice([2, 3]),  # Dark
+                    'SPEED_REL': np.random.choice([3, 4, 5]),
+                    'ROAD_COND': np.random.choice([1, 2]),
+                    'VRU_PRESENT': np.random.choice([0, 1], p=[0.65, 0.35]),
+                    # Contextual overrides
+                    'DUI_RISK_INDEX': np.random.uniform(0.55, 0.95),
+                    'BAR_DENSITY_CATEGORY': np.random.choice(['medium', 'high'], p=[0.40, 0.60]),
+                    'DRIVER_IMPAIRED': 1,
+                    'COMMERCIAL_DENSITY_INDEX': np.random.uniform(5, 9),
+                }
+
+            elif pattern == 'black_ice_winter':
+                # Winter black-ice conditions: near-freezing temp + moisture + curve
+                scenario = {
+                    'HOUR': np.random.choice([5, 6, 7, 20, 21, 22, 23, 0, 1]),
+                    'DAY_WEEK': np.random.randint(1, 8),
+                    'MONTH': np.random.choice([1, 2, 12, 11]),
+                    'WEATHER': np.random.choice([3, 4, 7]),  # Snow / freezing rain
+                    'LGT_COND': np.random.choice([1, 2, 3]),
+                    'SPEED_REL': np.random.choice([2, 3, 4]),
+                    'ROAD_COND': np.random.choice([3, 4]),   # Ice / snow
+                    'VRU_PRESENT': 0,
+                    # Contextual overrides
+                    'TEMPERATURE_F': np.random.uniform(20, 35),
+                    'BLACK_ICE_RISK': np.random.uniform(0.55, 0.95),
+                    'ROAD_SURFACE_TEMP_F': np.random.uniform(18, 33),
+                    'PRECIPITATION_RATE_IN_HR': np.random.uniform(0.05, 0.3),
+                    'HAS_HORIZONTAL_CURVE': np.random.choice([0, 1], p=[0.40, 0.60]),
+                }
+
+            elif pattern == 'narrow_road_curve':
+                # Rural narrow lane on curve — high run-off-road risk  
+                scenario = {
+                    'HOUR': np.random.choice(list(range(0, 24))),
+                    'DAY_WEEK': np.random.randint(1, 8),
+                    'WEATHER': np.random.choice([1, 1, 2, 3]),
+                    'LGT_COND': np.random.choice([1, 2, 3]),
+                    'SPEED_REL': np.random.choice([3, 4, 5]),
+                    'ROAD_COND': np.random.choice([1, 2, 3]),
+                    'VRU_PRESENT': 0,
+                    # Contextual overrides
+                    'LANE_WIDTH_FT': np.random.choice([9, 10]),
+                    'HAS_HORIZONTAL_CURVE': 1,
+                    'CURVE_RADIUS_FT': np.random.randint(150, 600),
+                    'ROAD_GRADE_PERCENT': np.random.uniform(4, 12),
+                    'SIGHT_DISTANCE_FT': np.random.randint(80, 250),
+                    'HAS_GUARDRAIL': 0,
+                    'LANE_MARKINGS_VISIBLE': np.random.choice([0, 1], p=[0.45, 0.55]),
+                    'IS_RURAL': 1,
+                }
+
+            elif pattern == 'construction_zone_night':
+                # Night-time construction — poor lighting, workers risk
+                scenario = {
+                    'HOUR': np.random.choice([20, 21, 22, 23, 0, 1, 2, 3, 4, 5]),
+                    'DAY_WEEK': np.random.randint(1, 8),
+                    'WEATHER': np.random.choice([1, 1, 2]),
+                    'LGT_COND': np.random.choice([2, 3, 4]),  # Dark / unknown
+                    'SPEED_REL': np.random.choice([3, 4]),
+                    'ROAD_COND': np.random.choice([1, 2]),
+                    'VRU_PRESENT': 0,
+                    # Contextual overrides
+                    'WORK_ZONE_PRESENT': 1,
+                    'WORK_ZONE_WORKERS_PRESENT': np.random.choice([0, 1], p=[0.25, 0.75]),
+                    'WORK_ZONE_LANE_REDUCTION': np.random.choice([1, 2, 3]),
+                    'LANE_MARKINGS_VISIBLE': np.random.choice([0, 1], p=[0.60, 0.40]),
+                    'SIGNAGE_VISIBILITY_SCORE': np.random.uniform(1.5, 3.0),
+                    'FATIGUE_RISK_INDEX': np.random.uniform(0.40, 0.80),  # Night workers
+                }
+
+            elif pattern == 'distracted_rush':
+                # Rush-hour distracted driving — phone use, high density
+                scenario = {
+                    'HOUR': np.random.choice([7, 8, 9, 16, 17, 18]),
+                    'DAY_WEEK': np.random.choice([2, 3, 4, 5, 6]),
+                    'WEATHER': 1,
+                    'LGT_COND': 1,
+                    'SPEED_REL': np.random.choice([2, 3]),
+                    'ROAD_COND': 1,
+                    'VRU_PRESENT': np.random.choice([0, 1], p=[0.70, 0.30]),
+                    # Contextual overrides
+                    'DISTRACTED_DRIVING_RISK': np.random.uniform(0.55, 0.90),
+                    'DRIVER_DISTRACTED': 1,
+                    'TRAFFIC_DENSITY_INDEX': np.random.uniform(3.0, 5.0),
+                    'TAILGATING_DETECTED_NEARBY': 1,
+                }
+
+            elif pattern == 'poor_infrastructure':
+                # Degraded road quality — faded markings, no guardrails, poor signs
+                scenario = {
+                    'HOUR': np.random.choice(list(range(0, 24))),
+                    'DAY_WEEK': np.random.randint(1, 8),
+                    'WEATHER': np.random.choice([1, 2, 3]),
+                    'LGT_COND': np.random.choice([1, 2, 3]),
+                    'SPEED_REL': np.random.choice([3, 4]),
+                    'ROAD_COND': np.random.choice([2, 3]),
+                    'VRU_PRESENT': np.random.choice([0, 1]),
+                    # Contextual overrides
+                    'ROAD_QUALITY_INDEX': np.random.uniform(1, 2),
+                    'LANE_MARKINGS_VISIBLE': 0,
+                    'SIGNAGE_VISIBILITY_SCORE': np.random.uniform(1, 2.5),
+                    'HAS_GUARDRAIL': 0,
+                    'HAS_RUMBLE_STRIPS': 0,
+                }
             
             else:
-                raise ValueError(f"Unknown pattern: {pattern}")
+                raise ValueError(
+                    f"Unknown pattern: {pattern!r}. "
+                    "Valid patterns: high_risk, low_risk, night_crash, weather_crash, "
+                    "speed_crash, vru_encounter, rush_hour_aggressive, work_zone, "
+                    "school_zone_active, dui_risk_night, black_ice_winter, "
+                    "narrow_road_curve, construction_zone_night, distracted_rush, "
+                    "poor_infrastructure"
+                )
             
             # Add common fields
             scenario['MONTH'] = np.random.randint(1, 13)
@@ -418,7 +594,7 @@ def create_comprehensive_test_suite() -> Dict[str, List[Dict]]:
         'SPEED_REL': [2]
     })
     
-    # 3. Risk patterns
+    # 3. Risk patterns — original
     test_suite['high_risk'] = simulator.generate_risk_pattern_scenarios('high_risk', 50)
     test_suite['low_risk'] = simulator.generate_risk_pattern_scenarios('low_risk', 50)
     test_suite['night_crash'] = simulator.generate_risk_pattern_scenarios('night_crash', 50)
@@ -426,6 +602,17 @@ def create_comprehensive_test_suite() -> Dict[str, List[Dict]]:
     
     # 4. VRU scenarios
     test_suite['vru_encounter'] = simulator.generate_risk_pattern_scenarios('vru_encounter', 100)
+
+    # 5. Extended contextual risk patterns
+    test_suite['rush_hour_aggressive']   = simulator.generate_risk_pattern_scenarios('rush_hour_aggressive', 50)
+    test_suite['work_zone']              = simulator.generate_risk_pattern_scenarios('work_zone', 50)
+    test_suite['school_zone_active']     = simulator.generate_risk_pattern_scenarios('school_zone_active', 50)
+    test_suite['dui_risk_night']         = simulator.generate_risk_pattern_scenarios('dui_risk_night', 50)
+    test_suite['black_ice_winter']       = simulator.generate_risk_pattern_scenarios('black_ice_winter', 50)
+    test_suite['narrow_road_curve']      = simulator.generate_risk_pattern_scenarios('narrow_road_curve', 50)
+    test_suite['construction_zone_night']= simulator.generate_risk_pattern_scenarios('construction_zone_night', 50)
+    test_suite['distracted_rush']        = simulator.generate_risk_pattern_scenarios('distracted_rush', 50)
+    test_suite['poor_infrastructure']    = simulator.generate_risk_pattern_scenarios('poor_infrastructure', 50)
     
     return test_suite
 

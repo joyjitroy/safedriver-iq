@@ -1,0 +1,5 @@
+behavior_cluster,aggression_score,risk_taking_score,environmental_risk_score,behavior_type
+0,0.0,0.0,0.0,Cautious but Crashed
+1,0.06774813144598939,2.1878157751889433,0.0,Environmental Risk-Taker
+2,0.42501616031027795,1.0,0.0,Environmental Risk-Taker
+3,1.0,0.0,0.0,Aggressive Driver

@@ -1,2 +1,4 @@
 CRSS_Data/**/*.csv filter=lfs diff=lfs merge=lfs -text
 CRSS_Data/**/*.CSV filter=lfs diff=lfs merge=lfs -text
+waymo/**/*.tfrecord* filter=lfs diff=lfs merge=lfs -text
+waymo/**/*.jspb filter=lfs diff=lfs merge=lfs -text

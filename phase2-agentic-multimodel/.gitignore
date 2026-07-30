@@ -1,0 +1,16 @@
+# Virtualenv
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# POC-generated artifacts (trained LSTMs, RL policies, SHAP outputs, plots)
+artifacts/
+
+# Large datasets live here but are not committed (multi-GB; provided separately)
+datasets/nuscenes-mini/
+datasets/argoverse2-val/

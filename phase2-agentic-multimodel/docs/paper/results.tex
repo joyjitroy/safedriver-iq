@@ -1,0 +1,241 @@
+% Results section for the ASCE2027 SafeDriver-IQ Phase 2 paper.
+% Self-contained: tables are inline (booktabs). Drop into the paper or split the
+% tables into tables/*.tex as the Phase 1 paper does. Numbers are from the POC
+% evaluation harness (python -m sdiq.main all) on the local RTX 4060 Laptop GPU.
+\section{Results}
+\label{sec:results}
+
+\subsection{Experimental Setup}
+We evaluate the four-layer agentic system on three public autonomous-driving
+datasets. The environmental model is the frozen Phase~1 random forest
+(64~features, no retraining). The trajectory-kinematics LSTM is trained on
+2{,}500 Argoverse~2 motion-forecasting scenarios; the VRU interaction model
+(Social Force Model with an LSTM residual correction) is trained on 1{,}200
+Argoverse~2 scenarios. Both transfer, with no fine-tuning, to the nuScenes
+\texttt{v1.0-mini} split (10~scenes, 404~keyframes, 18{,}538~annotations), which
+we use for the end-to-end study because its scenes are hand-annotated with the
+night, after-rain, and dense-VRU conditions that stress the system. Because none
+of these datasets carry crash labels, all risk targets are \emph{surrogate}
+measures (kinematic-aggression, collision-course minimum distance / time-to-
+closest-approach); this is the same epistemic constraint as Phase~1 and is
+discussed in Section~\ref{sec:results}\,\ref{subsec:limits}. All timing is on a
+single NVIDIA RTX~4060 Laptop GPU.
+
+\subsection{Component Model Performance}
+Table~\ref{tab:phase2_components} reports each learned component in isolation.
+The trajectory LSTM, framed as an anticipatory classifier (predict the kinematic
+risk of the next $2$\,s from the past $2$\,s), separates aggressive from benign
+windows with $0.950$ ROC-AUC. The VRU model's LSTM residual correction reduces
+the Social Force Model's $2$\,s forecasting error by $32.2\%$ in average
+displacement error (ADE) and $29.8\%$ in final displacement error (FDE),
+confirming that the learned correction sharpens the physics prior rather than
+replacing it. The reinforcement-learning policy recovers the graduated
+intervention mapping from reward alone, matching the reward-optimal tier on
+$90.7\%$ of held-out states with a $0.3\%$ under-reaction rate---the asymmetric
+reward (under-reaction penalized $2\times$ over-reaction) successfully biases the
+policy toward caution.
+
+\begin{table}[htbp]
+\caption{Phase 2 Component Model Performance}
+\label{tab:phase2_components}
+\centering
+\begin{tabular}{llc}
+\toprule
+\textbf{Component} & \textbf{Metric} & \textbf{Value} \\
+\midrule
+Trajectory LSTM      & ROC-AUC (risk vs.\ safe) & \textbf{0.950} \\
+(72{,}880 windows)   & Calibration MSE          & 0.044 \\
+\midrule
+VRU SFM (physics)    & ADE / FDE (m, $2$\,s)    & 0.648 / 1.271 \\
+VRU SFM\,+\,LSTM     & ADE / FDE (m, $2$\,s)    & \textbf{0.439} / \textbf{0.892} \\
+(16{,}357 windows)   & ADE improvement          & $-32.2\%$ \\
+\midrule
+RL policy            & Tier accuracy            & \textbf{0.907} \\
+(20{,}000 states)    & Under-reaction rate      & 0.003 \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}
+\footnotesize{Trajectory and VRU models trained on Argoverse~2 and evaluated on
+held-out splits; ADE/FDE are average/final displacement error. The RL policy is a
+one-step contextual bandit trained on synthetic state vectors with a non-linear
+surrogate-severity reward.}
+\end{table}
+
+\subsection{End-to-End Graduated Output}
+Running the full pipeline on the ten nuScenes scenes yields the graduated
+interventions in Table~\ref{tab:phase2_graduated}. The fused safety score is the
+heuristic context-multiplier blend; the intervention \emph{tier} is the
+independent decision of the RL policy over the eight-dimensional state vector.
+The two scenes that escalate to \textsc{emergency}---\texttt{scene-0061} (a
+daytime pedestrian near-miss) and \texttt{scene-1094} (a night, after-rain scene
+with 60 vulnerable road users)---are precisely the adverse cases the system is
+designed to catch. Notably the policy escalates \texttt{scene-0061} to
+\textsc{emergency} even though its fused score ($27.8$) sits in the heuristic
+\textsc{intervention} band: the agent has learned, from the near-miss and
+imminence features, an interaction the static band underweights.
+
+\begin{table}[htbp]
+\caption{End-to-End Graduated Intervention on nuScenes}
+\label{tab:phase2_graduated}
+\centering
+\begin{tabular}{llcc}
+\toprule
+\textbf{Scene} & \textbf{Condition} & \textbf{Score} & \textbf{Intervention} \\
+\midrule
+scene-0061 & clear      & 27.8 & \textbf{Emergency} \\
+scene-0103 & clear      & 69.2 & Advisory \\
+scene-0553 & clear      & 71.2 & Advisory \\
+scene-0655 & clear      & 72.8 & Advisory \\
+scene-0757 & clear      & 79.0 & Silent \\
+scene-0796 & clear      & 61.2 & Advisory \\
+scene-0916 & clear      & 65.0 & Advisory \\
+scene-1077 & night      & 55.7 & Advisory \\
+scene-1094 & night+rain & 24.8 & \textbf{Emergency} \\
+scene-1100 & night      & 55.0 & Advisory \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}
+\footnotesize{Score is the fused $0$--$100$ safety score (higher is safer);
+intervention is the RL policy's tier. Bands: $\geq$70 silent, 40--70 advisory,
+20--40 specific intervention, $<$20 emergency.}
+\end{table}
+
+\subsection{Coverage: Closing the Phase 1 Blind Spot}
+Phase~1's documented limitation is that, trained on crash-only data, vulnerable-
+road-user presence barely moves its score; its intervention therefore tracks
+ambient conditions (lighting, weather) but is blind to dynamic pedestrian and
+cyclist conflict. Table~\ref{tab:phase2_coverage} contrasts the Phase~1
+environment-only intervention with the full Phase~2 decision. Phase~2
+\emph{re-aligns} $4$ of the $10$ interventions to the actual dynamic hazard: it
+\emph{escalates} the single daytime VRU near-miss (\texttt{scene-0061},
+advisory\,$\rightarrow$\,emergency) that Phase~1 cannot see, and \emph{de-escalates}
+three hazard-free night scenes (\texttt{scene-0757}, \texttt{-1077}, \texttt{-1100})
+on which Phase~1 over-warns purely because it is dark. Interventions thus follow
+the road situation rather than the ambient lighting.
+
+\begin{table}[htbp]
+\caption{Phase 1 (Environmental Only) vs.\ Phase 2 (Full Agentic)}
+\label{tab:phase2_coverage}
+\centering
+\begin{tabular}{llccll}
+\toprule
+\textbf{Scene} & \textbf{Cond.} & \textbf{VRU} & \textbf{NM} & \textbf{Phase 1} & \textbf{Phase 2} \\
+\midrule
+scene-0061 & day        & 66 & 1 & Advisory  & \textbf{Emergency}$\uparrow$ \\
+scene-0103 & day        & 53 & 0 & Advisory  & Advisory \\
+scene-0553 & day        & 13 & 0 & Advisory  & Advisory \\
+scene-0655 & day        &  7 & 0 & Advisory  & Advisory \\
+scene-0757 & day        &  3 & 0 & Advisory  & Silent$\downarrow$ \\
+scene-0796 & day        & 12 & 0 & Advisory  & Advisory \\
+scene-0916 & day        & 33 & 0 & Advisory  & Advisory \\
+scene-1077 & night      &  1 & 0 & Emergency & Advisory$\downarrow$ \\
+scene-1094 & night+rain & 60 & 0 & Emergency & \textbf{Emergency} \\
+scene-1100 & night      & 14 & 0 & Emergency & Advisory$\downarrow$ \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}
+\footnotesize{NM = near-miss flags. $\uparrow$ caught a hazard Phase~1 missed;
+$\downarrow$ avoided a false alarm Phase~1 raised on ambient darkness alone.
+Phase~1 tier is the graduated band of its $0$--$100$ environmental score.}
+\end{table}
+
+\subsection{Ablation Study}
+To isolate each model's contribution we feed the RL policy state vectors with
+individual components zeroed (Table~\ref{tab:phase2_ablation}). With only the
+environmental signal the policy stays \textsc{silent} on every scene---consistent
+with the design in which the environmental model is a \emph{multiplier}, not an
+independent trigger. Adding the trajectory model raises most scenes to
+\textsc{advisory}. Crucially, the VRU model is the \emph{only} component that
+lifts the two genuine conflict scenes (\texttt{scene-0061} and \texttt{scene-1094})
+to \textsc{specific intervention}, and the full fusion escalates both to
+\textsc{emergency}. The VRU column lights up exactly on the near-miss scenes,
+demonstrating that the safety-critical escalations are attributable to the
+dedicated VRU model rather than to the environmental or kinematic signals.
+
+\begin{table}[htbp]
+\caption{Ablation: Intervention Tier as Each Model is Added}
+\label{tab:phase2_ablation}
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Scene} & \textbf{Env} & \textbf{+Traj.} & \textbf{+VRU} & \textbf{Full} \\
+\midrule
+scene-0061 & Silent & Silent   & \textbf{Interv.} & \textbf{Emerg.} \\
+scene-1094 & Silent & Advisory & \textbf{Interv.} & \textbf{Emerg.} \\
+scene-0103 & Silent & Advisory & Silent   & Advisory \\
+scene-0916 & Silent & Advisory & Silent   & Advisory \\
+scene-1077 & Silent & Advisory & Silent   & Advisory \\
+scene-0757 & Silent & Silent   & Silent   & Silent \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}
+\footnotesize{Representative scenes; the remaining four daytime scenes match the
+\texttt{scene-0103} pattern. ``Env'' keeps only the environmental and condition
+features; ``+VRU'' adds the VRU interaction risk and proximity/imminence. Only
+the VRU model raises the conflict scenes above \textsc{advisory}.}
+\end{table}
+
+\subsection{Latency}
+Table~\ref{tab:phase2_latency} reports the mean per-layer wall-clock over the ten
+nuScenes scenes ($\times2$ repeats). The decision and explanation layers are
+negligible ($2.3$\,ms for the RL policy, $15.9$\,ms including the SHAP
+attribution). The three perception/risk models dominate, with the trajectory
+LSTM the bottleneck at $368$\,ms because it scores every agent's sliding windows
+individually. Run sequentially the three models total $\sim\!515$\,ms; their
+theoretical parallel ceiling---the slowest single model---is $368$\,ms
+($1.4\times$). We report the honest negative result that a Python thread pool does
+\emph{not} realize this ceiling (measured $640$\,ms, slower than sequential): the
+environmental model's pure-Python feature engineering holds the interpreter lock,
+and the trajectory LSTM is already GPU-bound. The architecturally-mandated
+``three models in parallel every cycle'' therefore requires process-level
+parallelism or batched GPU inference (batching the trajectory model's per-agent
+windows is the obvious target), which we leave to the real-time engineering of
+Phase~3.
+
+\begin{table}[htbp]
+\caption{Mean Per-Layer Latency (RTX~4060 Laptop GPU)}
+\label{tab:phase2_latency}
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Layer} & \textbf{Latency (ms)} \\
+\midrule
+Environmental RF       & 73 \\
+Trajectory LSTM        & 368 \\
+VRU (SFM\,+\,LSTM)     & 75 \\
+\midrule
+3 models, sequential (sum)   & 515 \\
+3 models, parallel ceiling (max) & \textbf{368} \\
+\midrule
+RL decision            & 2.3 \\
+RL + SHAP explanation  & 15.9 \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}
+\footnotesize{Means over 20 samples. The decision layer is real-time; the
+perception models are the cost. A thread pool does not reach the parallel ceiling
+(GIL-bound feature engineering); see text.}
+\end{table}
+
+\subsection{Explainability}
+Every decision carries a deterministic SHAP attribution over the eight state
+features, always available regardless of network conditions. On the two
+\textsc{emergency} scenes the top attributed factors are the vulnerable-road-user
+conflict and the imminent-approach (low time-to-collision) features, matching the
+ground-truth geometry. The optional large-language-model co-pilot renders these
+attributions as natural-language rationales (e.g.\ ``\emph{Emergency intervention,
+driven mainly by pedestrian/cyclist conflict and imminent approach}'') but is held
+strictly off the safety-critical path: it never sets a risk score or tier, every
+call has a hard timeout, and on any failure the system falls back to the
+deterministic SHAP explanation.
+
+\subsection{Limitations}
+\label{subsec:limits}
+The evaluation datasets contain no crash labels, so all risk targets are surrogate
+measures and the RL reward is computed from a derived severity function rather than
+observed outcomes; in deployment the reward would come from real near-miss and
+incident telemetry. The LSTM forecast correction is trained at the Argoverse~2
+sampling rate ($10$\,Hz) and the nuScenes evaluation falls back to the rate-
+agnostic Social Force physics for the VRU forecast. Full reinforcement-learning
+training, a real-time parallel inference pipeline, and federated on-vehicle
+learning are out of scope for this proof of concept and constitute Phase~3.

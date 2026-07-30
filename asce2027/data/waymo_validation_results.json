@@ -1,0 +1,17 @@
+{
+  "total_scenes": 286,
+  "mean_crash_probability": 32.008078823352655,
+  "mean_final_safety_score": 67.99192117664734,
+  "mean_trajectory_risk": 0.8726439985049355,
+  "mean_vru_risk": 0.06252061278603456,
+  "near_miss_rate": 0.038461538461538464,
+  "tier_distribution": {
+    "advisory": 222,
+    "intervention": 18,
+    "silent": 33,
+    "emergency": 13
+  },
+  "avg_vehicles": 52.71678321678322,
+  "avg_pedestrians": 5.933566433566433,
+  "avg_cyclists": 1.4615384615384615
+}

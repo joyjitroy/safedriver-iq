@@ -2,6 +2,22 @@
 Feature Engineering Module
 
 Creates features for inverse safety modeling from crash data.
+
+Feature categories
+------------------
+  Tier 1 — derived from CRSS columns (always available):
+    - Temporal          : rush hour, night, weekend, season, school window
+    - Environmental     : weather, lighting, glare proxy
+    - Location          : road type, urban/rural, speed limit buckets
+
+  Tier 2 — synthesized via ContextualFeatureGenerator (when real data absent):
+    - Traffic           : congestion index, aggressive driver count, speed variance
+    - Road geometry     : lane width, curve, grade, sight distance
+    - Work zone         : construction present, workers on road, lane reduction
+    - Area context      : school zone, bar density, commercial density
+    - Driver state      : DUI risk, fatigue, distraction probability
+    - Enhanced env      : temperature, wind, precipitation, black-ice risk
+    - Infrastructure    : markings, guardrails, road quality
 """
 
 import pandas as pd
@@ -206,21 +222,190 @@ class FeatureEngineer:
         # Weekend + Night
         if 'IS_WEEKEND' in df.columns and 'IS_NIGHT' in df.columns:
             df['WEEKEND_NIGHT'] = (df['IS_WEEKEND'] & df['IS_NIGHT']).astype(int)
+
+        # Rush hour + high traffic density
+        if 'IS_RUSH_HOUR' in df.columns and 'TRAFFIC_DENSITY_INDEX' in df.columns:
+            df['RUSH_HOUR_HIGH_TRAFFIC'] = (
+                df['IS_RUSH_HOUR'] & (df['TRAFFIC_DENSITY_INDEX'] >= 3)
+            ).astype(int)
+
+        # DUI risk + night
+        if 'DUI_RISK_INDEX' in df.columns and 'IS_NIGHT' in df.columns:
+            df['NIGHT_DUI_RISK'] = (
+                df['IS_NIGHT'] * df['DUI_RISK_INDEX']
+            ).round(3)
+
+        # Work zone + adverse weather
+        if 'WORK_ZONE_PRESENT' in df.columns and 'ADVERSE_WEATHER' in df.columns:
+            df['WORK_ZONE_BAD_WEATHER'] = (
+                df['WORK_ZONE_PRESENT'] & df['ADVERSE_WEATHER']
+            ).astype(int)
+
+        # Curve + poor visibility
+        curve_col = 'HAS_HORIZONTAL_CURVE' if 'HAS_HORIZONTAL_CURVE' in df.columns else None
+        poor_vis = any(c in df.columns for c in ['POOR_LIGHTING', 'ADVERSE_WEATHER', 'BLACK_ICE_RISK'])
+        if curve_col and poor_vis:
+            fv = df.get('POOR_LIGHTING', 0).fillna(0) | df.get('ADVERSE_WEATHER', 0).fillna(0)
+            df['CURVE_POOR_VISIBILITY'] = (df[curve_col] & fv).astype(int)
+
+        # Narrow lane + high speed
+        if 'LANE_WIDTH_FT' in df.columns and 'HIGH_SPEED_ROAD' in df.columns:
+            df['NARROW_HIGH_SPEED'] = (
+                (df['LANE_WIDTH_FT'] < 11) & df['HIGH_SPEED_ROAD']
+            ).astype(int)
+
+        # Fatigue + early morning
+        if 'FATIGUE_RISK_INDEX' in df.columns and 'HOUR' in df.columns:
+            hour = pd.to_numeric(df['HOUR'], errors='coerce').fillna(12).astype(int)
+            df['FATIGUE_EARLY_MORNING'] = (
+                (hour.isin([3, 4, 5, 6])) & (df['FATIGUE_RISK_INDEX'] > 0.5)
+            ).astype(int)
+
+        # Black ice + curve
+        if 'BLACK_ICE_RISK' in df.columns and 'HAS_HORIZONTAL_CURVE' in df.columns:
+            df['BLACK_ICE_ON_CURVE'] = (
+                (df['BLACK_ICE_RISK'] > 0.3) & (df['HAS_HORIZONTAL_CURVE'] == 1)
+            ).astype(int)
         
         logger.info("Created interaction features")
         return df
-    
+
+    # ------------------------------------------------------------------
+    # Tier-2 synthetic feature creation (uses ContextualFeatureGenerator)
+    # ------------------------------------------------------------------
+
+    def create_contextual_features(
+        self,
+        df: pd.DataFrame,
+        random_seed: Optional[int] = 42
+    ) -> pd.DataFrame:
+        """
+        Synthesise ~40 contextual features that are NOT present in CRSS records
+        but are known to influence crash probability. Uses the
+        ``ContextualFeatureGenerator`` with condition-aware sampling so the
+        generated values are statistically consistent with available CRSS columns
+        (HOUR, WEATHER, SPD_LIM, RUR_URB, etc.).
+
+        Args:
+            df:           Accident-level DataFrame (CRSS or synthetic)
+            random_seed:  Seed for reproducibility
+
+        Returns:
+            DataFrame with all contextual feature columns appended
+        """
+        from src.contextual_feature_generator import ContextualFeatureGenerator
+        gen = ContextualFeatureGenerator(random_seed=random_seed)
+        df_aug = gen.augment_crss_dataframe(df)
+        logger.info(
+            f"Created contextual features: "
+            f"{len(df_aug.columns) - len(df.columns)} new columns added"
+        )
+        return df_aug
+
+    def create_driver_behavior_proxy_features(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Derive driver behaviour risk proxies from CRSS-available columns.
+
+        CRSS has several tables (distract.csv, drimpair.csv, violatn.csv,
+        maneuver.csv) that, when joined at vehicle level, reveal driver state.
+        This method creates aggregate flags at the crash level from those
+        pre-joined columns if present, otherwise zero-fills.
+
+        Args:
+            df: Accident-level DataFrame (optionally with distract/impair columns)
+
+        Returns:
+            DataFrame with driver behaviour proxy features
+        """
+        df = df.copy()
+
+        # DRIMPAIR (from drimpair.csv join): physical impairment code
+        # Code 5 = Under Influence of Alcohol, 6 = medications, 7 = illicit drugs
+        if 'DRIMPAIR' in df.columns:
+            df['DRIVER_IMPAIRED'] = df['DRIMPAIR'].isin([5, 6, 7]).astype(int)
+        else:
+            df['DRIVER_IMPAIRED'] = 0
+
+        # DISTRACT (from distract.csv join): distraction codes
+        # Code 5 = phone hand-held, 6 = phone hands-free, 15 = looked not seen
+        if 'DISTRACT' in df.columns:
+            df['DRIVER_DISTRACTED'] = df['DISTRACT'].isin([5, 6, 12, 15]).astype(int)
+        else:
+            df['DRIVER_DISTRACTED'] = 0
+
+        # MDRMANAV (from maneuver.csv): improper manoeuvre
+        # Code 15 = improper lane change, 4 = ran red light, 5 = ran stop sign
+        if 'MDRMANAV' in df.columns:
+            df['IMPROPER_MANEUVER'] = df['MDRMANAV'].isin([4, 5, 15, 17]).astype(int)
+        else:
+            df['IMPROPER_MANEUVER'] = 0
+
+        # SPEEDREL (from vehicle.csv): speed relative to speed limit
+        # Code 3 = exceeding speed limit, 4 = racing, 5 = too fast for conditions
+        if 'SPEEDREL' in df.columns:
+            df['SPEED_RELATED'] = df['SPEEDREL'].isin([3, 4, 5]).astype(int)
+        elif 'SPEED_REL' in df.columns:
+            df['SPEED_RELATED'] = (df['SPEED_REL'] >= 3).astype(int)
+        else:
+            df['SPEED_RELATED'] = 0
+
+        # Composite driver risk score
+        risk_cols = [c for c in ['DRIVER_IMPAIRED', 'DRIVER_DISTRACTED',
+                                  'IMPROPER_MANEUVER', 'SPEED_RELATED'] if c in df.columns]
+        df['DRIVER_RISK_SCORE'] = df[risk_cols].sum(axis=1)
+
+        logger.info("Created driver behaviour proxy features")
+        return df
+
+    def create_school_hours_feature(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Flag records in school-zone arrival/dismissal windows.
+
+        Uses HOUR and (if available) SCHOOL_ZONE column.  If SCHOOL_ZONE
+        is absent, applies base probability proportional to urbanisation.
+
+        Args:
+            df: DataFrame with HOUR column
+
+        Returns:
+            DataFrame with SCHOOL_HOURS_ACTIVE column
+        """
+        df = df.copy()
+        school_hours = list(range(7, 9)) + list(range(14, 17))
+
+        if 'HOUR' in df.columns:
+            hour = pd.to_numeric(df['HOUR'], errors='coerce').fillna(12).astype(int)
+            in_school_window = hour.isin(school_hours).astype(int)
+            if 'SCHOOL_ZONE' in df.columns:
+                df['SCHOOL_HOURS_ACTIVE'] = (
+                    in_school_window & df['SCHOOL_ZONE'].fillna(0).astype(int)
+                ).astype(int)
+            else:
+                df['SCHOOL_HOURS_ACTIVE'] = in_school_window
+        else:
+            df['SCHOOL_HOURS_ACTIVE'] = 0
+
+        logger.info("Created school hours feature")
+        return df
+
     def engineer_features_pipeline(
         self, 
         accident_df: pd.DataFrame, 
-        person_df: Optional[pd.DataFrame] = None
+        person_df: Optional[pd.DataFrame] = None,
+        include_contextual: bool = True,
+        random_seed: int = 42
     ) -> pd.DataFrame:
         """
         Complete feature engineering pipeline.
         
         Args:
-            accident_df: Accident-level data
-            person_df: Person-level data (optional, for VRU features)
+            accident_df:          Accident-level CRSS data
+            person_df:            Person-level data (optional, for VRU features)
+            include_contextual:   When True, synthesises ~40 contextual features
+                                  for factors not captured in CRSS (traffic
+                                  aggressiveness, road geometry, work zones,
+                                  driver state proxies, black-ice risk, etc.)
+            random_seed:          Seed for contextual feature synthesis
             
         Returns:
             DataFrame with all engineered features
@@ -229,14 +414,22 @@ class FeatureEngineer:
         
         df = accident_df.copy()
         
-        # Create features
+        # Tier-1: derived from CRSS columns
         df = self.create_temporal_features(df)
         df = self.create_environmental_features(df)
         df = self.create_location_features(df)
+        df = self.create_school_hours_feature(df)
+        df = self.create_driver_behavior_proxy_features(df)
         
         if person_df is not None:
             df = self.create_vru_features(df, person_df)
         
+        # Tier-2: synthesised contextual features
+        if include_contextual:
+            logger.info("Synthesising contextual features (traffic, geometry, work zone, …)")
+            df = self.create_contextual_features(df, random_seed=random_seed)
+
+        # Interaction features (runs last so it can use contextual columns)
         df = self.create_interaction_features(df)
         
         logger.info(f"\nFeature engineering complete")
