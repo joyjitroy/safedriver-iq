@@ -327,6 +327,14 @@ PRISM-AR is the third stage in the SafeDriver-IQ → PRISM → PRISM-AR sequence
 │   ├── src/sdiq/                # config, data loaders, kinematics, social force, agentic layer, LLM co-pilot
 │   ├── tests/                   # pytest suite (61 tests)
 │   └── docs/                    # setup, implementation plan, ASCE2027 architecture docs
+├── prism-ar/                   # PRISM-AR (Phase 3) source: risk-adaptive AR cue mapping for VRUs
+│   ├── src/prism_ar/            # data_ingestion, prism (risk engine), ar_overlay, dataset_generation, evaluation
+│   ├── tests/                   # unit tests
+│   ├── scripts/                 # run_*.py, generate_*.py, measure_*.py
+│   ├── data/                    # scenario annotations + rendered AR overlay images
+│   ├── results/                 # CSVs, JSON, figures, report.md
+│   ├── notebooks/
+│   └── docs/                    # PAPER_PLAN.md, architecture docx, Backups/
 ├── docs/
 │   ├── images/                 # Architecture diagrams (SafeDriver-IQ + PRISM)
 │   └── flyers/                 # Research flyers (Phase 1 + Phase 2)
@@ -361,6 +369,14 @@ PRISM-AR is the third stage in the SafeDriver-IQ → PRISM → PRISM-AR sequence
 │   ├── feature_importance.py       # multi-method feature consensus
 │   ├── waymo_data_loader.py        # Waymo TFRecord loader
 │   └── visualization.py            # Plotting utilities
+├── src/agent/                       # Real-time agentic decision layer (Phase 1 extension, see above)
+│   ├── core/                       # decision engine
+│   ├── perception/                 # context engine
+│   ├── control/                    # intervention controller
+│   ├── learning/                   # continuous/online learning
+│   └── explainability/
+├── src/simulation/
+│   └── scenario_simulator.py       # used by demo_agentic_ai.py
 ├── tests/
 │   ├── test_data_loader.py
 │   ├── test_feature_engineering.py
