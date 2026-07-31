@@ -288,6 +288,34 @@ Unlike Phase 1's fixed decision boundary, Layer 3's tier selection is a trained 
 
 The environmental Random Forest is **frozen and reused as-is** from Phase 1 in Phase 2 (`safedriver_iq_bridge.py`), acting as a context multiplier rather than the sole risk signal — this is how Phase 2 addresses the Phase 1 limitation noted below (no response to road condition/VRU presence/speed).
 
+#### PRISM-AR (Phase 3) Risk-Adaptive AR Architecture
+
+![PRISM-AR Architecture](prism-ar/results/figures/F1_PRISM_AR_Architecture.png)
+
+PRISM-AR is the third stage in the SafeDriver-IQ → PRISM → PRISM-AR sequence. It adds an **augmented reality external communication layer** (HMD overlays, projected cues, pedestrian-facing vehicle displays) on top of PRISM's risk reasoning. The reference implementation evaluated in the paper is a **deterministic** four-layer pipeline (not the Q-net RL policy used in Phase 2):
+
+1. **Layer 1 — Data Ingestion and Scene Abstraction**: Standardizes nuScenes, Argoverse 2, and Waymo WOMD into the unified `DrivingScene` representation (10 Hz agent tracks, weather/lighting/road/time attributes). NHTSA CRSS is *not* treated as a scene source here — it only feeds the environmental risk bridge below.
+2. **Layer 2 — Multi-Model Risk Engine**: Three parallel modules, each producing a risk value on a common [0, 1] scale:
+   - **Environmental risk** — blends a trained scene-context model with the SafeDriver-IQ CRSS-derived estimate: `r_env = 0.95 * r_model + 0.05 * r_crss`.
+   - **Trajectory risk** — closed-form, saturating function of time-to-collision (TTC) between ego and the nearest VRU.
+   - **VRU-interaction risk** — closed-form, saturating function of minimum ego–VRU distance.
+3. **Layer 3 — Risk Fusion and Tier Selection**: Deterministic weighted fusion `r_fused = clip(w_env·r_env + w_traj·r_traj + w_vru·r_vru)`, with **w_env = 0.40, w_traj = 0.30, w_vru = 0.30** for all reported results. Converted to a safety score `S = 100·(1 - r_fused)` and mapped to one of four tiers by fixed thresholds.
+4. **Layer 4 — External VRU Communication Policy**: Deterministic tier-to-cue lookup table (opacity increases with tier; flashing reserved for the highest tier), delivered through configurable VRU-facing channels (HMD, projection, exterior display).
+
+> **Terminology note:** the paper names the four tiers **Silent, Information, Warning, Emergency**, whereas the current codebase (`prism-ar/src/prism_ar/prism/risk_engine.py`) uses **silent, advisory, intervention, emergency**. These refer to the same four escalation levels but with different labels for the two middle tiers — worth reconciling before final submission.
+>
+> The architecture supports an **agentic extension** (a DQN policy over the fused risk state, with SHAP explanations and short-term memory, analogous to Phase 2's Layer 3) but this extension is **not evaluated** in the PRISM-AR reference results — all reported numbers use the fixed-weight, threshold-based pipeline above.
+
+#### Phase 2 → Phase 3 Mapping
+
+| | Phase 2 (PRISM) | Phase 3 (PRISM-AR, reference implementation) |
+|---|---|---|
+| Tier selection | Q-net RL policy over 8-dim fused state | Fixed weights + threshold lookup (deterministic) |
+| Risk fusion | Learned via RL reward | Closed-form weighted sum, `w = (0.40, 0.30, 0.30)` |
+| Output | Internal intervention tier (AV-facing) | External AR cue mapped from the same tier concept (VRU-facing) |
+| Explainability | Per-decision SHAP + memory | Deterministic lookup (traceable by construction); DQN+SHAP extension designed but not evaluated |
+| Tier labels | silent, advisory, intervention, emergency | Silent, Information, Warning, Emergency (paper) |
+
 ## Project Structure
 
 ```
