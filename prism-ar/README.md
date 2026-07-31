@@ -9,20 +9,26 @@ Build and evaluate PRISM-AR: a system that maps PRISM's continuous 0–100 safet
 ## Project Structure
 
 ```
-prism_ar/
-├── data_ingestion/     # Unified DrivingScene format + dataset loaders (Waymo/Argoverse/nuScenes/CRSS)
-├── prism/              # PRISM risk engine bridge
-├── ar_overlay/         # AR cue mapping (adaptive, static, oracle, no-AR)
-├── evaluation/         # Metrics and evaluation scripts
-├── dataset_generation/ # Scenario extraction + AR overlay rendering
-└── tests/              # Unit tests
-
-run_prism_ar_real_data.py   # End-to-end pipeline on real datasets
-run_ablation_study.py       # Ablation experiments
-run_robustness_study.py     # Noise/delay/frame-drop robustness
-generate_prism_ar_figures.py # Figure generation
-setup_venv.bat              # Windows venv setup
-results/figures/            # Output figures
+prism-ar/
+├── src/prism_ar/
+│   ├── data_ingestion/     # Unified DrivingScene format + dataset loaders (Waymo/Argoverse/nuScenes/CRSS)
+│   ├── prism/              # PRISM risk engine bridge
+│   ├── ar_overlay/         # AR cue mapping (adaptive, static, oracle, no-AR)
+│   ├── evaluation/         # Metrics and evaluation scripts
+│   └── dataset_generation/ # Scenario extraction + AR overlay rendering
+├── tests/                  # Unit tests
+├── scripts/
+│   ├── run_prism_ar_real_data.py   # End-to-end pipeline on real datasets
+│   ├── run_ablation_study.py       # Ablation experiments
+│   ├── run_robustness_study.py     # Noise/delay/frame-drop robustness
+│   ├── generate_prism_ar_figures.py # Figure generation
+│   └── setup_venv.bat              # Windows venv setup
+├── data/                       # Scenario annotations + rendered AR overlay images
+├── results/figures/            # Output figures
+├── notebooks/
+├── docs/                       # PAPER_PLAN.md, architecture docx, Backups/
+├── pyproject.toml              # editable install (src/ layout)
+└── requirements.txt
 ```
 
 ## Datasets
@@ -38,28 +44,33 @@ Outputs are written to `C:\prismar_out\prism_ar_real` (junction to `results/pris
 
 ## Quick Start
 
-```powershell
-# 1. Create the clean virtual environment
-.\setup_venv.bat
+```bash
+cd prism-ar
+
+# 1. Install dependencies (editable install using the src/ layout in pyproject.toml)
+pip install -r requirements.txt
+pip install -e .
 
 # 2. Run tests
-C:\prismar_venv\Scripts\python.exe -m pytest prism_ar/tests/ -v
+pytest tests/ -v
 
 # 3. Run the full real-data pipeline
-C:\prismar_venv\Scripts\python.exe run_prism_ar_real_data.py --max_scenes 50
+python scripts/run_prism_ar_real_data.py --max_scenes 50
 
 # 4. Generate figures
-C:\prismar_venv\Scripts\python.exe generate_prism_ar_figures.py
+python scripts/generate_prism_ar_figures.py
 
 # 5. Run ablation and robustness studies
-C:\prismar_venv\Scripts\python.exe run_ablation_study.py
-C:\prismar_venv\Scripts\python.exe run_robustness_study.py
+python scripts/run_ablation_study.py
+python scripts/run_robustness_study.py
 ```
+
+On Windows, `scripts/setup_venv.bat` can be used instead of steps 1 to create an isolated virtual environment first.
 
 ## Important Notes
 
-- The current `prism_ar/prism/risk_engine.py` is a **reference implementation** with simplified rules. For paper-ready results, replace it with the trained PRISM/SafeDriver-IQ weights.
-- The 2D synthetic dataset (`generate_prism_ar_dataset.py`) is retained only as a smoke-test baseline.
+- `src/prism_ar/prism/risk_engine.py` defines both `PRISMRiskEngine` (reference, fixed rule-based environmental risk, default weights 0.15/0.40/0.45) and `TrainedPRISMRiskEngine` (trained scene-context model blended with the SafeDriver-IQ CRSS estimate, weights 0.40/0.30/0.30). **All paper-reported results use `TrainedPRISMRiskEngine`**, matching Eq. (4)/(5) in the manuscript.
+- The 2D synthetic dataset (`scripts/generate_prism_ar_dataset.py`) is retained only as a smoke-test baseline.
 - All heavy dataset dependencies (TensorFlow, av2, nuscenes-devkit) are avoided; custom pure-Python parsers are used instead.
 
 ## Reference

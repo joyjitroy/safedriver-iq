@@ -473,6 +473,33 @@ cd phase2-agentic-multimodel
 
 See [phase2-agentic-multimodel/README.md](phase2-agentic-multimodel/README.md) for milestone status and [phase2-agentic-multimodel/docs/setup.md](phase2-agentic-multimodel/docs/setup.md) for environment details.
 
+## Quick Start — Phase 3 (PRISM-AR)
+
+Phase 3 also lives in its own folder (`prism-ar/`) with an editable `src/` layout, independent of Phase 1 and Phase 2's environments.
+
+```bash
+cd prism-ar
+
+# 1. Install dependencies (editable install using the src/ layout in pyproject.toml)
+pip install -r requirements.txt
+pip install -e .
+
+# 2. Run tests
+pytest tests/ -v
+
+# 3. Run the full real-data pipeline (Waymo + Argoverse 2 + nuScenes + synthetic near-miss)
+python scripts/run_prism_ar_real_data.py --max_scenes 50
+
+# 4. Generate the paper figures
+python scripts/generate_prism_ar_figures.py
+
+# 5. Run ablation and robustness studies
+python scripts/run_ablation_study.py
+python scripts/run_robustness_study.py
+```
+
+On Windows, `scripts/setup_venv.bat` can be used instead of step 1 to create an isolated virtual environment first. See [prism-ar/README.md](prism-ar/README.md) for dataset path configuration and implementation notes.
+
 ## Detailed Setup Instructions
 
 ### Step 1: Clone/Download Project
