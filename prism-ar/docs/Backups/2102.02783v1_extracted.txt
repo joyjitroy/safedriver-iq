@@ -1,0 +1,1000 @@
+---PAGE 1---
+IEEETRANSACTIONSONVEHICULARTECHNOLOGY,VOL.XX,NO.XX,XXXX2020 1
+Comparing State-of-the-Art and Emerging
+Augmented Reality Interfaces for Autonomous
+Vehicle-to-Pedestrian Communication
+F. Gabriele Prattico`, Student Member, IEEE, Fabrizio Lamberti, Senior Member, IEEE, Alberto Cannavo`,
+Student Member, IEEE, Lia Morra, Senior Member, IEEE, Paolo Montuschi, Fellow, IEEE
+Abstract—Providing pedestrians and other vulnerable road multi-billion dollars business. Huge investments are being
+users with a clear indication about a fully autonomous ve- made [1], and the expectations are that fully autonomous
+hicle status and intentions is crucial to make them coexist.
+vehicles (FAVs) [2] will reach the market by the next decade.
+In the last few years, a variety of external interfaces have
+Giventhe disruptive potentialofFAVs, theiracceptancecould
+been proposed, leveraging different paradigms and technologies
+including vehicle-mounted devices (like LED panels), short- be hindered by open challenges related not only to technical
+range on-road projections, and road infrastructure interfaces aspects, but also to societal factors [3], which deserve sig-
+(e.g., special asphalts with embedded displays). These designs nificant attention as both people with and without technical
+wereexperimentedindifferentsettings,usingmockups,specially
+expertise will be requested to trust machines [4]. This need
+prepared vehicles, or virtual environments, with heterogeneous
+can be addressed from two viewpoints: that of the drivers (in
+evaluation metrics. Promising interfaces based on Augmented
+Reality (AR) have been proposed too, but their usability and the future, of the passengers) and of in-vehicle interfaces; and
+effectivenesshavenotbeentestedyet.Thispaperaimstocomple- that of vulnerable road users (VRUs), like, e.g., pedestrians,
+mentsuchbodyofliteraturebypresentingacomparisonofstate- and of interfaces external to the vehicle.
+of-the-art interfaces and new designs under common conditions.
+In the last years, significant efforts have been devoted to
+To this aim, an immersive Virtual Reality-based simulation
+designing interaction paradigms capable of raising occupants’
+was developed, recreating a well-known scenario represented by
+pedestrianscrossinginurbanenvironmentsundernon-regulated awareness about vehicles’ status and intentions, with the aim
+conditions. A user study was then performed to investigate the ofimprovingtrustintheirautonomousdecisions[5].However,
+variousdimensionsofvehicle-to-pedestrianinteractionleveraging tackling the needs and expectations of VRUs is substantially
+objectiveandsubjectivemetrics.Eventhoughnointerfaceclearly
+morecomplicated.Drivingisacomplexsocialbehaviorbased
+stood out over all the considered dimensions, one of the AR
+on continuous interactions between drivers and road users
+designs achieved state-of-the-art results in terms of safety and
+trust,atthecostofhighercognitiveeffortandlowerintuitiveness in uncertain and ambiguous situations. When adding (or re-
+compared to LED panels showing anthropomorphic features. placing traditional vehicles with) FAVs, the lack of human
+Together with rankings on the various dimensions, indications drivers may cause a communication breakdown, potentially
+aboutadvantagesanddrawbacksofthevariousalternativesthat
+dangerousforallroadusers[6].Forthisreason,interfaceswith
+emerged from this study could provide important information
+VRUs (mainly pedestrians) recently started to be investigated
+for next developments in the field.
+to increase the safety and acceptability of FAVs.
+Index Terms—Fully autonomous vehicles, human-machine in-
+Severalalternativeshavebeenproposedalready,focusingon
+teraction,virtualreality,augmentedreality,vehicle-to-pedestrian
+the most common vehicle-to-pedestrian interactions, i.e., road
+communication, pedestrian crossing.
+crossings. Possible interaction paradigms include showing
+anthropomorphic features [7], or using LED strips/panels to
+I. INTRODUCTION
+communicate FAV’s intentions [8]–[10]. In other designs, on-
+ADVANCEMENTS in the field of automation are contin- vehicle visual hints were replaced by on-road projections,
+uous, and promise to revolutionize most of everyone’s possibly leveraging well-known metaphors like crosswalk or
+activities. Autonomous vehicles, in particular, will play a key stop signs [11], [12]. Some prototype implementations also
+role in this ongoing revolution. While in the early 2010’s introduced changes in the road infrastructure, collecting data
+autonomousvehicleswerestillregardedasvisionarybyalmost from connected vehicles to communicate with pedestrians.
+all car manufacturers, today this sector has changed into a Whenever a new vehicle-to-pedestrian interaction paradigm
+(or interface) was introduced, it was generally compared with
+ManuscriptreceivedXXXXXX,XXXX;revisedXXXXXX,XXXX.
+some of the previously proposed ones in qualitative and/or
+Copyright (c) 2015 IEEE. Personal use of this material is permitted.
+However, permission to use this material for any other purposes must be quantitative terms, often working with prototype implementa-
+obtainedfromtheIEEEbysendingarequesttopubs-permissions@ieee.org. tionsormockups.SomeworksresortedtoVirtualReality(VR)
+The authors are with the GRAINS – GRAphics And INtelligent
+for comparing a number of alternatives at once [11]. Despite
+Systems group at the Dipartimento di Automatica e Informatica
+of Politecnico di Torino, 10129, Torino, Italy. e-mail: (e- the great relevance of these works for next developments
+mail: filippogabriele.prattico@polito.it;fabrizio.lamberti@polito.it; in the field, available experimental evaluations suffer from
+alberto.cannavo@polito.it;lia.morra@polito.it;paolo.montuschi@polito.it).
+several drawbacks. For instance, when a representative set of
+This article has supplementary downloadable material available at
+https://doi.org/10.1109/TVT.2021.3054312,providedbytheauthors. interfaces are considered, not all the experimental conditions
+1202
+beF
+4
+]CH.sc[
+1v38720.2012:viXra
+
+---PAGE 2---
+IEEETRANSACTIONSONVEHICULARTECHNOLOGY,VOL.XX,NO.XX,XXXX2020 2
+studied in other works are investigated (and viceversa). When especially compared to the GYR flashing yellow. In another
+the above requirements are met, often the analysis does not study dealing with color codes [13], the authors suggested
+fully recreate real-world conditions or does not address the to remove the intermediate warning state (collapsing it to
+sameobjectiveandsubjectivedimensionswhichweredeemed danger), as they realized that pedestrians tended to selfishly
+relevantinotherstudies.Finally,andmostimportantly,notall cross even when they were putting the vehicle’s passengers
+theinteractionparadigmsdevisedsofarhavebeentested.This at risk. Authors also stated that an indication of approaching
+is the case, for instance, of Augmented Reality (AR)-based vehicle could be more effective than a safe/unsafe to cross
+interfaces, which proved to be particularly effective for in- information (though without any experimental evaluation).
+vehicleinteraction[5].SomeAR-baseddesignsforvehicle-to- Anothertypeofinterfacewhichprovedtobequiteintuitive
+pedestrian interfaces have been also proposed but, at present, for pedestrians consists in LED strips mounted in various
+they have not been compared (or even tested) yet with the positions of the vehicle’s exterior. An example is given in
+mentioned alternatives. [9], [10]. In this implementation, the strip is mounted over
+In this work, a VR-based simulation system was first de- the windshield, and only the central LEDs are lighted while
+signed, by taking into account the above issues and endowing driving. When a pedestrian in detected, LEDs start to light
+it with the capabilities required to support a fair comparison from the center to the edges of the strip. During crossing, all
+of multiple interface designs relying on heterogeneous tech- the LEDs are lighted, and when the vehicle resumes motion,
+nologiesandofferingdifferentfunctionalities.Thissystemwas arevertedanimationfromedgestocenterisactivated.Experi-
+then exploited to run a user study aimed to compare the most mentscarriedoutwithaWizardofOztechniqueonaspecially
+relevant interfaces proposed so far from different categories. preparedvehicleshowedthat,afterashorttraining,userswere
+Specifically, AR-based interfaces were considered, to shed abletoproperlyusetheinterface.Itisworthnotingthat,in[9],
+somelightontheirpossibleroleinnext-generationvehicle-to- two different experiments were run to gather both direct and
+pedestrianinteractionparadigms.Awidesetofmetricsderived indirectmeasuresofthepedestrianperceivedsafety.In[11],a
+from relevant literature was used, providing interested readers comparisonbetweentheaboveinterfaceandadifferentdesign
+withacomprehensivepictureofadvantagesanddrawbacksof with two strips on the vehicle’s sides was performed in a VE.
+available paradigms. Users preferred the latter interface showing appreciation for
+itsintuitivenessandunambiguity,thoughcontinuousfeedback
+provided was judged as not particularly useful.
+II. RELATEDWORK
+Other examples of this interface category are provided in
+Asdiscussedintheprevioussection,theimplicitcommuni- [14]–[16]. Besides the position on the vehicle’s exterior, the
+cationmechanismprovidedbyvehiclemovementalonemight main differences among the various designs lay in the strip’s
+notbeabletoguaranteeanefficientinteractionbetweenVRUs shape,inthelightingpattern,andinthecolor(s)used(andtheir
+andFAVs.Thisiswhy,inthelastyears,anumberofinterfaces meanings). In some cases, the above features are combined
+havebeendevelopedtoelicitvehicles’statusand/orintentions. together. For instance, in [17], a flashing yellow light is used
+1) Vehicle-mountedinterfaces: thefirstinterfacesproposed toindicatethatthevehicleisnotyielding,whereasabluelight
+relied on visual hints provided by equipment mounted on the moving from top to bottom indicates that it is going to stop;
+vehicle exterior. A first example is represented by the “Eyes a fading blue light shows that vehicle is waiting and, lastly,
+on a car” design [7], which aims to replace eye contact flashing yellow is used again to indicate vehicle restart.
+between pedestrians and drivers of conventional vehicles with An alternative design, still based on a LED strip but
+digitaleyesplacedonthefrontlights.Assoonasthevehicle’s exploitingagainanthropomorphicfeaturesliketheinterfacein
+sensors detect a pedestrian intending to cross, the eyes start [7],isthe“Smilingcar”[11].Theinterfaceshowsahorizontal
+staring at him or her to signal that it will stop to allow yellow line in normal driving conditions, which changes to
+crossing. Otherwise, the eyes gaze remains fixed on the road. a smile when a pedestrian is detected to inform him or her
+ExperimentsperformedinaVirtualEnvironment(VE)showed that the vehicle will yield. Based on studies performed in a
+thatpedestrianswerefasterindecidingwhethertocrossornot scenario involving one vehicle and one pedestrian [11], [18],
+when the interface was available. However, some users found users found this interface as very simple to use and able to
+the eyes artificial, leading to an undesirable Uncanny Valley provide unambiguous information.
+effect [11], and not sufficiently reliable or safe. LEDpanelshavebeenusedalsotoprovidepedestrianswith
+Other interfaces were inspired by the well-known traffic written information on vehicle’s status (e.g., “Braking” [18])
+light metaphor. For instance, the concept in [8] is based on a or on what to do (e.g., “Cross now” [19]–[21]). Compared
+LED light placed in the vehicle’s front. Two lighting patterns with other interfaces, such a direct communication approach
+were proposed: green, flashing yellow, red (GYR), and white, didnotproveparticularlyeffective,duetopossiblereadability
+flashing red, red (WRR). For each set, the first color indicates and language issues [11]. In some configurations, interfaces
+when it is safe to cross, the last color when it is not; to refer request the pedestrians to notify their intention to cross with
+to intermediate situations, the middle color is used. Studies a specific gesture. In this case, LED strips have been used to
+performed on this design confirmed that users were able to inform them that gesture was correctly recognized [22].
+properly associate colors to messages the vehicle intended to 2) Projection-based interfaces: the main limitation of
+communicate.However,theflashingredofWRRtendedtobe vehicle-mounted interfaces is that they communicate only by
+(mis)interpreted as a danger signal rather than a warning one, means of visual signs placed on the vehicle, which may be
+
+---PAGE 3---
+IEEETRANSACTIONSONVEHICULARTECHNOLOGY,VOL.XX,NO.XX,XXXX2020 3
+poorly visible either because of adverse weather or lighting AR to draw large green regions indicating where it is safe to
+conditions, or simply because the vehicle is still too far. cross,andredregionsclosertothevehicleindicatingwhereit
+A way pursued to cope with these limitations consists wouldbedangeroustocross.Thethirddesignisacombination
+in projecting visual indications on the road. For instance, of the previous ones. A user study was performed, in which
+the prototype interface in [23] projects a pattern of parallel participants were shown static representations of the three
+lines in front of the vehicle. Lines are perpendicular to the designs. Despite the amount of visual indications provided,
+driving direction, and get closer/farther when the vehicle is participants preferred the third design.
+decelerating/accelerating. Experiments performed with a real, The above review, which showed that various interface
+non-autonomous vehicle showed that pedestrians were faster categories have indeed been proposed but only a few of
+in deciding whether to cross or not, but they focused their themhavebeentestedunderrepresentativeand/orcomparable
+attention on the road rather than on the vehicle itself. In conditions, motivated the design of the simulation system and
+[12],amoresophisticatedprojectionpatternwasused.During the experimental analysis that are reported in this work.
+normal driving, a wave-shaped red pattern is projected. When
+a pedestrian is detected and vehicle starts to slow down, III. SIMULATIONSYSTEM
+pattern color changes to yellow. When vehicle has come to
+In this section, the VR-based system created to support the
+a complete stop and crossing is safe, pattern changes into a
+study of the various interfaces is illustrated. In particular, the
+green crosswalk shape, which turns to red when vehicle is
+simulation environment is presented first. Afterwards, inter-
+going to restart again. The implementation proposed in [11],
+facesimplementationandscenarioconfigurationarediscussed.
+characterized by a lower number of states, was rated as very
+pleasant; it was also judged as futuristic, but this result could
+A. Simulation environment
+be due to the particular vehicle the interface was mounted
+onto. Despite the increased visibility, these interfaces may not The simulation environment has been built on top of the
+work well with all road conditions. Moreover, even though AirSim open-source software [29]. Originally developed by
+they rely on the well-known crosswalk concept which should Microsoft as a simulator for collecting data needed to train
+be familiar for pedestrians, experiments indicated that these computer vision algorithms for unmanned vehicles, AirSim
+interfaces induce a high mental workload. supportshardware-in-theloopsimulationsandischaracterized
+3) Smart road interfaces: a different approach to support byanextremelyhighvisualfidelity.Also,a“WindridgeCity”
+vehicle-to-pedestriancommunicationconsistsinusingtheroad urban scenario is provided free of charge.
+infrastructure itself. In the so called “Smart roads” concept, However, the “as-is” performance of AirSim is not suit-
+visual hints are provided through LED panels embedded in able for an effective fruition via immersive VR. Hence, data
+theroadpavementtoindicatewhenitissafetocross(e.g.,by collection from vehicle’s simulated sensors was disabled (as
+showing a white crosswalk) and when it is not (e.g., lighting not required in this work), and a number of optimizations
+red bars on the sidewalk edge). For instance, the prototype were implemented in order to target the minimum framerate
+implemented in London [24] was judged as very trustworthy. required for immersive experiences (90 frames per seconds or
+The main drawback of such interfaces is the cost associated more to prevent motion sickness). To this purpose, among the
+with updating the road infrastructure [11]. graphics platforms supported by AirSim, Unity was selected;
+4) Multi-modal interfaces: the above designs rely only on optimizationsleveragedad-hocfunctionalitiesavailableinthis
+the visual communication channel, which is also the focus graphicsenginetoimprovetheperformanceoftheapplication
+of the present study. It is worth noticing, however, that this logic and of graphics processing.
+choice makes these interfaces not suitable for all VRUs, e.g., In particular, concerning the former aspect, the novel Data-
+for visually impaired persons. For this reason, multi-modal OrientedTechnologyStack(DOTS)paradigmwasused,which
+interfacesincludingacombinationofvisual,audioandhaptic- allowsdeveloperstoexploittheparallelprocessingcapabilities
+based notifications have been proposed [25]. However, the andlargecacheavailabilityofmodernprocessors.Thebenefit
+audiochannelprovednotparticularlyeffectiveinnoisytraffic. inperformanceisespeciallyrelevantforapplicationsthatneed
+5) AR interfaces: the last category in this review is rep- to handle multiple instances of the same simulated object, in
+resented by AR interfaces. Thanks to technological advance- this case the logic (and physics) of vehicles (and their parts,
+ments and the ever-larger availability of consumer-grade de- like wheels) and of pedestrians. The above paradigm was
+vices [26], it is possible to imagine a not too distant future in implemented by relying on the Unity’s architectural pattern
+whichpedestrianswillweartheirownARglasses,enablingthe named Entity Component System (ECS) together with the C#
+development of sophisticated vehicle-to-pedestrian and, more Job System, which enables an effective handling of frame-
+generally, human-robot interaction paradigms [27]. However, synchronized multi-threading, and the Burst Compiler, which
+experiments in this field are still rare. In a recent study [28], allowsforthegenerationofhigh-performancenativecodethat
+threeconceptswereexplored.Inthefirstone,ARvisualhints can exploit parallel hardware acceleration.
+are exploited to show to the pedestrian, through a blue tape For the second aspect, the Unity’s Scriptable Render
+overlapped to his or her field of view, the safer path to follow Pipeline (SRP) was exploited, since it allows to better cus-
+for crossing the road; moreover, AR-based yellow arrows are tomize graphics quality based on hardware capabilities and
+drawn in front of the vehicle to show where it could stop, if application requirements. In particular, the High Definition
+needed. The second design, referred to as “safe zones”, uses Render Pipeline (HDRP), which has been recently made
+
+---PAGE 4---
+IEEETRANSACTIONSONVEHICULARTECHNOLOGY,VOL.XX,NO.XX,XXXX2020 4
+Braking was implemented as follows: as soon as the FAV
+detects a pedestrian intending to cross, because close enough
+to the sidewalk edge, looking either at the vehicle or at the
+road, and within the detection range, it starts braking with a
+constant deceleration. Deceleration is calculated by consider-
+ingthecurrentspeedandaimingtoreachafullstopatacertain
+distancefromthepedestrian;inpreliminaryexperiments,other
+deceleration strategies were found to largely alter the users’
+perceptionoftheinterfacebehavior,asconfirmedalsoby[30],
+and hence were excluded from the evaluation. If the FAV is
+not able to stop in due time (too fast and/or too close when
+(a)Baseline,B (b)Smile,S
+crossing starts), the horn is activated to signal the danger.
+By default, AirSim’s built-in vehicles are provided with a
+controller logic for driving them with keyboard or joystick.
+However, in this work FAVs’ behavior described above was
+scripted using the ECS, and speed was managed using a PID
+controller(withoutputshaping)since,asitwillbeshownlater,
+onlydecelerationandaccelerationonastraightpathhadtobe
+handled in the designed experiments.
+By building on top of the above “Baseline” (abbreviated
+B), one interface was implemented for each of the categories
+discussedindetailinSection2,focusingspecificallyonvisual
+(c)Projection,P (d)Smartroad,M interfaces. To this aim, we chose the interfaces that scored
+better in experiments reported in previous literature. Neither
+theFAV’sbehaviornorthevehicleshapewerealteredtoavoid
+biases in the interface comparison [11].
+For vehicle-mounted interfaces [11], [18], the “Smiling
+car” concept was selected [11], later referred to as “Smile”
+(abbreviated S). In normal driving conditions, an horizontal
+straightyellowlineisshownonthevehicle’sfrontside;when
+a pedestrian is detected and the FAV starts braking, the line
+turnssmoothlyintoasmile(Fig.1b)tosignalthatitwillyield.
+Among projection-based interfaces [11], [12], [23], the
+concept originally presented in [12] was considered (later
+(e)Saferoads,F (f)Saferoadsextended,E
+named “Projection”, P). To foster comparability of results,
+Fig. 1. Simulation environment and interfaces included in the evaluation
+depictedwhilethevehicleisbraking. the implementation in [11] was used (Fig. 1c), but the sound
+played at vehicle restart was removed in order to make the
+interface rely only on visual indications, like the other ones.
+availableforVRapplications,wasused.TheHDRPallowedto The interface integrates a LED panel on the vehicle’s front
+effectivelymanagetherenderingof3Delementswithdifferent side, whose pattern changes based on actual projection: all
+levels of detail (LODs) based on actual distance from the LEDs lighted in normal driving conditions, LEDs lighting
+user, to use dynamic resolution for reducing the workload from edges to center while decelerating, LEDs lighting in the
+on the GPU, to enable efficient calculation of reflections, crossingdirectionwhilestopped,thentransitiontotheoriginal
+transparenciesandshadows,andtoactivatevolumetriclighting state at vehicle restart.
+forrealisticeffects.Furthermore,theSRPsupportstheShader For the “Smart road” (M) category, the implementation
+Graph (SG), which is a visual shader programming tool studied in [24] was selected (Fig. 1d). In the original work,
+that was of paramount importance to effectively backing the pedestrian detection is performed by the infrastructure (thus,
+implementation of the vehicle’s interfaces. for instance, crosswalk marking appears even when there is
+Finally, several minor changes were applied to the original no vehicle approaching); in this study, detection was moved
+urban scenario like, among others, simplifying the colliders’ onto the FAV’s side. When there is no vehicle approaching,
+shape, activating GPU instancing on materials, and enabling the interface does not provide any feedback (like with the
+asynchronous map loading. other designs). When a vehicle is approaching, the interface’s
+stateiscontrolledbythevehicleitself,simulatingaconnection
+established between the two entities; if the vehicle is able
+B. Interface selection and implementation
+to stop, a crosswalk appears together with the predicted stop
+In order to provide the users with a reference implementa- position,andwhitelinesonthesidewalkedgeareturnedgreen
+tion, a “Baseline” behavior was defined for the virtual FAVs, (otherwise, they are turned red and no crosswalk is shown).
+in which no specific interface is available (Fig. 1a). Lastly, for the AR-based category, the third design in [28]
+
+---PAGE 5---
+IEEETRANSACTIONSONVEHICULARTECHNOLOGY,VOL.XX,NO.XX,XXXX2020 5
+leveraging AR hints for showing zones suitable/unsuitable for Followingtheapproachadopted,e.g.,in[20],[32],vehicles
+crossing was chosen, later referred to as “Safe roads” (F). were organized in a pattern whose characteristics were con-
+The interface shows in front of the vehicle a yellow arrow, trolled in order to ensure realism while at the same time pre-
+terminated by a yellow bar whose length is equal to the senting the users a number of different situations stimulating
+currentestimatedstoppingdistance(Fig.1e).Thearrowlength thevariousinterfacesinmanyways(Fig.2).Cruisespeedwas
+is determined only by the vehicle’s dynamics, and it is not set to 50 Km/h (14 m/s) for all the vehicles, since previous
+related in any way to pedestrian detection. When accelerating work indicates that above 40 Km/h the demographics have
+or moving at cruise speed, the stopping distance is calculated low to no impact on the pedestrians’ behavior [33]. Since the
+by applying a reference deceleration (deemed comfortable for experience was expected to strongly depend on space (hence,
+the passengers) of 3 m/s2 [31]. When braking, the stopping time)separatingtheusersfromtheapproachingvehicle,itwas
+distance is obtained by sampling a pre-calculated braking decided to vary the distances between consecutive vehicles,
+curve at the current velocity: the curve is selected among setting them to either 45 m, 60 m or 100 m; within the
+two alternatives (comfortable 3 m/s2, and maximum 6 m/s2), pattern, a pseudo-random distribution guaranteeing a uniform
+pickingtheonewiththelowestdecelerationvaluestillgreater distribution of the inter-vehicle distance was used. So called
+than current deceleration. To reinforce the feedback provided “not-yielding” vehicles were also included in the pattern: this
+by the interface, the region of the road between the vehicle characteristichasbeenusedrarelyintheliterature,butauthors
+and the arrowhead is colored red, the rest green. It is worth of works where it was not exploited lamented the fact that
+observing that, since the arrowhead (and the colored region) its lack negatively influenced the realism of the simulation
+reflects solely the dynamics of the FAV, the pedestrian is not [11].Thesevehiclesareessentialtoexploretrustinhuman-to-
+providedwithaclear,immediateindicationofthefactthatthe vehicle interactions in the presence of faulty FAVs. Detection
+vehicleactuallydetectedhimorher,andwillstopaccordingly. range of vehicles’ sensors was set to 60 m, and yielding
+Sincethegoalofthepresentworkwastostudy,inparticular, vehicles were programmed to stop 5 m ahead of the crossing
+the effectiveness of AR-based vehicle-to-pedestrian interac- pedestrian.
+tion,afurtherinterfacewasaddedtotheanalysis.Thischoice
+was motivated by the fact that, unfortunately, the interface in IV. EXPERIMENTALPROTOCOL
+[28] is one of the few concepts proposed so far that has still
+In this section, the experimental protocol devised to carry
+to be tested by letting users actually experiment road crossing
+out the evaluation will be illustrated in detail.
+with it. Hence, a new interface was designed, named “Safe
+roads extended”, by combining key communication abilities
+A. Experiment design and preparation
+that were found in some of the best interface designs, but
+were lacking in F. The behavior of the original yellow arrow For each interface, the user is instructed to cross as quickly
+ismaintained.However,aredtickisaddedonthearrowbody andasmanytimesaspossible,wheneverheorshefeelsitsafe
+(Fig. 1f) to show the pedestrian where the vehicle would stop tocross.Thetestingofeachexperienceisconcludedwhenthe
+in case of an emergency brake (6 m/s2): the distance between following two conditions are met: the user has completed at
+the vehicle and the tick represents the minimum stopping least 15 crossings in total and at least one per distance. This
+distance. Moreover, an additional blue arrow, with a blue bar choice ensures that the user experiences the full spectrum of
+on the head, is drawn only when a pedestrian is detected situationswithinareasonableamountoftime.Additionally,as
+(thus avoiding unneeded visual clutter). The blue arrowhead donein[20]amaximumlimittothedurationofthesimulation
+position is fixed as the vehicle’s speed decreases, showing the was introduced, in our case an upper bound of 300 generated
+(estimated) point where it will stop; thus, the pedestrian is vehicles was set. FAVs are set to become visible at 140 m
+implicitly informed that he or she has been detected, and can (Fig.2)andareallowedtoqueue,thoughqueuesareprevented
+use this information to decide whether to cross or not. from growing too much in order to avoid long waiting times
+that could be physically and/or mentally demanding in VR.
+C. Virtual scenario The user was informed that crossings in front of queued
+In order to test the interfaces, a representative case study vehicles would not be considered (they will be later referred
+within the selected VE had to be defined. Based on previous to as invalid crossings).
+literature,wedecidedtofocusonanunregulatedcrossingsce- Asdoneinalmostalltheworkscarriedoutsofar,theuseris
+nario [11], [20], which could become commonplace in urban controlling the only pedestrian that can interact with vehicles
+contextspopulatedonlybyFAVs.Moreover,intheabsenceof in the above scenario: in this way, it is possible to isolate the
+other external signals (e.g., traffic lights), VRUs have to rely contribution of his or her interactions with the approaching
+oninformationprovidedbytheFAVs’interfacesonly,leveling vehicles from other possibly disturbing factors. It is worth
+out possible environmental contributions. In particular, a one- observing that interactions in more complex scenarios could
+way, 5 m wide road was chosen, as done, e.g., in [11], [12]. beinvestigatedinthefutureusingthedevisedsoftware,which
+In this way, the users could ground their decisions to cross or already integrates a traffic simulation system encompassing
+notontheobservationofalimitednumberofvehiclesmoving both vehicles and pedestrians (not used in the experiments).
+on a straight path rather than, e.g., on vehicles changing lanes Experiments were designed according to a within-subjects
+or stopping at different locations; evaluation metrics can also logic: all the subjects tested all the interfaces, starting with
+be made independent of the crossing direction. the Baseline. Latin Square order was then used to define the
+
+---PAGE 6---
+IEEETRANSACTIONSONVEHICULARTECHNOLOGY,VOL.XX,NO.XX,XXXX2020 6
+Fig.2. Scenariodevisedfortheexperiment:patternusedforgeneratingvehicles,visibilityanddetectionranges,safetystopdistance,andcrosswalklength.
+sequence of the remaining tests. In the future, it is reasonable Abortedcrossings,occurringwhentheusergetsoffandonthe
+to expect that pedestrians will be accustomed with FAVs’ same sidewalk (without reaching the opposite one), are also
+interfaces: we sought to replicate a similar condition in our recorded.Anefficiencymetricwasdefinedasthetotalnumber
+experimental setting by showing each subject a video to of valid crossings (i.e., non-invalid and non-aborted) divided
+familiarize with each interface prior to the virtual experience. by the time elapsed from the first to the last crossing.
+In each video, a pedestrian attempts to cross the road under
+three different conditions: the vehicle is either too close to
+stop (hence, it will pass by horning at the pedestrian), it is D. Subjective evaluation metrics
+forced to an emergency brake, or it has sufficient time to stop To further evaluate users’ experience, a questionnaire2 was
+smoothly. Videos shown to participants are made available1.
+developed based on previous literature on the subject.
+A before-experience section (BEQ) collects demographic
+B. Hardware configuration and physical setup informationabouttheparticipant,aswellashisorheropinion
+The VR headset device selected to let the users immerse aboutFAVs,crossinghabits,andexperiencewithtechnologies
+themselves in the created VE was the Samsung Odyssey. It is used in the experiments. Possible symptoms associated with
+anHMDequippedwithanAMOLEDdisplaywitharesolution motion sickness are recorded using the Simulation Sickness
+of 1440×1600 pixels per eye, a refresh rate of 90Hz and a Questionnaire (SSQ) [35].
+horizontal field of view of 110◦. The headset supports 3D Afterwards, the testing of the individual interfaces begins.
+audio and relies on inside-out tracking technology, meaning The after-video tutorial section (ATQ) aims at ensuring that
+that it does not requires external equipment to determine the the interface functioning has been fully understood prior to
+user’s (better, his or her head’s) and the controllers’ pose in theactualVRexperience:theuserisrequiredtoanswersome
+the real environment. An untethered setup was defined using questions, describe the interface behavior in words and sketch
+the MSI VR One Backpack PC to run the simulation. The a graphical representation on paper. Then, the after-interface
+backpack integrates an Intel Core i7-7820HK and a NVidia questionnaire (AIQ) is used to investigate various dimensions
+GeForce GTX 1070 in less than 3.5 Kg. Users could thus of vehicle-to-user interaction after the VR experience (lasting
+walkinaphysicalspacemappingone-to-onewiththeselected approximately 10 minutes). The AIQ combines questions
+portion of the VE where they were expected to cross. This from the Trust Scale (TS) [36], the System Usability Scale
+setup was expected to lead to a more realistic experience, (SUS) [37], the NASA Task Load Index (NASA-TLX) [38]
+boosting the sense of immersion and presence [34]. and the Short User Experience Questionnaire (UEQ-S) [39].
+Additional, custom questions are used to, e.g., investigate the
+C. Objective evaluation metrics level of perceived safety associated with a given interface,
+including whether the participant has felt the need to wait for
+During the simulation, user’s behavior is logged by collect-
+the vehicle to come to a full stop before attempting to cross.
+ing several quantitative measures. For each interaction with
+Finally,theparticipantisrequestedtorateanumberoffeatures
+an approaching vehicle, the system records the time at which
+of the tested interface (perceived safety, familiarity, workload,
+the pedestrian is detected (and the vehicle starts braking,
+etc.) with respect to the Baseline.
+thus initiating the negotiation) and the time at which the
+After testing all the interfaces, a post-experience question-
+pedestrian reaches the opposite sidewalk, i.e., the crossing
+naire (PEQ) is administered, which includes questions from
+ends (Fig. 2). Crossing time (CT), calculated as the difference
+the SSQ to evaluate possible discomforts due to the VE,
+betweentheabovetimes,islogged;previousworksspeculated
+from the VRUse tool [40] to determine the usability of the
+that it may be associated with user’s uncertainty [11]. When
+VR simulation, and from the iGroup Presence Questionnaire
+the user enters the road, the distance of the approaching
+(IPQ) [41] to measure immersion and presence. Additional
+vehicle (distance at crossing, or DAC) and its speed (speed
+questions verify that the proper level of realism is reached in
+at crossing, or SAC) are recorded. The interval between the
+thesimulation.Finally,theparticipantisaskedtorank(without
+time the user was detected and he or she left the sidewalk
+ties)alltheinterfacesbasedonindividualfeaturesandoverall.
+(and negotiation ends) is defined as decision time (DT). The
+A final open interview concludes the experience.
+systemalsokeepstrackofpossiblecollisionswiththevehicles.
+1Videos:https://youtu.be/RoPURY1dlZE 2Questionnaire:http://tiny.cc/6xoksz
+
+---PAGE 7---
+IEEETRANSACTIONSONVEHICULARTECHNOLOGY,VOL.XX,NO.XX,XXXX2020 7
+E. Data analysis TABLEI
+FAVSIMULATIONPERCEPTION.INVERTEDITEMSAREMARKEDWITH*.
+CollecteddatawereanalyzedusingMSExcelwiththeReal-
+Statisticsadd-on(v7.1).Comparativeanalyseswereperformed
+Item M SD
+using Friedman’s test (pass condition was set at p ≤ 0.05).
+You think that vehicles were driven by a human (1)
+Post-hoc comparison on pairwise groups was further applied 3.75 0.72
+or were fully autonomous (5)
+using the Conover’s test. For non-comparative questionnaire
+The FAVs showed adequate decision making skills 4.17 0.56
+items, Cronbach’s Alpha (α) on clusters of related items was The FAVs struggled in case of sudden, unexpected
+2.08 1.04
+computed to test internal consistency. Interface rankings in or abrupt pedestrian behavior*
+The FAVs made mistakes* 2.08 0.96
+the PEQ were aggregated using a Bucklin voting system; in
+The FAVs seemed intelligent 3.83 0.56
+particular, the relative placement scoring system (RPSS) [42]
+Overall, you are satisfied about FAV simulation 4.00 0.59
+was applied considering a majority of half of the sample size.
+V. RESULTS
+as said, was intentionally introduced to simulate failures in
+Experimental evaluation involved 12 volunteers (8 males, pedestrian detection: in this respect, 75.0% of the participants
+4 females) aged between 24 and 46 (M = 28.00, SD = stated that they felt awkward when, right in the middle of the
+4.68). Participants were selected among Politecnico di Torino crossing, the vehicle sometimes did not recognize them (and
+students and from the authors’ social networks. Based on they ascribed this behavior to faulty, or not smart enough,
+demographicinformationcollectedfromtheBEQ,17%ofthe FAVs). Few participants reported also that they found FAVs
+participants were unfamiliar with immersive VR (never used, too polite with pedestrians compared to how a human driver
+orusedonce),whereas83%saidtheyusethistechnologyvery would behave in such situations.
+often or on a daily basis. Participants reported crossing the
+roads under non-regulated conditions either very often/daily
+(50%)oroccasionally(50%),andwereonaveragetrustworthy B. Interface comparison
+about FAVs (M = 3.42, SD = 0.78, α = 0.77). In the Once the representativeness of the simulated scenario was
+following,experimentalresultswillbepresented,focusingfirst validated,theanalysismovedtocomparingselectedinterfaces.
+on the participants’ perception of the VE and of simulation
+1) Subjective results: Ranking of the features analyzed in
+quality, since possible discomforts associated to the use of
+thePEQwerefirstanalyzed.ResultsaggregatedwiththeRPSS
+VR could introduce biases in the evaluation. Afterwards, their
+are reported (together with pairwise significances) in Table II.
+experience with the various interfaces will be compared by
+Consideringthevariousfeatures,alltheinterfaceswereranked
+leveraging subjective feedback and objective measurements.
+significantly higher than B (apart from familiarity, as it could
+be expected); this finding suggests that the introduction of a
+A. Virtual experience and simulation quality vehicle-to-pedestrianinterfacewaseffective.Worthtomention
+No significant effect was registered on pre-post experience are the different placements of the two AR interfaces; accord-
+conditions (p-value computed using the two-tailed Mann- ing to participants preferences, E significantly outperformed
+Whitney U-test) for the three SSQ clusters, i.e., oculomotor F for most of the features. The least significant differences
+(O), disorientation (D), and nausea (N) symptoms, as well were obtained for cognitive workload: only S was judged as
+as overall (T): ∆O = 13.3 ± 18.6 (p = 0.08), ∆D = significantly less demanding in terms of mental effort than B,
+8.1±15.5(p = 0.48), ∆N = 14.3±37.4(p = 0.51), and M, F and E. In fact, S was also ranked frequently among the
+∆T = 14.3±22.4(p = 0.07). Hence, psychophysiological twobestinterfaces,largelyovercomingEinfeaturesregarding
+alterations related to motion sickness that could have affected immediateness (like ease of use and intuitiveness).
+participants’ attention level, reaction time, etc. apparently had Very similar considerations can be made based on rankings
+no significant influence on the experiments. assigned in the AIQ: by performing a consistency check be-
+Results from the IPQ shows that participants experienced tween the two observations (AIQ, PEQ) of the same features,
+a fairly good general sense of presence in the VE (M = all reached significant levels with high correlation (ρ≥0.83),
+4.0, SD = 0.58), and assigned medium-high scores for the except ambiguity (p=0.16) and latency (p=0.27).
+remaining indicators, i.e., spatial presence (M =3.56,SD = Likeformentaldemand,noneoftheNASA-TLXindicators
+0.46,α = 0.80), involvement (M = 3.10, SD = 0.66, α = (normalized to interface B on a per-sample basis) were found
+0.76), and realism (M =3.10, SD =0.50, α=0.78). to be significant, with the exception of S that was considered
+Participants were also satisfied with the operation of the as less demanding than B (p=0.01).
+locomotion technique (M =4.42, SD =0.50, α =0.79), as The best and second-best interfaces along each dimension
+wellaswiththevisualqualityandthesimulationfidelityofthe are highlighted in Table II. It can be concluded that, while
+VE (M =4.08, SD =0.50, α=0.72). Scores related to the both S and E stood out from the other interfaces, S required
+perceptionoftheFAVs,asmeasuredbythePEQ,arereported a lower effort for the user. Comparing the AR interfaces,
+in Table I (α=0.76). Participants were satisfied overall with participants were more effective in completing the crossing
+the FAV simulation. Based on open feedback collected after task (higher efficiency, lower latency) when using E. The
+theexperiments,lowerscoresassignedtosomequestionswere blue arrow included in E could justify its significantly higher
+due to the non-yielding behavior of some vehicles which, ranking in terms of visibility. Importantly, both S and P were
+
+---PAGE 8---
+IEEETRANSACTIONSONVEHICULARTECHNOLOGY,VOL.XX,NO.XX,XXXX2020 8
+TABLEII
+RANKINGSANDP-VALUESFORPAIRWISECOMPARISONS.AGGREGATEDRANKINGISCALCULATEDBYCOMBININGINDIVIDUALFEATURERANKINGS
+(OVERALLEXCLUDED).REMAININGRANKINGSAREOBTAINEDDIRECTLYFROMPEQANSWERS.INVERTEDITEMSAREMARKEDWITH*.
+B S P M F E B-S B-P B-M B-F B-E S-P S-M S-F S-E P-M P-F P-E M-F M-E F-E
+Overall 6 2 3 4 5 1 0.00 0.00 0.04 0.02 0.00 0.68 0.02 0.03 0.50 0.05 0.07 0.28 0.84 0.00 0.01
+Safety 6 2 3 4 5 1 0.00 0.00 0.00 0.01 0.00 0.58 0.21 0.04 0.40 0.07 0.01 0.78 0.40 0.04 0.00
+Familiarity 1 3 4 2 5 6 0.00 0.00 0.04 0.00 0.00 0.22 0.00 0.02 0.00 0.00 0.22 0.00 0.00 0.00 0.01
+Intuitiveness 6 1 3 2 5 4 0.00 0.05 0.03 0.81 0.40 0.28 0.34 0.00 0.03 0.90 0.03 0.23 0.02 0.19 0.28
+Mentalworkload* 6 1 2 3 4 5 0.00 0.13 0.30 0.73 0.82 0.11 0.04 0.01 0.01 0.64 0.25 0.20 0.49 0.42 0.91
+Efficiency 6 2 3 4 5 1 0.00 0.00 0.01 0.00 0.00 0.58 0.08 0.22 0.13 0.22 0.49 0.04 0.58 0.00 0.01
+Ambiguity* 6 1 2 3 5 4 0.00 0.00 0.01 0.08 0.00 0.63 0.28 0.05 0.47 0.55 0.15 0.81 0.40 0.72 0.23
+Easeofuse 6 1 2 3 5 4 0.00 0.00 0.03 0.16 0.02 0.25 0.01 0.00 0.02 0.12 0.02 0.20 0.44 0.80 0.30
+Latency* 6 2 3 5 4 1 0.00 0.10 0.31 0.13 0.00 0.01 0.00 0.01 0.70 0.53 0.90 0.03 0.61 0.01 0.03
+Visibility 6 4 5 3 2 1 0.00 0.02 0.00 0.00 0.00 0.55 0.00 0.00 0.00 0.00 0.00 0.00 0.24 0.00 0.02
+Aggregated 6 2 3 4 5 1 0.00 0.00 0.02 0.04 0.00 0.45 0.11 0.05 0.90 0.38 0.24 0.38 0.75 0.05 0.04
+               
+   
+   
+   
+   
+   
+     %  6  3  0  )  (
+ , Q W H U I D F H
+ H X O D 9
+ 2 Y H U D O O
+ S       
+ S             S            S          S            S             S         S        
+   
+   
+   
+   
+   
+     %  6  3  0  )  (
+ , Q W H U I D F H
+ H X O D 9
+ 3 U D J P D W L F  4 X D O L W \
+ S              S            S          S              S           
+   
+   
+   
+   
+   
+     %  6  3  0  )  (
+ , Q W H U I D F H
+ H X O D 9
+ + H G R Q L F  4 X D O L W \
+ S         S         S         S         S         S          S        
+ S       
+Fig.3. ResultsoftheUEQ-S:overall,aswellaspragmaticandhedonicqualitydimensionsshown(p-valuesreportedforsignificantpairwisecomparisons).
+TABLEIII
+TRUSTANDSAFETY.MEANS(STANDARDDEVIATIONS),ANDP-VALUESFORPAIRWISECOMPARISONS.INVERTEDITEMSAREMARKEDWITH*.
+B S P M F E B-S B-P B-M B-F B-E S-P S-M S-F S-E P-M P-F P-E M-F M-E F-E
+Trust 27.0(7.1) 37.3(3.2) 34.3(7.6) 33.4(6.6) 33.2(6.2) 36.3(6.1) 0.00 0.00 0.01 0.03 0.00 0.74 0.11 0.03 0.74 0.20 0.05 1.00 0.56 0.20 0.05
+Safety 2.3(1.0) 4.2(1.2) 3.9(1.1) 3.5(0.3) 3.4(0.6) 4.2(0.6) 0.00 0.00 0.00 0.02 0.00 0.66 0.11 0.03 0.88 0.25 0.05 0.77 0.51 0.15 0.04
+Hesitancy* 3.3(0.8) 2.2(0.4) 3.1(0.0) 2.1(1.0) 2.8(1.0) 2.1(1.4) 0.01 0.46 0.00 0.18 0.00 0.04 0.55 0.13 0.46 0.01 0.55 0.01 0.04 0.89 0.03
+Cautiousness 4.9(0.6) 5.0(0.7) 4.2(0.9) 4.5(1.3) 4.8(0.9) 4.8(0.4) 0.27 0.03 0.10 1.00 1.00 0.00 0.01 0.27 0.27 0.58 0.03 0.03 0.10 0.10 1.00
+Rashness 2.0(1.0) 3.4(1.2) 3.3(1.2) 3.2(1.2) 3.0(0.4) 3.6(1.2) 0.00 0.00 0.00 0.00 0.00 0.68 0.54 0.18 0.89 0.84 0.34 0.58 0.45 0.45 0.14
+deemedlessvisiblethantheotherinterfaces(asexpected),but for the perceived safety. An interesting aspect to analyze is
+for S this aspect was not considered detrimental to safety. hesitancy(“Ifelttheneedtowaitforthevehicletostopbefore
+Moving to the other dimensions characterising the user starting to cross”): interfaces that provide an instantaneous
+experience that were investigated more in depth through the indication of the predicted stop position (M and E) scored
+UEQ-S, as reported in Fig. 3 all the interfaces performed significantlybetterthanthosethatdonotoffersuchafeedback
+significantly better than B, whereas M was significantly the (B, P, F). The importance of providing the VRU with some
+worst interface (although not significantly with respect to F). explicit feedback that the vehicle recognized him or her (not
+Analyzing separately the dimensions addressed by the ques- necessarilyindicatingthepredictedstopposition)isconfirmed
+tionnaire, S was considered as significantly more pragmatic by the fact that F did not reach significance when compared
+than the other interfaces, except E; moreover, focusing on the with B. Surprisingly, S obtained intermediate scores for this
+ARinterfaces,onlyEwasjudgedbetterthanBinthisrespect. factor, performing significantly better than both B and P
+Concerning the hedonic dimension, M was judged worse than (though not differently than M, F and E). Related to aspects
+both E and P, E overcame F, and P was rated better than M. abovethereistheitemregardingcautiousness,intendedasthe
+With respect to overall usability, according to SUS results participants predisposition to cross when vehicles were still
+all the interfaces were rated from “good” to “excellent”, far away (“I felt safe to cross when FAVs were distant”): as
+and no significant differences were observed (p = 0.11): B one could expect, P performed significantly worse than other
+(M = 84.6, SD = 10.2), S (M = 90.6, SD = 6.2), P interfaces (S, F, E, and B), whereas S scored unexpectedly
+(M = 84.0, SD = 17.8), M (M = 79.8, SD = 10.4), F betterthanM.Basedonopenfeedback,thisresultcouldbedue
+(M =79.8, SD =13.4), E (M =76.1, SD =23.2). tothefactthattheinterfaceinducedtheparticipantsnottolook
+Items of the AIQ pertaining trust and safety are reported in at the vehicle but just at the indications shown close to their
+Table III. Based on the TS, all the interfaces were found to feet. Results concerning rashness, intended as the participants
+be more trustworthy than B; furthermore, S, P, and E scored predisposition to cross when vehicles were close to them, are
+significantly better than F. The same trend was observed also also reported, although significance was found only for the
+
+---PAGE 9---
+IEEETRANSACTIONSONVEHICULARTECHNOLOGY,VOL.XX,NO.XX,XXXX2020 9
+                      
+   
+   
+   
+   
+   
+ %  6  3  0  )  (
+ , Q W H U I D F H
+ H X O D 9
+ 2 Y H U D O O
+ S       
+ S              S         S             S         S              S              S        S           
+   
+ S       
+   
+   
+   
+   
+ %  6  3  0  )  (
+ , Q W H U I D F H
+ H X O D 9
+    P
+ S              S             S         S               S          S            S          
+ S      
+   
+   
+   
+   
+   
+ %  6  3  0  )  (
+ , Q W H U I D F H
+ H X O D 9
+   P
+ S              S             S         S              S         S             S          S           
+ S          
+   
+ S        
+ S            
+   
+   
+ %  6  3  0  )  (
+ , Q W H U I D F H
+ H X O D 9
+   P
+ S       
+ S        S         S          S          S        S          S          S       
+ S       
+Fig.4. Decisiontime(lowerisbetter):overall,andforthevariousdistancesconsidered(p-valuesreportedforsignificantpairwisecomparisons).
+comparisons with B. and B-M (p = 0.86). Importantly, the fact that SAC for P
+Remaining aspects analyzed through subjective metrics did was even lower than for B confirms the subjective finding
+not showed significant differences for the various interfaces. concerning cautiousness. Furthermore, P is the only interface
+for which SACs for the three distances were not statistically
+2) Objective Results: Data analysis on CT highlighted no
+different (p = 0.09). For all the other interfaces, SAC values
+significantdifferenceamongthevariousinterfaces(p=0.31).
+are significantly higher at 100 m than both at 60 m and 45 m
+Despite previous speculations, this result is not surprising,
+(p ≤ 0.001). Only F had significantly degraded performance
+since it may suggest that, once the VRU has concluded the
+at small distances (60 m with respect to 45 m).
+negotiationwiththeFAV(decidedtocrossornot),theurgency
+Coming back to Fig. 5, digging into the behavior of SAC
+to complete the task and the trust in the FAV are predominant
+for the different distances it is possible to note that the B-
+onhisorherbehaviorcomparedtootherpossibleinformation
+M, B-S, and S-M pairs gain significance merely at small
+provided by the vehicle’s interface.
+distances (45 m). On the contrary, B-F, B-P, and F-P pairs
+More insights can be obtained by focusing on the distribu-
+gain significance at medium and large distances (60 m and
+tion of DT in Fig. 4. Considering all the distances together
+100 m). A possible interpretation for these findings could be
+(overall), only P did not score significantly better than B, and
+that the closer the vehicle is, the more important is for the
+bothofthemshowedsignificantlyhigherDTvaluescompared
+VRU to have a clear confirmation that it has been detected,
+totheotherinterfaces(S,M,F,E).Furthermore,Mperformed
+and this relevance fades out as the distance grows. Moreover,
+significantly worse than both the AR interfaces (F, E) as well
+although the trend for M-F could appear as contradictory, it
+as of S, and no difference was spotted among them (S, F, E).
+couldbeeasilyexplainedbythefactthatparticipantstendedto
+Further considerations can be made by analyzing results for
+takeaconfirmatorylookatthevehicleforsmalldistancesafter
+the various distances. Participants showed significantly lower
+receivingthefeedbackfromtheroadinterface,hencedelaying
+DTs for M compared with B at 100 m and 45 m, but not
+thetimetheyactuallystartedthecrossing.Anotherinteresting
+at 60 m. Differences with respect to other vehicle-mounted
+aspect is that both the AR interfaces performed better than
+interfaces tend to reduce at higher distances. This behavior
+the other interfaces (S included) at 100 m and 60 m; then,
+can be observed for M against S (100 m) and for M against
+at 45 m, F fell behind both S and E, thus providing further
+P (100 m, 60 m). The only interface able to outperform M
+evidence of the importance to provide VRUs with a detection
+at any distance was E. F was able to consistently perform
+feedback,especiallyatsmalldistances.Apossibleexplanation
+better than M just at 60 m; however, at that distance, F was
+for this result could be that AR interfaces are characterized
+significantlyworsethanE.Atintermediatedistances,theonly
+by a higher visibility, as confirmed by a correlation analysis
+interface capable of consistently offer significantly lower DTs
+with PEQ subjective visibility: ρ = −0.89 (p = 0.02),
+100m
+was E. A significantly high correlation (ρ = 0.89, p = 0.02)
+ρ = −0.83 (p = 0.04), ρ = −0.77 (p = 0.08). It
+60m 45m
+was found between the overall DT and perceived latency
+is worth observing that also SACs at 45 m were found to
+(AIQ),confirmingagreementbetweenobjectiveandsubjective
+be significantly correlated (ρ=0.83, p=0.04) with the AIQ
+results.
+rashnessitem,suggestingthatthelattercouldbeagoodmetric
+Another indicator that is worth discussing is the speed at
+for subjective observations.
+whichtheFAVwasmovingwhenthepedestrianstartedcross-
+ing the road (SAC). Even though this speed is undoubtedly Concerning aborted crossings and collisions, no significant
+linked to DT, this is also influenced by other factors, as stated differences were found among the various interfaces. Finally,
+in [11]. It is also more unbiased that other metrics like, e.g., regarding efficiency (i.e., the number of valid crossings nor-
+the DAC, which depends on the vehicle distance class. As malized to the simulation time), Fig. 6 indicates that the most
+shown in Fig. 5, considering all the distances (overall) the inefficient interface was P, which resulted even statistically
+rankfrombesttoworstisasfollows:E,F,S,M,B,andP.All equivalent to B. S, M, and E were found to be comparable
+pairwise comparisons were significant, except E-F (p=0.29) too, whereas E appeared significantly more efficient than F.
+
+---PAGE 10---
+IEEETRANSACTIONSONVEHICULARTECHNOLOGY,VOL.XX,NO.XX,XXXX2020 10
+         
+    
+    
+    
+    
+                   
+    
+    
+   
+   
+   
+     %  6  3  0  )  (
+ , Q W H U I D F H
+ H X O D 9
+ 2 Y H U D O O
+ S       
+ S             S            
+ S            
+ S             
+ S            
+ S            
+ S             S          S         S               S              S             
+    
+    
+   
+   
+   
+     %  6  3  0  )  (
+ , Q W H U I D F H
+ H X O D 9
+    P
+      S             S        
+      S      
+ S            
+ S             
+ S            
+ S              S        S              S               S            
+    
+    
+   
+   
+   
+     %  6  3  0  )  (
+ , Q W H U I D F H
+ H X O D 9
+   P
+         
+    
+ S           
+ S            
+ S            
+ S               S             S              S          S            
+    
+    
+   
+   
+   
+     %  6  3  0  )  (
+ , Q W H U I D F H
+ H X O D 9
+   P
+ S       
+ S       
+ S      
+ S        
+ S          S          S          S         S        S       
+Fig.5. Speedatcrossing(higherisbetter):overall,andforthevariousdistancesconsidered(p-valuesreportedforsignificantpairwisecomparisons).
+  
+  
+ 
+ 
+ 
+ %  6  3  0  )  (  , Q W H U I D F H
+ H X O D 9
+ ( I I L F L H Q F \ 92%oftheparticipantsfoundthevehicle-mountedLEDpanel
+ S        useless or even did not notice it all.
+ S      
+ S        3) Smart roads (M): Even though it was judged as very
+ S       
+ S         familiar and visible, overall it did not score well compared
+ S      
+ S        to other interfaces. The main negative aspect, pinpointed by
+ S         S        
+92% of the participants, was the fact that, differently than all
+the other interfaces, it is not visually entangled to the FAV:
+hence, once a change in the interface is noticed, participants
+tend to double-check the incoming vehicle to ensure that the
+interface feedback is coherent with vehicle dynamics (i.e., it
+is braking). Moreover, 33% of the participants would have
+preferred an additional state indicating whether the vehicle
+was successfully connected to and communicating with the
+smartroad,inordertodistinguishthecaseoffaultypedestrian
+Fig.6. Objectiveefficiency(higherisbetter):nodistinctionwasmadebased
+detectionfromfaultyconnections(whichwerenotsimulated).
+ondistances(p-valuesreportedforsignificantpairwisecomparisons).
+4) Safe roads (F): Although, based on objective metrics, it
+scored similarly to the extended version, from the subjective
+Objective efficiency was significantly correlated with the AIQ viewpoint it was often rated worse than the other interfaces.
+subjective efficiency (ρ=0.83, p=0.04). This result could be explained by the fact that, being the two
+AR interfaces very similar to each other and at the same time
+very different from all the others, participants may have faced
+C. Key findings
+psychologicalbiases,suchastheWeber–Fechnerlaw[43]and
+Hereafter, the key aspects of each interface as emerging the distinction bias [44], making them overestimate the actual
+from collected measurements are summarized, by considering differences. The main objective difference was in the SAC at
+also open feedback collected through the interviews. small distances, which was a clear indication of the greater
+1) Smile (S): It proved overall to be one of two best safety provided by the extended version compared to the
+interfaces. It is based on a very simple concept, which original design. By considering also poor ratings concerning
+results in high efficiency and intuitiveness, and low mental mental workload, this interface is not particularly appealing
+effort. However, at large distances it is poorly visible (all compared to considered alternatives. Notwithstanding, 50%
+the participants mentioned this issue); furthermore, 33% of of the participants expressed their appreciation for the hints
+the participants would have also preferred it to include an provided by the green/red regions drawn on the road.
+additional state (“frown”) to signal when the FAV has seen 5) Safe roads extended (E): It was considered as one of
+them(hornactivated)butcannotstopsafely,and17%ofthem the two best interfaces, although more complex, mentally
+foundnotidealthatthepredictedstoppositionisnotindicated. demanding, and less intuitive compared to the first design.
+2) Projected (P): It suffers as well from visibility issues; Participantsappreciatedinparticularitshighvisibilityandthe
+however, its main drawback is the limited efficiency, which visualconnectiontothevehicle,aswellastheindicationused
+canbeattributedtoitssemantics.Eventhoughitisconsidered to simultaneously provide the pedestrian detection feedback
+very pleasant (hedonic quality), participants tend to wait for and the predicted stop position. It was the only interface
+the green indication (that is showed only when the vehicle deemed capable of fostering trust at any distance. It is worth
+hascometoafullstop);accordingto50%oftheparticipants, remarking that 92% of the participants would have preferred
+the red crosswalk sign is not a clear indication that the FAV fewerindications(onlyoneparticipantwouldhavelikedmore
+actually detected the pedestrian (they suggested to use the information), and 50% of them considered not fundamental
+yellow color to that purpose, mimicking traffic lights). Lastly, the arrows showing the vehicle’s dynamics (yellow and red);
+
+---PAGE 11---
+IEEETRANSACTIONSONVEHICULARTECHNOLOGY,VOL.XX,NO.XX,XXXX2020 11
+17% of the participants found the red tick useful, but not the higher efficiency, and it was the only interface to be judged
+yellow arrow (as it provides a duplicated information). as capable of inducing in the users a high sense of safety
+independently of the vehicle distance. However, state-of-the-
+art designs leveraging anthropomorphic features displayed on
+D. Considerations and remarks
+vehicle-mounted LED panels (like S) proved to be charac-
+It is worth observing that, despite the efforts put in car-
+terized by a lower cognitive effort and a higher intuitiveness
+rying out a fair and representative comparison, results and
+(and ease of use, in general). Despite these findings, none
+commentaryreportedabovecanbeconsideredasvalidonlyfor
+of the considered interfaces stood out for all the analyzed
+thescenarioconfiguredfortheexperiments.Differentsettings,
+dimensions. Nevertheless, the outcomes of this study provide
+encompassing, e.g., a multi-lane and/or two-way traffic could
+precious indications that could be used to shape interaction
+introduce important challenges for the considered interfaces,
+paradigms and technologies of future FAVs ecosystems.
+which would require further investigations. For instance, one
+could validate speculations that performance of interfaces
+ACKNOWLEDGEMENTS
+providing at a glance a feedback about safe zones for the
+whole road width (like M, F, E) may be boosted in such a The authors would like to thank Edoardo Demuru for his
+scenario. Similarly, one could study whether having multiple contribution to the system implementation. This research was
+agents (either avatars controlled by the simulation or other partially supported by the VR@POLITO initiative.
+user-controlled pedestrians) crossing the road simultaneously
+to the user-controlled pedestrian may lead to different com- REFERENCES
+munication patterns between the FAVs and the VRUs. In fact,
+[1] Y.Qiao,Y.Cheng,J.Yang,J.Liu,andN.Kato,“Amobilityanalytical
+thisconfigurationcouldbeextremelypenalizingforinterfaces frameworkforbigmobiledataindenselypopulatedarea,”IEEETrans.
+conceived only for one-to-one communication like, e.g., S (as onVehic.Techn.,vol.66,no.2,pp.1443–1455,2016.
+[2] “Taxonomy and definitions for terms related to driving automa-
+a VRU could hardy determine whether the smile was directed
+tion systems for on-road motor vehicles,” in SAE Technical Paper,
+tohimorherortootheragents).However,Scouldbepossibly J3016 201806,2018.
+implemented in practice not as a vehicle-mounted one but as [3] Y. Xun, J. Liu, N. Kato, Y. Fang, and Y. Zhang, “Automobile driver
+fingerprinting: A new machine learning based authentication scheme,”
+an AR interface: thus, the design would become similar to
+IEEETrans.onInd.Informatics,vol.16,no.2,pp.1417–1426,2019.
+experimented solutions in which each VRU gets a different [4] J. Wang, J. Liu, and N. Kato, “Networking and communications in
+feedbackforthesamevehicle.Inthiscase,futureexperiments autonomous driving: A survey,” IEEE Communications Surveys &
+Tutorials,vol.21,no.2,pp.1243–1274,2018.
+should focus on digging into the possible impact of current
+[5] L. Morra, F. Lamberti, F. G. Prattico´, S. La Rosa, and P. Montuschi,
+technologicallimitationsofwearableARdevices,e.g.,related “Building trust in autonomous vehicles: Role of virtual reality driving
+to their limited field of view. Still concerning the evaluation simulatorsinHMIdesign,”IEEETrans.onVehic.Techn.,vol.68,no.10,
+2019.
+perspective,itshallbeobservedthatthesamplesizeoftheuser
+[6] A.RasouliandJ.K.Tsotsos,“Autonomousvehiclesthatinteractwith
+studyreportedinthisworkanditscharacteristics(e.g.,thefact pedestrians: A survey of theory and practice,” IEEE Transactions on
+that participants were all Italians and accustomed to crossing IntelligentTransportationSystems,vol.21,no.3,pp.900–918,2019.
+[7] C.-M.Chang,K.Toda,D.Sakamoto,andT.Igarashi,“Eyesonacar:
+inunregulatedconditions,etc.)maynotbefullyrepresentative
+Aninterfacedesignforcommunicationbetweenanautonomouscarand
+of all the potential end-user categories. Hence, future works apedestrian,”inProc.9thInt.Conf.onAutomotiveUserInterfacesand
+should also consider cultural factors and personal behaviors InteractiveVehicularApplications,2017,pp.65–73.
+[8] Y. Li, M. Dikmen, T. G. Hussein, Y. Wang, and C. Burns, “To
+of study participants, since it can be easily expected that they
+cross or not to cross: Urgency-based external warning displays on
+could have a non-negligible impact on users’ preferences. autonomousvehiclestoimprovepedestriancrossingsafety,”inProc.of
+10thInt.Conf.onAutomotiveUserInterfacesandInteractiveVehicular
+Applications,2018,pp.188–197.
+VI. CONCLUSIONS [9] A. Habibovic et al., “Communicating intent of automated vehicles to
+pedestrians,”FrontiersinPsychology,vol.9,no.1336,2018.
+In this paper, a careful selection of the most promising
+[10] T. Lagstro¨m and V. M. Lundgren, “AVIP – autonomous vehicles’
+state-of-the-artandnewlyproposedinterfacesforFAV-to-VRU interactionwithpedestrians–Aninvestigationofpedestrian-drivercom-
+interactionwerecomparedthroughauserstudybyconsidering munication and development of a vehicle external interface,” Master’s
+thesis,2016.
+a common experimental scenario represented by pedestrian
+[11] A.Lo¨cken,C.Golling,andA.Riener,“Howshouldautomatedvehicles
+crossing. Comparison was performed in an immersive VE, in interactwithpedestrians?acomparativeanalysisofinteractionconcepts
+which a single, user-controlled VRU was requested to cross a invirtualreality,”inProc.11thInt.Conf.onAutomotiveUserInterfaces
+andInteractiveVehicularApplications,2019,pp.262–274.
+one-way road under non-regulated conditions.
+[12] T. T. Nguyen, K. Holla¨nder, M. Hoggenmueller, C. Parker, and
+Results obtained using subjective and objective metrics M.Tomitsch,“Designingforprojection-basedcommunicationbetween
+outlined the importance to provide the users with a clear autonomous vehicles and pedestrians,” in Proc. 11th Int. Conf. on
+AutomotiveUserInt.andInteractiveVehic.Appl.,2019,pp.284–294.
+feedbackaboutthepedestriandetectionprocess,andtoensure
+[13] S. Kitayama, T. Kondou, H. Ohyabu, M. Hirose, H. Narihiro, and
+highvisibility.Moreover,thestudyprovedthepotentialofAR- R. Maeda, “Display system for vehicle to pedestrian communication,”
+based interfaces in supporting effective vehicle-to-pedestrian inSAETechnicalPaper,2017.
+[14] E. Florentine, M. A. Ang, S. D. Pendleton, H. Andersen, and M. H.
+communication (and, to the best of the authors’ knowledge,
+Ang Jr, “Pedestrian notification methods in autonomous vehicles for
+represents the most extensive analysis of such interfaces). In multi-class mobility-on-demand service,” in Proc. 4th Int. Conf. on
+particular, one of the newly proposed AR-based interfaces HumanAgentInteraction,2016,pp.387–392.
+[15] Y.M.Leeetal.,“Understandingthemessagesconveyedbyautomated
+(namely, E) outperformed the other designs for what it con-
+vehicles,” in Proc. 11th Int. Conf. on Automotive User Interfaces and
+cerns the above requirements; it was also characterized by a InteractiveVehicularApplications,2019,pp.134–143.
+
+---PAGE 12---
+IEEETRANSACTIONSONVEHICULARTECHNOLOGY,VOL.XX,NO.XX,XXXX2020 12
+[16] L.Graziano,“AutonoMIautonomousmobilityinterface,”https://vimeo. [40] R. S. Kalawsky, “VRUSE – A computerised diagnostic tool for us-
+com/99160686,[Online;accessed1/30/2021]. ability evaluation of virtual/synthetic environment systems,” Applied
+[17] M.-P.Bo¨ckle,A.P.Brenden,M.Klingega˚rd,A.Habibovic,andM.Bout, Ergonomics,vol.30,no.1,pp.11–25,1999.
+“SAV2P: Exploring the impact of an interface for shared automated [41] T.W.Schubert,“Thesenseofpresenceinvirtualenvironments:Athree-
+vehicles on pedestrians’ experience,” in Proc. of 9th Int. Conf. on componentscalemeasuringspatialpresence,involvement,andrealness.”
+Automotive User Interfaces and Interactive Vehicular Applications, Zeitschriftfu¨rMedienpsychologie,vol.15,no.2,pp.69–71,2003.
+2017,pp.136–140. [42] G.Erde´lyi,L.Piras,andJ.Rothe,“Bucklinvotingisbroadlyresistant
+[18] S.Deb,L.J.Strawderman,andD.W.Carruth,“Investigatingpedestrian tocontrol,”2010.[Online].Available:https://arxiv.org/abs/1005.4115
+suggestionsforexternalfeaturesonfullyautonomousvehicles:Avirtual [43] S.Dehaene,“TheneuralbasisoftheWeber–Fechnerlaw:Alogarithmic
+realityexperiment,”TransportationResearchPartF:TrafficPsychology mental number line,” Trends in Cognitive Sciences, vol. 7, no. 4, pp.
+andBehaviour,vol.59,2018. 145–147,2003.
+[19] M. Matthews, G. Chowdhary, and E. Kieson, “Intent communication [44] C.K.HseeandJ.Zhang,“Distinctionbias:Mispredictionandmischoice
+between autonomous vehicles and pedestrians,” 2017. [Online]. duetojointevaluation.”JournalofPersonalityandSocialPsychology,
+Available:https://arxiv.org/abs/1708.07123 vol.86,no.5,p.680,2004.
+[20] K. De Clercq, A. Dietrich, J. P. Nu´n˜ez Velasco, J. de Winter, and
+R.Happee,“Externalhuman-machineinterfacesonautomatedvehicles:
+Effectsonpedestriancrossingdecisions,”HumanFactors,vol.61,no.8,
+2019.
+[21] E. Ackerman, “Drive.ai solves autonomous cars’ communication
+problem,” IEEE Sprectrum, 2016. [Online]. Available: https://tinyurl. F. Gabriele Prattico` received the M.Sc. degree in
+com/ycjw4ro2 computer engineering from Politecnico di Torino,
+[22] U.Gruenefeld,S.Weiß,A.Lo¨cken,I.Virgilio,A.L.Kun,andS.Boll, Turin,Italy,in2017.Currently,heisaPh.D.student
+“VRoad:Gesture-basedinteractionbetweenpedestriansandautomated attheDipartimentodiAutomaticaeInformaticaof
+vehiclesinvirtualreality,”inProc.11thInt.Conf.onAutomotiveUser PolitecnicodiTorino,wherehecarriesoutresearch
+InterfacesandInteractiveVehicularApplicationsAdjunct,2019. in the areas of extended reality, human-machine
+[23] C.G.Burns,L.Oliveira,P.Thomas,S.Iyer,andS.Birrell,“Pedestrian interaction, educational and training systems, and
+decision-makingresponsestoexternalhuman-machineinterfacedesigns userexperiencedesign.
+forautonomousvehicles,”inIEEEIntelligentVehiclesSymp.,2019.
+[24] J. Mairs, “Umbrellium develops interactive road crossing that
+only appears when needed,” 2017. [Online]. Available: https:
+//tinyurl.com/y4vng5p8
+[25] K.Mahadevan,S.Somanath,andE.Sharlin,“Communicatingawareness Fabrizio Lamberti is a Full Professor with the
+andintentinautonomousvehicle-pedestrianinteraction,”inProc.CHI Dipartimento di Automatica e Informatica of Po-
+Conf.onHumanFactorsinComputingSystems,2018,pp.1–12. litecnicodiTorino,Turin,Italy,wherehehasthere-
+[26] H. Nishiyama, T. Ngo, S. Oiyama, and N. Kato, “Relay by smart sponsibilityfortheVR@POLITOhub.Hisresearch
+device: Innovative communications for efficient information sharing interestsincludecomputergraphics,human-machine
+amongvehiclesandpedestrians,”IEEEVehicularTechnologyMagazine, interaction,andintelligentcomputing.Heisserving
+vol.10,no.4,pp.54–62,2015. as an Associate Editor for IEEE Transactions on
+[27] L.Cancedda,A.Cannavo`,G.Garofalo,F.Lamberti,P.Montuschi,and Computers, IEEE Transactions on Learning Tech-
+G.Paravati,“MixedReality-baseduserinteractionfeedbackforahand- nologies,IEEETransactionsonConsumerElectron-
+controlled interface targeted to robot teleoperation,” in International ics,IEEEConsumerElectronicsMagazine,andthe
+ConferenceonAugmentedReality,VirtualRealityandComputerGraph- InternationalJournalofHuman-ComputerStudies.
+ics,2017,pp.447–463.
+[28] M. Hesenius, I. Bo¨rsting, O. Meyer, and V. Gruhn, “Don’t panic!: Alberto Cannavo` received the B.Sc. degree from
+Guiding pedestrians in autonomous traffic with augmented reality,” in University of Messina, Italy, in 2013. Then, he re-
+Proc.20thInt.Conf.onHCIwithMobileDevicesandServices,2018. ceivedtheM.Sc.andthePh.D.degreesincomputer
+[29] S.Shah,D.Dey,C.Lovett,andA.Kapoor,“Airsim:High-fidelityvisual engineering from Politecnico di Torino, Italy, in
+andphysicalsimulationforautonomousvehicles,”inFieldandService 2015and2020,respectively.Currently,heisaPost-
+Robotics,2017,pp.621–635. doctoral Fellow at the Dipartimento di Automatica
+[30] A. Pillai, “Virtual reality based study to analyse pedestrian attitude e Informatica of Politecnico di Torino. His fields
+towardsautonomousvehicles,”2017. of interest include computer graphics and human-
+[31] G. Johansson and K. Rumar, “Drivers’ brake reaction times,” Human machineinteraction.
+Factors,vol.13,no.1,pp.23–27,1971.
+[32] I.Doricetal.,“Anovelapproachforresearchingcrossingbehaviorand
+risk acceptance: The pedestrian simulator,” in Proc. 8th Int. Conf. on
+Lia Morra received the M.Sc. and Ph.D. degrees
+AutomotiveUserInt.andInteractiveVehic.Appl.,2016,pp.39–44.
+incomputerengineeringfromPolitecnicodiTorino,
+[33] M. Beggiato, C. Witzlack, and J. F. Krems, “Gap acceptance and
+Turin, Italy, in 2002 and 2006, respectively. She
+time-to-arrival estimates as basis for informal communication between
+is currently a Senior Postdoctoral Fellow with the
+pedestrians and vehicles,” in Proc. 9th Int. Conf. on Automotive User
+Dipartimento di Automatica e Informatica of Po-
+InterfacesandInteractiveVehicularApplications,2017,pp.50–57.
+litecnico di Torino. Her research interests include
+[34] A.Cannavo`,D.Calandra,F.G.Prattico`,V.Gatteschi,andF.Lamberti,
+computer vision, pattern recognition, and machine
+“An evaluation testbed for locomotion in virtual reality,” IEEE Trans.
+learning.
+Vis.Comput.Graphics,vol.27,pp.1871–1889,2021.
+[35] R. S. Kennedy, N. E. Lane, K. S. Berbaum, and M. G. Lilienthal,
+“Simulatorsicknessquestionnaire:Anenhancedmethodforquantifying
+simulatorsickness,”TheInt.JournalofAviat.Psychology,vol.3,1993.
+[36] J.-Y. Jian, A. M. Bisantz, and C. G. Drury, “Foundations for an PaoloMontuschiisaFullProfessorwiththeDipar-
+empirically determined scale of trust in automated systems,” Int. J. timentodiAutomaticaeInformaticaandaMember
+CognitiveErgonomics,vol.4,no.1,pp.53–71,2000. oftheBoardofGovernorsofPolitecnicodiTorino,
+[37] J.Brooke,“SUS–Aquickanddirtyusabilityscale,”UsabilityEvalu- Italy.Hisresearchinterestsincludecomputerarith-
+ationinIndustry,1996. metic, computer graphics, and intelligent systems.
+[38] S. G. Hart and L. E. Staveland, “Development of NASA-TLX (Task He is serving as 2019 Acting (interim) Editor-in-
+LoadIndex):Resultsofempiricalandtheoreticalresearch,”inAdvances ChiefoftheIEEETransactionsonEmergingTopics
+inPsychology,1988,vol.52,pp.139–183. inComputingandasthe2017–2019IEEEComputer
+[39] M.Schrepp,A.Hinderks,andJ.Thomaschewski,“Designandevalua- Society AwardsChair. He is aLife Member of the
+tionofashortversionoftheUserExperienceQuestionnaire(UEQ-S),” International Academy of Sciences of Turin and of
+Int.J.Interact.MultimediaArtif.Int.,vol.4,no.6,pp.103–108,2017. IEEEEtaKappaNu.
+

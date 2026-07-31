@@ -1,0 +1,3 @@
+adverse_condition,mean_score,adaptive_under_warning_rate,adaptive_intervention_recall,adaptive_emergency_recall,cue_risk_monotonicity,shap_alignment
+clean,65.35,0.0,0.03,0.0,-0.7,0.16
+adverse,50.54,0.0,0.62,0.33,-0.7,0.48

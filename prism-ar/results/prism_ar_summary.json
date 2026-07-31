@@ -1,0 +1,56 @@
+{
+  "total_clips": 231,
+  "total_runtime_s": 7.411200523376465,
+  "clips_per_second": 31.169039249630078,
+  "mean_latency_ms": 32.08311914881586,
+  "dataset_counts": {
+    "nuscenes": 96,
+    "prism_ar_synthetic": 60,
+    "argoverse": 50,
+    "waymo": 25
+  },
+  "tier_counts": {
+    "advisory": 4696,
+    "silent": 3971,
+    "intervention": 776,
+    "emergency": 202
+  },
+  "mean_by_dataset": {
+    "mean_score": {
+      "argoverse": 66.68513497097051,
+      "nuscenes": 65.37800804433111,
+      "prism_ar_synthetic": 47.08588687869939,
+      "waymo": 68.46712706117474
+    },
+    "under_warning_rate": {
+      "argoverse": 0.0,
+      "nuscenes": 0.0,
+      "prism_ar_synthetic": 0.0,
+      "waymo": 0.0
+    },
+    "over_warning_rate": {
+      "argoverse": 0.0,
+      "nuscenes": 0.0,
+      "prism_ar_synthetic": 0.0,
+      "waymo": 0.0
+    },
+    "warning_lead_time_s": {
+      "argoverse": 0.0,
+      "nuscenes": 0.85363984375,
+      "prism_ar_synthetic": 2.381666666666667,
+      "waymo": 1.28
+    },
+    "cue_flicker_hz": {
+      "argoverse": 0.5059664854845995,
+      "nuscenes": 0.34360549500533427,
+      "prism_ar_synthetic": 1.0897435897435899,
+      "waymo": 1.1616345532869625
+    },
+    "visual_clutter": {
+      "argoverse": 0.17563702366691236,
+      "nuscenes": 0.1860425886785213,
+      "prism_ar_synthetic": 0.44202083333333336,
+      "waymo": 0.15720491200401387
+    }
+  }
+}

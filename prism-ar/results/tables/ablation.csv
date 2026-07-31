@@ -1,0 +1,5 @@
+ablation,mean_score,warning_lead_time_s,adaptive_under_warning_rate,adaptive_over_warning_rate,static_under_warning_rate,static_over_warning_rate,cue_flicker_hz,visual_clutter
+full,62.37,1.02,0.0,0.0,0.32,0.0,0.5,0.23
+no_trajectory,65.77,0.48,0.0,0.0,0.23,0.0,0.32,0.22
+no_vru,52.49,3.83,0.0,0.0,0.79,0.0,0.55,0.38
+no_weather,64.23,0.58,0.0,0.0,0.25,0.0,0.51,0.2

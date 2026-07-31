@@ -1,0 +1,73 @@
+{
+  "n_clips": 6,
+  "mean_ms_per_frame": {
+    "environmental": 0.00011055558894036546,
+    "trajectory": 0.001120555356869267,
+    "vru": 0.000460833446898808,
+    "fusion": 0.00241750029898766,
+    "cue_mapping": 5.33329309999115e-05,
+    "total": 0.004162777622696012
+  },
+  "per_clip": [
+    {
+      "scene_id": "near_miss_0000",
+      "frames": 40,
+      "env_ms_per_frame": 0.0003016670234501362,
+      "traj_ms_per_frame": 0.002762500662356615,
+      "vru_ms_per_frame": 0.0005074999838446577,
+      "fuse_ms_per_frame": 0.002335000317543745,
+      "cue_ms_per_frame": 5.9165176935493946e-05,
+      "total_ms_per_frame": 0.0059658331641306486
+    },
+    {
+      "scene_id": "near_miss_0001",
+      "frames": 40,
+      "env_ms_per_frame": 6.083282642066479e-05,
+      "traj_ms_per_frame": 0.0006333333052073915,
+      "vru_ms_per_frame": 0.0004075001925230026,
+      "fuse_ms_per_frame": 0.002482500470553835,
+      "cue_ms_per_frame": 5.00003807246685e-05,
+      "total_ms_per_frame": 0.0036341671754295626
+    },
+    {
+      "scene_id": "near_miss_0002",
+      "frames": 40,
+      "env_ms_per_frame": 0.00012083328329026699,
+      "traj_ms_per_frame": 0.0013099993035818138,
+      "vru_ms_per_frame": 0.0007366674253717065,
+      "fuse_ms_per_frame": 0.0039691668159017954,
+      "cue_ms_per_frame": 9.583309292793274e-05,
+      "total_ms_per_frame": 0.006232499921073516
+    },
+    {
+      "scene_id": "near_miss_0003",
+      "frames": 40,
+      "env_ms_per_frame": 5.9999486741920315e-05,
+      "traj_ms_per_frame": 0.0006824993761256337,
+      "vru_ms_per_frame": 0.00037249992601573467,
+      "fuse_ms_per_frame": 0.0019366668614869316,
+      "cue_ms_per_frame": 3.916696490099032e-05,
+      "total_ms_per_frame": 0.0030908326152712102
+    },
+    {
+      "scene_id": "near_miss_0004",
+      "frames": 40,
+      "env_ms_per_frame": 6.00004568696022e-05,
+      "traj_ms_per_frame": 0.0006500000987822812,
+      "vru_ms_per_frame": 0.0003649998689070344,
+      "fuse_ms_per_frame": 0.0017441673359523218,
+      "cue_ms_per_frame": 3.74983452881376e-05,
+      "total_ms_per_frame": 0.0028566661057993774
+    },
+    {
+      "scene_id": "near_miss_0005",
+      "frames": 40,
+      "env_ms_per_frame": 6.00004568696022e-05,
+      "traj_ms_per_frame": 0.0006849993951618671,
+      "vru_ms_per_frame": 0.00037583328473071254,
+      "fuse_ms_per_frame": 0.002037499992487331,
+      "cue_ms_per_frame": 3.833362522224586e-05,
+      "total_ms_per_frame": 0.003196666754471759
+    }
+  ]
+}

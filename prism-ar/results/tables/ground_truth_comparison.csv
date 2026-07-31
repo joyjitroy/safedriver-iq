@@ -1,0 +1,5 @@
+dataset,adaptive_tier_accuracy,static_tier_accuracy,adaptive_intervention_recall,static_intervention_recall,adaptive_emergency_recall,static_emergency_recall
+argoverse,0.69,0.54,0.0,0.0,0.0,0.0
+nuscenes,0.75,0.36,0.13,0.0,0.0,0.0
+prism_ar_synthetic,0.61,0.48,0.46,0.0,0.35,0.0
+waymo,0.84,0.31,0.21,0.0,0.0,0.0
