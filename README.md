@@ -158,6 +158,8 @@ Phase 2 extends the foundation into an agentic multi-model architecture with env
 
 ## Key Innovations
 
+### Phase 1: SafeDriver-IQ
+
 | Traditional Approach | SafeDriver-IQ (Novel) |
 |---------------------|----------------------|
 | Binary crash prediction | Continuous safety score (0-100) |
@@ -166,13 +168,46 @@ Phase 2 extends the foundation into an agentic multi-model architecture with env
 | General risk factors | VRU-specific safety models |
 | CRSS-only training | CRSS + Waymo + synthesised contextual features |
 
-### Novel Contributions:
+**Novel Contributions (Phase 1):**
 1. **Inverse Safety Score Formulation** - Continuous safety metric (0-100) instead of binary crash prediction
 2. **Good Driver Profile Extraction** - First empirical characterisation of safe driving from crash data + Waymo behavioural data
 3. **VRU-Specific Safety Modeling** - Dedicated models for pedestrian, cyclist, and work zone encounters
 4. **Contextual Feature Synthesis** - 16 research-calibrated risk dimensions generated from `ContextualFeatureGenerator` to fill CRSS data gaps
 5. **Multi-Method Feature Consensus** - Random Forest, XGBoost, Permutation Importance, and SHAP combined into a single consensus ranking
 6. **Real-Time Integration Architecture** - Practical system design for in-vehicle deployment
+
+### Phase 2: PRISM
+
+| Traditional Approach | PRISM (Novel) |
+|---------------------|----------------------|
+| Single risk model | Three parallel risk models (environmental, trajectory, VRU interaction) fused by an RL agent |
+| Static thresholds on one score | Q-net RL policy selecting one of four graduated intervention tiers |
+| One-shot decisions | Short-term and long-term memory across decisions |
+| Opaque model output | Per-decision SHAP-based explanations |
+| Dataset-specific retraining | Cross-dataset calibration (nuScenes, Argoverse 2, Waymo WOMD) without retraining |
+
+**Novel Contributions (Phase 2):**
+1. **Multi-Model Risk Fusion** - Parallel environmental, trajectory-kinematic, and VRU-interaction risk models integrated via reinforcement learning
+2. **Agentic Tiered Decision Policy** - Q-net RL policy replacing static thresholds, with an asymmetric reward that penalizes under-reaction 2x over over-reaction
+3. **Social-Force + LSTM VRU Modeling** - Physics-informed Social Force Model combined with a learned LSTM residual correction for ego-VRU conflict prediction
+4. **Explainable Agentic Reasoning** - SHAP-based per-decision explanations with short/long-term memory
+5. **Cross-Dataset Generalization** - Validated on nuScenes, Argoverse 2, and Waymo WOMD without retraining
+
+### Phase 3: PRISM-AR
+
+| Traditional Approach | PRISM-AR (Novel) |
+|---------------------|----------------------|
+| Static, predefined eHMI signals | Risk-adaptive AR cues driven directly by PRISM's fused risk state |
+| Binary or single-level warnings | Four-tier graduated external communication (silent, information, warning, emergency) |
+| External signals disconnected from AV's internal state | External communication explicitly grounded in explainable internal risk reasoning |
+| Single-condition evaluation | 231 scenario clips across three public AV datasets plus controlled near-miss scenarios |
+
+**Novel Contributions (Phase 3):**
+1. **Risk-Adaptive External Communication** - First framework directly linking an AV's internal fused risk state to VRU-facing AR cues
+2. **Explainable Tiered Escalation** - Four-level cue policy (silent, information, warning, emergency) grounded in the fused PRISM risk score
+3. **Cue-Risk Monotonicity Validation** - Spearman ρ = -0.703 (Wilcoxon p < 0.0001) alignment between cue intensity and risk severity
+4. **Real-Time Feasibility** - Sub-millisecond per-frame reference implementation
+5. **Multi-Baseline Evaluation Protocol** - Paired comparison against no-interface, static eHMI, and oracle upper-bound policies
 
 ## Dataset
 
