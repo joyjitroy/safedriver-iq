@@ -312,6 +312,22 @@ PRISM-AR is the third stage in the SafeDriver-IQ → PRISM → PRISM-AR sequence
 >
 > The architecture supports an **agentic extension** (a DQN policy over the fused risk state, with SHAP explanations and short-term memory, analogous to Phase 2's Layer 3) but this extension is **not evaluated** in the PRISM-AR reference results — all reported numbers use the fixed-weight, threshold-based pipeline above.
 
+#### PRISM-AR External Communication Channels
+
+PRISM-AR maps the fused internal risk state to external safety cues delivered through three VRU-facing channels: an HMD overlay, a projected road cue, and a pedestrian-facing vehicle display. The examples below are conceptual deployment illustrations; they show how tiered risk information can be surfaced to pedestrians and cyclists but are not themselves experimental evidence.
+
+**HMD overlay**
+
+![PRISM-AR HMD overlay](prism-ar/results/figures/F10a_HMD_Overlay.png)
+
+**Projected road cue**
+
+![PRISM-AR projected road cue](prism-ar/results/figures/F10b_Projected_Cue.png)
+
+**Pedestrian-facing vehicle display**
+
+![PRISM-AR pedestrian-facing vehicle display](prism-ar/results/figures/F10c_Vehicle_Display.png)
+
 #### Phase 2 → Phase 3 Mapping
 
 | | Phase 2 (PRISM) | Phase 3 (PRISM-AR, reference implementation) |
