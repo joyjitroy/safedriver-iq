@@ -693,7 +693,7 @@ The `prism-ar/` folder contains the reproducibility bundle for the PRISM-AR IEEE
 
 These artifacts support the paper's results: 231 evaluated scenario clips, tier accuracy 0.43 → 0.71, cue-risk monotonicity ρ = -0.703 (p < 0.0001), and sub-millisecond per-frame latency. See [Quick Start — Phase 3 (PRISM-AR)](#quick-start--phase-3-prism-ar) above to regenerate them.
 
-## New Features (Just Completed! 🎉)
+## New Features (Phase 1, Just Completed! 🎉)
 
 ### 🚀 Full Pipeline Implemented
 
@@ -730,8 +730,6 @@ These artifacts support the paper's results: 231 evaluated scenario clips, tier 
 **4. Model Training**
 - Complete inverse safety model training pipeline
 - Three model types: Random Forest (n_estimators=200, max_depth=10), XGBoost (n_estimators=200, max_depth=6, lr=0.1), Gradient Boosting
-- Automated best model selection based on performance
-- Model saving/loading with feature persistence
 - Automated best model selection based on performance
 - Model saving/loading with feature persistence
 
@@ -850,6 +848,22 @@ With 20% adoption, SafeDriver-IQ could prevent:
 - **30,000 VRU injuries/year** (20% reduction)
 
 **Total impact: 1,870+ lives saved annually**
+
+## Research Flyers
+
+One-page visual summaries for each SafeDriver-IQ research phase.
+
+### Phase 1 — SafeDriver-IQ
+
+![SafeDriver-IQ Phase 1 research flyer](docs/flyers/safedriver_iq_phase1_flyer.png)
+
+### Phase 2 — PRISM
+
+![PRISM Phase 2 research flyer](docs/flyers/prism_phase2_flyer.png)
+
+### Phase 3 — PRISM-AR
+
+![PRISM-AR Phase 3 research flyer](docs/flyers/prism_ar_flyer.png)
 
 ## Documentation
 
