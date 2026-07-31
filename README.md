@@ -224,6 +224,18 @@ Phase 2 extends the foundation into an agentic multi-model architecture with env
 - Used for: Good driver profiling, near-miss detection, behavioral pattern extraction
 - Stored via **Git LFS** in `waymo/motion_dataset/`
 
+**nuScenes v1.0-mini** — Public autonomous-driving benchmark
+- **10 scenes**, 12 sensors (6 cameras, 5 radars, 1 LiDAR)
+- Full 3D bounding-box tracks for vehicles, pedestrians, and cyclists
+- Used for: PRISM/PRISM-AR validation in complex urban intersections and adverse-lighting scenes
+- Stored under `phase2-agentic-multimodel/datasets/nuscenes-mini/`
+
+**Argoverse 2** — Large-scale motion forecasting dataset
+- **24,988 scenarios** in the validation split (1,000 sampled as PRISM/PRISM-AR candidate clips)
+- 10 Hz agent tracks (position, velocity, heading) across multiple US cities
+- Used for: PRISM/PRISM-AR validation across diverse urban environments and per-city breakdowns
+- Stored under `phase2-agentic-multimodel/datasets/argoverse2-val/`
+
 ### Dataset Summary by Paper
 
 | Paper | Dataset | Size | Type | Purpose |
@@ -232,6 +244,12 @@ Phase 2 extends the foundation into an agentic multi-model architecture with env
 | Phase 2 (ASCE2027) | nuScenes mini | 10 scenarios | Autonomous driving scenes | Validate PRISM across diverse urban environments |
 | Phase 2 (ASCE2027) | Argoverse 2 | 1,000 scenarios | Autonomous driving scenes | Validate PRISM across diverse urban environments |
 | Phase 2 (ASCE2027) | Waymo WOMD | 286 scenarios | Autonomous driving scenes | Validate PRISM across diverse urban environments |
+| Phase 3 (PRISM-AR/TVT) | nuScenes v1.0-mini | 10 source scenes → 96 evaluated clips | VRU-interaction clips | Evaluate risk-adaptive AR cues |
+| Phase 3 (PRISM-AR/TVT) | Argoverse 2 | 1,000 candidate → 50 evaluated clips | VRU-interaction clips | Evaluate risk-adaptive AR cues |
+| Phase 3 (PRISM-AR/TVT) | Waymo WOMD | 286 candidate → 25 evaluated clips | VRU-interaction clips | Evaluate risk-adaptive AR cues |
+| Phase 3 (PRISM-AR/TVT) | Synthetic near-miss generator | 60 scenarios | Controlled pedestrian-crossing scenes | Supplement rare warning/emergency cases |
+
+Phase 3 candidate clips are drawn from the same three AV datasets as Phase 2 (1,296 total candidate clips), then filtered by a VRU-interaction extractor (20 m ego-approach radius, decreasing distance, ≥5 frames visible) down to 231 total evaluated scenario clips. See [`prism-ar/README.md`](prism-ar/README.md) and `prism-ar/src/prism_ar/dataset_generation/scenario_extractor.py` for the extraction logic.
 
 ## System Architecture
 
