@@ -78,6 +78,22 @@ Phase 2 of this research, an agentic multi-model architecture for proactive safe
 - **~11%** escalated to **intervention/emergency**
 - Cross-dataset calibration without retraining
 
+### Phase 3: PRISM-AR
+
+**Paper Title:** *Explainable Risk-Adaptive Driving Intelligence for Vulnerable Road User Communication in Automated Vehicles*
+
+Phase 3 extends PRISM's internal AV risk reasoning into external, VRU-facing communication. PRISM-AR (PRISM with Augmented Reality) adds a tiered external communication policy that maps PRISM's fused risk state to adaptive AR cues for pedestrians and cyclists across four escalation levels: silent, information, warning, and emergency. Prepared for submission to **IEEE Transactions on Vehicular Technology (TVT)**, Special Issue on Advanced Driving Intelligence for Autonomous Vehicles (manuscript deadline: 1 August 2026). Source and validation artifacts are in the [`prism-ar/`](prism-ar/) directory.
+
+**Authors:** Joyjit Roy, Meng Lu, Arijit Roy, Sushanta Das, Samaresh Kumar Singh
+
+### Key Results (Phase 3)
+
+- **231 scenario clips** evaluated across three public AV datasets plus controlled near-miss scenarios
+- Proxy ground-truth tier accuracy improves from **0.43 (static eHMI)** to **0.71 (PRISM-AR)**
+- Cue-risk monotonicity: Spearman **ρ = -0.703** (Wilcoxon p < 0.0001)
+- Activates warning/emergency cues in risk-critical cases the static baseline fails to escalate
+- Sub-millisecond per-frame latency (reference implementation)
+
 ### 📌 Relationship to This Project
 The SafeDriver-IQ system was **designed, implemented, and validated first**, and the insights, models, and experimental findings from this project directly led to the research publication.
 
