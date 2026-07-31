@@ -598,14 +598,18 @@ Expected: 65 tests total (53 pass + 12 realtime tests with 5 expected failures d
 
 ## Pipeline
 
-### Phase 1: Data Preparation
+> **Note:** the step numbers below are internal sub-stages within each phase's own pipeline — they are unrelated to the SafeDriver-IQ (Phase 1) / PRISM (Phase 2) / PRISM-AR (Phase 3) numbering used elsewhere in this README.
+
+### Phase 1: SafeDriver-IQ Pipeline
+
+**Step 1 — Data Preparation**
 - Load CRSS datasets (2016-2023)
 - Load Waymo Open Motion Dataset (TFRecord parsing via `WaymoDataLoader`)
 - Filter VRU crashes
 - Feature engineering (120+ variables)
 - Create exposure-weighted baseline
 
-### Phase 2: Crash Factor Investigation (Notebook 04 — NEW)
+**Step 2 — Crash Factor Investigation (Notebook 04 — NEW)**
 - **Investigation 1** — Primary crash factors (temporal, environmental, VRU interactions)
 - **Investigation 2** — Feature selection via 4-method consensus (RF, XGBoost, Permutation, SHAP)
 - **Investigation 3** — Driver behavior classification (CRSS crash clusters + Waymo good-driver profiling)
@@ -616,21 +620,46 @@ Expected: 65 tests total (53 pass + 12 realtime tests with 5 expected failures d
 - **Investigation 8** — Root cause analysis causal chain framework
 - **Section 6** — Contextual feature synthesis with `ContextualFeatureGenerator` (16 research-calibrated risk factors)
 
-### Phase 3: Crash Pattern Analysis
+**Step 3 — Crash Pattern Analysis**
 - Clustering → Identify crash archetypes
 - Association Rules → Find co-occurring risk factors
 - Feature Importance → Rank risk contributors
 
-### Phase 4: Inverse Safety Model
+**Step 4 — Inverse Safety Model**
 - Train crash classifier (Random Forest / XGBoost, n_estimators=200)
 - Extract decision boundaries
 - Compute "distance from crash boundary" = Safety Score
 - Profile "good driver" = maximises safety score (using Waymo behavioural data)
 
-### Phase 5: Validation & Visualization
+**Step 5 — Validation & Visualization**
 - Cross-validation metrics
 - SHAP analysis for interpretability
 - Dashboard for results presentation
+
+### Phase 2: PRISM Pipeline
+
+Implemented as milestones M0–M8 in `phase2-agentic-multimodel/`:
+
+- **M0 — Environment & data**: isolated `.venv`, devkit-free nuScenes, config-driven sanity tests
+- **M1 — Unified data loaders**: `DrivingScene` / `AgentTrack` / `EgoState` over nuScenes + Argoverse 2
+- **M2 — Environmental risk bridge**: reuses the frozen Phase 1 Random Forest as a context multiplier
+- **M3 — Trajectory-kinematics**: Savitzky-Golay features + a 2-layer anticipatory LSTM
+- **M4 — VRU interaction**: Social Force Model + LSTM residual correction
+- **M5 — Scenario summary**: fuses all three risk models into one `ScenarioSummary` (the M6/M7 integration contract)
+- **M6 — Agentic reasoning**: Q-net RL policy over the fused state → 4 graduated tiers, with SHAP explanations and memory
+- **M7 — LLM co-pilot**: off the safety-critical path; scenario summaries and intervention narration
+- **M8 — End-to-end + evaluation**: `AgenticPipeline` runs all layers; coverage, ablation, and latency evaluations
+
+### Phase 3: PRISM-AR Pipeline
+
+Implemented in `prism-ar/scripts/run_prism_ar_real_data.py`:
+
+1. Load Waymo, Argoverse 2, and nuScenes mini scenes (plus the synthetic near-miss generator)
+2. Extract AR-relevant VRU interaction clips via the scenario extractor
+3. Run the PRISM risk engine (`TrainedPRISMRiskEngine`) on each clip
+4. Generate paired overlays: no-AR, static, adaptive, and oracle
+5. Compute evaluation metrics (tier accuracy, recall, cue-risk monotonicity, warning lead time, cue flicker, visual clutter)
+6. Save the results CSV, summary tables, and sample overlay images
 
 ## ASCE2027 Validation Artifacts
 
