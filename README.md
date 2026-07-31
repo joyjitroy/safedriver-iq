@@ -95,11 +95,11 @@ Phase 3 extends PRISM's internal AV risk reasoning into external, VRU-facing com
 - Sub-millisecond per-frame latency (reference implementation)
 
 ### 📌 Relationship to This Project
-The SafeDriver-IQ system was **designed, implemented, and validated first**, and the insights, models, and experimental findings from this project directly led to the research publication.
+Each phase of the SafeDriver-IQ system was **designed, implemented, and validated first**, and the insights, models, and experimental findings from this project directly led to the corresponding research publications: the Phase 1 arXiv paper, the Phase 2 ASCE2027 paper, and the Phase 3 PRISM-AR manuscript prepared for IEEE TVT.
 
 In other words:
-- ✅ This repository = **working system + experiments**
-- ✅ The paper = **formalization of methodology, results, and contributions**
+- ✅ This repository = **working system + experiments** (Phase 1: `src/`, Phase 2: `phase2-agentic-multimodel/`, Phase 3: `prism-ar/`)
+- ✅ The papers = **formalization of methodology, results, and contributions** for each phase
 
 ### 🚀 What the Paper Formalizes
 The research paper builds on this project and formally introduces:
