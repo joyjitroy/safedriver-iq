@@ -4,7 +4,7 @@
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Status: Agentic AI](https://img.shields.io/badge/Status-Agentic%20AI%20Phase%201%20Complete-success.svg)](AGENTIC_AI_PLAN.md)
+[![Status: Agentic AI](https://img.shields.io/badge/Status-Agentic%20AI%20Phase%201%20Complete-success.svg)](src/agent/)
 
 ## Project Overview
 
@@ -23,13 +23,15 @@ A deep-dive multi-dataset investigation combining **CRSS** (417K crashes) and **
 
 **Key addition — Contextual Feature Synthesis:** CRSS captures crash *outcomes* but is silent on contextual preconditions. A new `ContextualFeatureGenerator` synthesises 16 research-calibrated risk dimensions (see [Section 6](#section-6--comprehensive-crash-factor-analysis-beyond-crss-data) in notebook 04) drawn from NHTSA, FHWA-HSM, AAA Foundation, and IIHS sources, enabling richer training and what-if simulation.
 
-### 🤖 Agentic AI Integration (Phase 1 Complete)
-Now features an **autonomous decision-making system** that actively prevents crashes through:
+### 🤖 Real-Time Agentic Decision Layer (Phase 1 extension)
+A rule/RL-based decision layer (`src/agent/`) wraps the Phase 1 tabular safety score with **autonomous decision-making**:
 - Real-time risk assessment and autonomous interventions
 - Continuous learning from driving experiences
 - Multi-modal driver notifications (visual, audio, haptic)
 - Transparent, explainable AI reasoning
-- [Learn more →](AGENTIC_AI_README.md) | [View plan →](AGENTIC_AI_PLAN.md)
+- Code: [`src/agent/core/`](src/agent/core/) (decision engine) · [`src/agent/perception/`](src/agent/perception/) · [`src/agent/control/`](src/agent/control/) · [`src/agent/learning/`](src/agent/learning/) · [`src/agent/explainability/`](src/agent/explainability/) — see [`demo_agentic_ai.py`](demo_agentic_ai.py) to run it
+
+> **Note:** This is a Phase 1 add-on around the single tabular safety-score model, not to be confused with **PRISM (Phase 2)**, which independently fuses three separate risk models (environmental, trajectory, VRU) via its own RL agent — see below.
 
 ### The Problem
 - **7,500+ pedestrian deaths/year** in the USA (40-year high)
@@ -39,6 +41,9 @@ Now features an **autonomous decision-making system** that actively prevents cra
 
 ### Our Solution
 Instead of predicting crashes, we model the **distance from crash** - quantifying how "safe" a driving scenario is by measuring its statistical distance from crash-producing conditions.
+
+### 🕶️ PRISM-AR: Risk-Adaptive AR Cues for VRUs (extends PRISM / Phase 2)
+PRISM-AR (in [`prism-ar/`](prism-ar/)) takes PRISM's continuous safety score and intervention tier and maps them to **adaptive augmented-reality cues** for pedestrians and cyclists — e.g., a translucent amber safe zone at "advisory", a flashing red no-cross boundary at "emergency". It is being prepared for submission to **IEEE Transactions on Vehicular Technology**. See [`prism-ar/README.md`](prism-ar/README.md) for details.
 
 ## 📄 Research Publication
 
