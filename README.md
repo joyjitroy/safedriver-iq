@@ -156,6 +156,12 @@ Phase 1 introduces inverse crash probability modeling: a continuous 0–100 safe
 
 Phase 2 extends the foundation into an agentic multi-model architecture with environmental, trajectory, and VRU risk models fused by a DQN agent. PRISM was validated across nuScenes, Argoverse 2, and Waymo WOMD, achieving a mean safety score of 68/100 with 77.6% of scenarios classified as advisory.
 
+#### Phase 3: PRISM-AR (IEEE TVT)
+
+![PRISM-AR Phase 3 Flyer](docs/flyers/prism_ar_flyer.png)
+
+Phase 3 maps PRISM's fused risk state to risk-adaptive AR cues for pedestrians and cyclists. It was evaluated on 231 scenario clips across three public AV datasets plus synthetic near-miss cases, improving proxy tier accuracy from 0.43 (static eHMI) to 0.71 (PRISM-AR) and achieving Spearman cue-risk monotonicity ρ = -0.703.
+
 ## Key Innovations
 
 ### Phase 1: SafeDriver-IQ
@@ -337,7 +343,7 @@ PRISM-AR is the third stage in the SafeDriver-IQ → PRISM → PRISM-AR sequence
 │   └── docs/                    # PAPER_PLAN.md, architecture docx, Backups/
 ├── docs/
 │   ├── images/                 # Architecture diagrams (SafeDriver-IQ + PRISM)
-│   └── flyers/                 # Research flyers (Phase 1 + Phase 2)
+│   └── flyers/                 # Research flyers (Phase 1 + Phase 2 + Phase 3)
 ├── CRSS_Data/                  # National crash database (2016-2023)
 │   ├── 2016/                   # Year-wise crash data
 │   ├── 2017/
@@ -770,7 +776,7 @@ These artifacts support the paper's results: 231 evaluated scenario clips, tier 
 
 ## Demonstration & Results
 
-### What You Can Demo NOW
+### Phase 1: SafeDriver-IQ (Inverse Crash Scoring)
 
 #### 1. Data Loading & Scale
 ```bash
@@ -801,7 +807,7 @@ Includes:
 - Environmental factor analysis
 - Injury severity patterns
 
-#### 4. Crash Factor Investigation (NEW)
+#### 4. Crash Factor Investigation
 ```bash
 jupyter notebook notebooks/04_crash_factor_investigation.ipynb
 ```
@@ -813,76 +819,110 @@ Includes:
 - What-if sensitivity analysis
 - Root cause causal chain framework
 
-### Key Insights Available
+**Key Insights Available**
 
-**Crash Patterns:**
-- Peak crash times: Evening rush hour (5-7 PM)
-- High-risk periods: Weekend nights
-- VRU crashes concentrated in urban areas
-- Dark/poor lighting significantly increases risk
+- **Crash Patterns:** Evening rush hour (5-7 PM) peaks; weekend nights are high-risk; VRU crashes concentrated in urban areas; dark/poor lighting elevates risk
+- **VRU Statistics (2023):** 2,907 pedestrians and 2,026 bicyclists involved in crashes; fatal injury rate ~5-7% for VRUs vs ~2% for vehicle occupants
+- **Feature Engineering:** 120+ temporal, environmental, location, and VRU-specific features with interaction terms
 
-**VRU Statistics (2023):**
-- 2,907 pedestrians involved in crashes
-- 2,026 bicyclists involved in crashes
-- Fatal injury rate: ~5-7% for VRUs (vs. ~2% vehicle occupants)
+### Phase 2: PRISM (Agentic Multi-Model AV Safety)
 
-**Feature Engineering:**
-- 120+ features created from raw data
-- Temporal, environmental, location, VRU-specific categories
-- Interaction features for complex scenarios
+Run from `phase2-agentic-multimodel/`:
 
-### Demo Scenarios
+```bash
+# Show resolved dataset/model paths
+.venv/bin/python -m sdiq.config
 
-Key notebooks for demonstrations:
-- **[01_data_exploration.ipynb](notebooks/01_data_exploration.ipynb)** — Data quality, VRU trends, temporal patterns
-- **[02_train_inverse_model.ipynb](notebooks/02_train_inverse_model.ipynb)** — Full inverse safety model training
-- **[03_shap_analysis.ipynb](notebooks/03_shap_analysis.ipynb)** — SHAP interpretability deep-dive
-- **[04_crash_factor_investigation.ipynb](notebooks/04_crash_factor_investigation.ipynb)** — 8-investigation crash factor analysis with Waymo integration
+# Run the test suite (61 tests)
+.venv/bin/python -m pytest -q
+
+# Smoke-test unified data loaders
+.venv/bin/python -m sdiq.data_loader
+
+# End-to-end agentic pipeline per nuScenes scene
+.venv/bin/python -m sdiq.main run
+
+# Compare Phase 1 vs Phase 2 intervention coverage
+.venv/bin/python -m sdiq.main coverage
+
+# Per-model ablation and latency breakdown
+.venv/bin/python -m sdiq.main ablations
+.venv/bin/python -m sdiq.main latency
+```
+
+**Key Results:** 1,296 scenarios across nuScenes, Argoverse 2, and Waymo WOMD; mean safety score 68/100; 77.6% advisory, 3.8% near-miss, ~11% escalated to intervention/emergency.
+
+### Phase 3: PRISM-AR (Risk-Adaptive AR Cues for VRUs)
+
+Run from `prism-ar/`:
+
+```bash
+# Install and run tests
+pip install -r requirements.txt
+pip install -e .
+pytest tests/ -v
+
+# Full real-data pipeline (Waymo + Argoverse 2 + nuScenes + synthetic near-miss)
+python scripts/run_prism_ar_real_data.py --max_scenes 50
+
+# Generate paper figures, ablation/robustness studies, and report
+python scripts/generate_prism_ar_figures.py
+python scripts/run_ablation_study.py
+python scripts/run_robustness_study.py
+python scripts/generate_prism_ar_report.py
+```
+
+**Key Results:** 231 evaluated scenario clips; proxy tier accuracy improves from 0.43 (static eHMI) to 0.71 (PRISM-AR); Spearman cue-risk monotonicity rho = -0.703 (p < 0.0001); sub-millisecond per-frame latency.
+
+### Demo Notebooks & Scripts
+
+| Phase | Entry point | What it demonstrates |
+|---|---|---|
+| Phase 1 | `notebooks/01_data_exploration.ipynb` | CRSS data quality, VRU trends, temporal patterns |
+| Phase 1 | `notebooks/02_train_inverse_model.ipynb` | Full inverse safety model training |
+| Phase 1 | `notebooks/03_shap_analysis.ipynb` | SHAP interpretability deep-dive |
+| Phase 1 | `notebooks/04_crash_factor_investigation.ipynb` | 8-investigation crash factor analysis with Waymo |
+| Phase 2 | `.venv/bin/python -m sdiq.main run` | End-to-end PRISM agentic pipeline |
+| Phase 3 | `scripts/run_prism_ar_real_data.py` | PRISM-AR real-data AR cue evaluation |
 
 ## Expected Impact
 
-With 20% adoption, SafeDriver-IQ could prevent:
+With 20% adoption of the SafeDriver-IQ family (Phase 1 scoring, Phase 2 PRISM agentic intervention, Phase 3 PRISM-AR external VRU communication), the system could prevent:
 - **1,500 pedestrian deaths/year** (20% reduction)
 - **200 cyclist deaths/year** (20% reduction)
 - **170 work zone deaths/year** (20% reduction)
 - **30,000 VRU injuries/year** (20% reduction)
 
+Phase 2 and Phase 3 extend this impact from human-driven vehicles to autonomous vehicle fleets by translating the same risk reasoning into real-time internal interventions and external VRU-facing AR cues.
+
 **Total impact: 1,870+ lives saved annually**
-
-## Research Flyers
-
-One-page visual summaries for each SafeDriver-IQ research phase.
-
-### Phase 1 — SafeDriver-IQ
-
-![SafeDriver-IQ Phase 1 research flyer](docs/flyers/safedriver_iq_phase1_flyer.png)
-
-### Phase 2 — PRISM
-
-![PRISM Phase 2 research flyer](docs/flyers/prism_phase2_flyer.png)
-
-### Phase 3 — PRISM-AR
-
-![PRISM-AR Phase 3 research flyer](docs/flyers/prism_ar_flyer.png)
 
 ## Documentation
 
 - **[README.md](README.md)** — Project overview & setup (this file)
-- **[PROJECT_SETUP_SUMMARY.md](PROJECT_SETUP_SUMMARY.md)** — Detailed setup reference
+- **[PROJECT_SETUP_SUMMARY.md](PROJECT_SETUP_SUMMARY.md)** — Detailed Phase 1 setup reference
 - **[notebooks/04_crash_factor_investigation.ipynb](notebooks/04_crash_factor_investigation.ipynb)** — Comprehensive crash factor investigation
+- **[phase2-agentic-multimodel/README.md](phase2-agentic-multimodel/README.md)** — PRISM (Phase 2) overview and quick start
+- **[phase2-agentic-multimodel/docs/setup.md](phase2-agentic-multimodel/docs/setup.md)** — PRISM environment setup details
+- **[prism-ar/README.md](prism-ar/README.md)** — PRISM-AR (Phase 3) overview and quick start
+- **[prism-ar/docs/PAPER_PLAN.md](prism-ar/docs/PAPER_PLAN.md)** — PRISM-AR IEEE TVT submission plan
+- **[prism-ar/results/report.md](prism-ar/results/report.md)** — PRISM-AR generated evaluation report
 
 ## Known Issues & Limitations
 
-The current trained model does not respond meaningfully to changes in **road condition**, **VRU presence**, or **speed relative to limit**. This is a fundamental limitation of training on crash-only data: the model never learned what "truly safe" driving looks like. It remains useful for weather, lighting, and temporal risk patterns. For test evidence, run `pytest tests/test_realtime_calculator.py -v --tb=short`.
+**Phase 1 limitation:** The current trained inverse crash model does not respond meaningfully to changes in **road condition**, **VRU presence**, or **speed relative to limit**. This is a fundamental limitation of training on crash-only data: the model never learned what "truly safe" driving looks like. It remains useful for weather, lighting, and temporal risk patterns. For test evidence, run `pytest tests/test_realtime_calculator.py -v --tb=short`.
 
-The PRISM architecture (Phase 2) addresses this by adding separate trajectory-kinematic and VRU-interaction models, plus a DQN fusion agent. Validation results are in the `asce2027/` directory.
+**Phase 2 mitigation:** PRISM addresses the Phase 1 limitation by adding separate trajectory-kinematic and VRU-interaction models, plus a DQN fusion agent. Validation results are in the `asce2027/` directory.
+
+**Phase 3 current scope:** PRISM-AR's reported results use a deterministic, fixed-weight risk-fusion pipeline rather than the agentic DQN+SHAP extension. The four-tier labels in the paper (Silent, Information, Warning, Emergency) differ from the current codebase labels (silent, advisory, intervention, emergency); these map to the same escalation levels. The agentic extension is designed but not evaluated in the current reference results.
 
 ## Contributing
 
 This is a research project. For questions or collaboration:
-- Review [notebooks/04_crash_factor_investigation.ipynb](notebooks/04_crash_factor_investigation.ipynb) for the latest investigation results
-- Run `demo_quick.py` to see current capabilities
-- Check issues for planned features
+- Phase 1: Review [notebooks/04_crash_factor_investigation.ipynb](notebooks/04_crash_factor_investigation.ipynb) and run `demo_quick.py`
+- Phase 2: See [phase2-agentic-multimodel/README.md](phase2-agentic-multimodel/README.md), run `.venv/bin/python -m sdiq.main run`
+- Phase 3: See [prism-ar/README.md](prism-ar/README.md), run `scripts/run_prism_ar_real_data.py`
+- Check issues for planned features across all phases
 
 ## License
 
@@ -892,6 +932,8 @@ This is a research project. For questions or collaboration:
 
 - **American Center for Mobility (ACM)** for collaboration and domain guidance as a federally designated CAV proving ground
 - **NHTSA** for CRSS data availability
+- **Waymo, Argoverse 2, and nuScenes** teams for open autonomous-driving datasets used in Phases 2 and 3
 - **SafeDriver-IQ** novel methodology development
+- Co-authors and collaborators across all phases: Samaresh Kumar Singh, Sushanta Das, Meng Lu, and Arijit Roy
 - Python scientific computing community (pandas, scikit-learn, etc.)
 
