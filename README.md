@@ -201,13 +201,30 @@ PRISM (Proactive Risk Intelligence and Safety Management) extends SafeDriver-IQ 
 3. **Layer 3 — Agentic Reasoning**: Fuses risks via a DQN reinforcement learning agent, selects one of four intervention tiers (silent, advisory, intervention, emergency), and provides SHAP-based explanations with short-term and long-term memory.
 4. **Layer 4 — Applications**: Supports ADAS integration, fleet risk management, and infrastructure planning without dataset-specific retraining.
 
+Unlike Phase 1's fixed decision boundary, Layer 3's tier selection is a trained Q-net RL policy (not a fixed weighted formula) that maps the 8-dimensional fused risk state to one of the four graduated tiers, using an asymmetric reward that penalizes under-reaction 2x over over-reaction.
+
+#### Phase 1 → Phase 2 Mapping
+
+| | Phase 1 (SafeDriver-IQ) | Phase 2 (PRISM) |
+|---|---|---|
+| Safety score range | 0–100 (inverse crash probability) | 0–100 (inherited, continuous) |
+| Output categories | 5 risk levels: Critical, High, Medium, Low, Excellent | 4 intervention tiers: silent, advisory, intervention, emergency |
+| Decision mechanism | Static thresholds on the inverse safety score | Q-net RL policy over the fused 8-dim risk state |
+| Risk sources | Single frozen Random Forest (environmental only) | Three parallel models (environmental RF + trajectory LSTM + VRU SFM/LSTM) fused by the RL agent |
+
+The environmental Random Forest is **frozen and reused as-is** from Phase 1 in Phase 2 (`safedriver_iq_bridge.py`), acting as a context multiplier rather than the sole risk signal — this is how Phase 2 addresses the Phase 1 limitation noted below (no response to road condition/VRU presence/speed).
+
 ## Project Structure
 
 ```
-├── asce2027/                   # ASCE2027 PRISM validation artifacts
+├── asce2027/                   # ASCE2027 PRISM validation artifacts (reproducibility bundle)
 │   ├── scripts/                # Analysis scripts (AV2, Waymo, nuScenes)
 │   ├── data/                   # Validation results (CSV/JSON)
 │   └── figures/                # Paper figures
+├── phase2-agentic-multimodel/  # PRISM (Phase 2) source: sdiq package, models, tests
+│   ├── src/sdiq/                # config, data loaders, kinematics, social force, agentic layer, LLM co-pilot
+│   ├── tests/                   # pytest suite (61 tests)
+│   └── docs/                    # setup, implementation plan, ASCE2027 architecture docs
 ├── docs/
 │   ├── images/                 # Architecture diagrams (SafeDriver-IQ + PRISM)
 │   └── flyers/                 # Research flyers (Phase 1 + Phase 2)
@@ -306,6 +323,37 @@ streamlit run app/streamlit_app.py
 ✓ 38,462 VRU crashes identified
 ✓ Data from 2016-2023 successfully loaded
 ```
+
+## Quick Start — Phase 2 (PRISM)
+
+Phase 2 lives in its own isolated environment under `phase2-agentic-multimodel/` and does not share Phase 1's virtualenv.
+
+```bash
+cd phase2-agentic-multimodel
+
+# Show resolved dataset/model paths
+.venv/bin/python -m sdiq.config
+
+# Run the test suite (61 tests)
+.venv/bin/python -m pytest -q
+
+# Smoke-test the unified data loaders (nuScenes + AV2)
+.venv/bin/python -m sdiq.data_loader
+
+# Run the full agentic pipeline end-to-end (graduated output per nuScenes scene)
+.venv/bin/python -m sdiq.main run
+
+# Compare Phase 1 vs Phase 2 intervention coverage
+.venv/bin/python -m sdiq.main coverage
+
+# Per-model ablation (marginal effect of env/trajectory/VRU)
+.venv/bin/python -m sdiq.main ablations
+
+# Per-layer latency breakdown
+.venv/bin/python -m sdiq.main latency
+```
+
+See [phase2-agentic-multimodel/README.md](phase2-agentic-multimodel/README.md) for milestone status and [phase2-agentic-multimodel/docs/setup.md](phase2-agentic-multimodel/docs/setup.md) for environment details.
 
 ## Detailed Setup Instructions
 
@@ -448,6 +496,17 @@ The `asce2027/` folder contains the reproducibility bundle for the ASCE2027 conf
 - **Figures**: Score distribution, tier distribution, ablation, latency, near-miss, SHAP, and VRU proximity plots
 
 These artifacts support the paper's results: mean safety score 68/100, 77.6% advisory, 3.8% near-miss rate, and ~11% escalation to intervention/emergency.
+
+### Reproducing the ASCE2027 figures/tables
+
+```bash
+cd asce2027/scripts
+python generate_paper_outputs.py   # regenerates data/ and figures/ from validation results
+python compute_stats.py            # summary statistics used in the paper
+python check_tier_mapping.py       # verifies score-to-tier assignment
+python find_thresholds.py          # threshold search used for tier boundaries
+python sensitivity_final.py        # sensitivity analysis
+```
 
 ## New Features (Just Completed! 🎉)
 
