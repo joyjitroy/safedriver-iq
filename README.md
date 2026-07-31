@@ -505,7 +505,7 @@ On Windows, `scripts/setup_venv.bat` can be used instead of step 1 to create an 
 ### Step 1: Clone/Download Project
 ```bash
 cd /path/to/your/workspace
-git clone https://github.com/ssam18/safedriver-iq.git
+git clone https://github.com/joyjitroy/safedriver-iq.git
 cd safedriver-iq
 ```
 
