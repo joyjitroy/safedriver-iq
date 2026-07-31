@@ -682,6 +682,17 @@ python find_thresholds.py          # threshold search used for tier boundaries
 python sensitivity_final.py        # sensitivity analysis
 ```
 
+## PRISM-AR (TVT) Validation Artifacts
+
+The `prism-ar/` folder contains the reproducibility bundle for the PRISM-AR IEEE TVT manuscript:
+
+- **Scripts** (`prism-ar/scripts/`): `run_prism_ar_real_data.py`, `run_ablation_study.py`, `run_robustness_study.py`, `generate_prism_ar_figures.py`, `generate_prism_ar_report.py`, `generate_prism_ar_dataset.py`, `measure_prism_ar_latency.py`
+- **Data** (`prism-ar/results/`): `prism_ar_results.csv`, `prism_ar_summary.json`, `ablation_results.csv`, `robustness_results.csv`, `latency_results.json`, `report.md`, and per-metric tables in `tables/` (`ablation.csv`, `adverse_condition.csv`, `ground_truth_comparison.csv`, `main_by_dataset.csv`, `robustness.csv`)
+- **Figures** (`prism-ar/results/figures/`): architecture diagram (F1), mean safety scores by dataset (F2), tier distribution (F3), ground-truth comparisons (F4, F5), lead-time distribution (F6), distance-vs-score (F7), dataset metrics (F8), ablation (F9), AR cue mockups — HMD overlay, projected cue, vehicle display (F10a–d), and the evaluation-flow diagram (F11)
+- **Rendered overlay images** (`prism-ar/results/images/`): paired no-AR / static / adaptive / oracle frames for representative Waymo, Argoverse 2, and nuScenes clips
+
+These artifacts support the paper's results: 231 evaluated scenario clips, tier accuracy 0.43 → 0.71, cue-risk monotonicity ρ = -0.703 (p < 0.0001), and sub-millisecond per-frame latency. See [Quick Start — Phase 3 (PRISM-AR)](#quick-start--phase-3-prism-ar) above to regenerate them.
+
 ## New Features (Just Completed! 🎉)
 
 ### 🚀 Full Pipeline Implemented
