@@ -15,9 +15,9 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 # Repo geometry
 # ---------------------------------------------------------------------------
-# .../safedriver-iq/phase2-agentic-multimodel/src/sdiq/config.py
+# .../safedriver-iq/phase2-prism/src/sdiq/config.py
 PKG_DIR = Path(__file__).resolve().parent          # src/sdiq/
-PROJECT_ROOT = PKG_DIR.parent.parent               # phase2-agentic-multimodel/
+PROJECT_ROOT = PKG_DIR.parent.parent               # phase2-prism/
 PHASE1_REPO = PROJECT_ROOT.parent                  # safedriver-iq/  (Phase 1 root)
 DATASETS_DIR = PROJECT_ROOT / "datasets"
 
@@ -40,8 +40,8 @@ NUSCENES_TABLES = NUSCENES_DATAROOT / NUSCENES_VERSION
 AV2_VAL_ROOT = _env_path("SDIQ_AV2_VAL_ROOT", DATASETS_DIR / "argoverse2-val")
 
 # Phase 1 tabular datasets (referenced, not duplicated here).
-CRSS_DATA_DIR = _env_path("SDIQ_CRSS_DIR", PHASE1_REPO / "CRSS_Data")
-WAYMO_DATA_DIR = _env_path("SDIQ_WAYMO_DIR", PHASE1_REPO / "waymo")
+CRSS_DATA_DIR = _env_path("SDIQ_CRSS_DIR", PHASE1_REPO / "data" / "crss")
+WAYMO_DATA_DIR = _env_path("SDIQ_WAYMO_DIR", PHASE1_REPO / "data" / "waymo")
 
 # ---------------------------------------------------------------------------
 # Frozen Phase 1 model artifacts (the env-risk RF bridge)
@@ -52,15 +52,15 @@ WAYMO_DATA_DIR = _env_path("SDIQ_WAYMO_DIR", PHASE1_REPO / "waymo")
 # feature_names.txt and the docx's "64-feature vector" — is `best_safety_model.pkl`.
 # The bridge (M2) therefore targets best_safety_model.pkl. Both load via joblib.load().
 RF_MODEL_PATH = _env_path(
-    "SDIQ_RF_MODEL", PHASE1_REPO / "results" / "models" / "best_safety_model.pkl"
+    "SDIQ_RF_MODEL", PHASE1_REPO / "phase1-safedriver-iq" / "results" / "models" / "best_safety_model.pkl"
 )
 RF_FEATURE_NAMES_PATH = _env_path(
-    "SDIQ_RF_FEATURES", PHASE1_REPO / "results" / "models" / "feature_names.txt"
+    "SDIQ_RF_FEATURES", PHASE1_REPO / "phase1-safedriver-iq" / "results" / "models" / "feature_names.txt"
 )
 # The smaller 5-feature investigation model, kept for reference / ablation.
 RF_INVESTIGATION_MODEL_PATH = _env_path(
     "SDIQ_RF_INVESTIGATION_MODEL",
-    PHASE1_REPO / "results" / "crash_investigation_rf_model.pkl",
+    PHASE1_REPO / "phase1-safedriver-iq" / "results" / "crash_investigation_rf_model.pkl",
 )
 
 # Where the POC writes its own trained models / artifacts.

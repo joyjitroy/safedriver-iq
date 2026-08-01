@@ -6,8 +6,8 @@ setup(
     description="Inverse Crash Modeling for Driver Competency Quantification",
     author="Your Name",
     author_email="your.email@example.com",
-    packages=find_packages(where="src"),
-    package_dir={"": "src"},
+    packages=find_packages(where="phase1-safedriver-iq/src"),
+    package_dir={"": "phase1-safedriver-iq/src"},
     py_modules=[
         "data_loader",
         "preprocessing", 

@@ -9,7 +9,7 @@ Build and evaluate PRISM-AR: a system that maps PRISM's continuous 0–100 safet
 ## Project Structure
 
 ```
-prism-ar/
+phase3-prism-ar/
 ├── src/prism_ar/
 │   ├── data_ingestion/     # Unified DrivingScene format + dataset loaders (Waymo/Argoverse/nuScenes/CRSS)
 │   ├── prism/              # PRISM risk engine bridge
@@ -45,7 +45,7 @@ Outputs are written to `C:\prismar_out\prism_ar_real` (junction to `results/pris
 ## Quick Start
 
 ```bash
-cd prism-ar
+cd phase3-prism-ar
 
 # 1. Install dependencies (editable install using the src/ layout in pyproject.toml)
 pip install -r requirements.txt

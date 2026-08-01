@@ -19,11 +19,11 @@ class CRSSDataLoader:
     Loads and combines CRSS data files from multiple years.
     
     Attributes:
-        data_dir: Path to CRSS_Data directory
+        data_dir: Path to data/crss directory
         years: List of years to load (2016-2023)
     """
     
-    def __init__(self, data_dir: str = "CRSS_Data", years: Optional[List[int]] = None):
+    def __init__(self, data_dir: str = "data/crss", years: Optional[List[int]] = None):
         """
         Initialize CRSS data loader.
         

@@ -25,7 +25,7 @@ print("="*70)
 
 # 1. Load Data
 print("\n1. Loading CRSS data...")
-loader = CRSSDataLoader("CRSS_Data")
+loader = CRSSDataLoader("data/crss")
 data = loader.load_complete_dataset()
 
 accident_df = data['accident']

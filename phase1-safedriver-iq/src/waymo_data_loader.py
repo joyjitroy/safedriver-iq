@@ -62,11 +62,11 @@ class WaymoDataLoader:
     Loads and processes Waymo Open Motion Dataset.
     
     Attributes:
-        data_dir: Path to waymo/motion_dataset directory
+        data_dir: Path to data/waymo/motion_dataset directory
         dataset_type: Type of dataset (training, validation, testing, etc.)
     """
     
-    def __init__(self, data_dir: str = "waymo/motion_dataset", dataset_type: str = "training"):
+    def __init__(self, data_dir: str = "data/waymo/motion_dataset", dataset_type: str = "training"):
         """
         Initialize Waymo data loader.
         

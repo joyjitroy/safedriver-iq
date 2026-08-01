@@ -28,7 +28,7 @@ Usage
     gen = ContextualFeatureGenerator(random_seed=42)
 
     # Augment an existing CRSS accident DataFrame
-    df_augmented = gen.augment_crss_dataframe(accident_df)
+    df_augmented = gen.augment_data/crssframe(accident_df)
 
     # Or generate a standalone synthetic scenario
     scenarios = gen.generate_synthetic_scenarios(n=1000)
@@ -103,7 +103,7 @@ class ContextualFeatureGenerator:
     # Public API
     # ------------------------------------------------------------------
 
-    def augment_crss_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
+    def augment_data/crssframe(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Augment a CRSS accident DataFrame with synthesized contextual features.
 

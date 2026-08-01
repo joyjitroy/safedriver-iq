@@ -19,7 +19,7 @@ def main():
     
     # Initialize loader
     print("Initializing CRSS Data Loader...")
-    loader = CRSSDataLoader(data_dir='CRSS_Data', years=[2023])  # Test with one year first
+    loader = CRSSDataLoader(data_dir='data/crss', years=[2023])  # Test with one year first
     
     print("\nTest 1: Loading 2023 Accident Data")
     print("-" * 50)
@@ -52,7 +52,7 @@ def main():
     print("\nTest 3: Loading All Years")
     print("-" * 50)
     print("Loading data for years 2016-2023...")
-    loader_full = CRSSDataLoader(data_dir='CRSS_Data', years=list(range(2016, 2024)))
+    loader_full = CRSSDataLoader(data_dir='data/crss', years=list(range(2016, 2024)))
     
     datasets = loader_full.load_complete_dataset()
     

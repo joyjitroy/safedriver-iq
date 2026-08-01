@@ -27,7 +27,7 @@ def demo_data_loading():
     print_section("DEMO 1: Data Loading & Scale")
     
     print("Loading CRSS national crash data (2016-2023)...")
-    loader = CRSSDataLoader(data_dir='CRSS_Data')
+    loader = CRSSDataLoader(data_dir='data/crss')
     
     # Load 2023 first for quick demo
     print("\n1. Loading 2023 sample data...")

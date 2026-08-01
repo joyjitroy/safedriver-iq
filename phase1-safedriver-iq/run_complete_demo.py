@@ -64,7 +64,7 @@ def demo_data_loading():
     
     # Load data
     print("Loading CRSS data (2016-2023)...")
-    loader = CRSSDataLoader(data_dir='CRSS_Data')
+    loader = CRSSDataLoader(data_dir='data/crss')
     
     # Get VRU crashes
     vru_crashes = loader.get_vru_crashes()

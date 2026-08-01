@@ -12,7 +12,7 @@ learning — those are Phase 3).
 
 ## Quick start
 ```bash
-cd phase2-agentic-multimodel
+cd phase2-prism
 .venv/bin/python -m sdiq.config        # show resolved dataset/model paths
 .venv/bin/python -m pytest -q          # run the test suite
 .venv/bin/python -m sdiq.data_loader   # smoke-test the unified loaders

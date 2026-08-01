@@ -295,7 +295,7 @@ class FeatureEngineer:
         """
         from src.contextual_feature_generator import ContextualFeatureGenerator
         gen = ContextualFeatureGenerator(random_seed=random_seed)
-        df_aug = gen.augment_crss_dataframe(df)
+        df_aug = gen.augment_data/crssframe(df)
         logger.info(
             f"Created contextual features: "
             f"{len(df_aug.columns) - len(df.columns)} new columns added"
