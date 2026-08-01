@@ -4,7 +4,7 @@
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Status: Agentic AI](https://img.shields.io/badge/Status-Agentic%20AI%20Phase%201%20Complete-success.svg)](src/agent/)
+[![Status: Agentic AI](https://img.shields.io/badge/Status-Agentic%20AI%20Phase%201%20Complete-success.svg)](phase1-safedriver-iq/src/agent/)
 
 ## Project Overview
 
@@ -24,12 +24,12 @@ A deep-dive multi-dataset investigation combining **CRSS** (417K crashes) and **
 **Key addition — Contextual Feature Synthesis:** CRSS captures crash *outcomes* but is silent on contextual preconditions. A new `ContextualFeatureGenerator` synthesises 16 research-calibrated risk dimensions (see [Section 6](#section-6--comprehensive-crash-factor-analysis-beyond-crss-data) in notebook 04) drawn from NHTSA, FHWA-HSM, AAA Foundation, and IIHS sources, enabling richer training and what-if simulation.
 
 ### 🤖 Real-Time Agentic Decision Layer (Phase 1 extension)
-A rule/RL-based decision layer (`src/agent/`) wraps the Phase 1 tabular safety score with **autonomous decision-making**:
+A rule/RL-based decision layer (`phase1-safedriver-iq/src/agent/`) wraps the Phase 1 tabular safety score with **autonomous decision-making**:
 - Real-time risk assessment and autonomous interventions
 - Continuous learning from driving experiences
 - Multi-modal driver notifications (visual, audio, haptic)
 - Transparent, explainable AI reasoning
-- Code: [`src/agent/core/`](src/agent/core/) (decision engine) · [`src/agent/perception/`](src/agent/perception/) · [`src/agent/control/`](src/agent/control/) · [`src/agent/learning/`](src/agent/learning/) · [`src/agent/explainability/`](src/agent/explainability/) — see [`demo_agentic_ai.py`](demo_agentic_ai.py) to run it
+- Code: [`phase1-safedriver-iq/src/agent/core/`](phase1-safedriver-iq/src/agent/core/) (decision engine) · [`phase1-safedriver-iq/src/agent/perception/`](phase1-safedriver-iq/src/agent/perception/) · [`phase1-safedriver-iq/src/agent/control/`](phase1-safedriver-iq/src/agent/control/) · [`phase1-safedriver-iq/src/agent/learning/`](phase1-safedriver-iq/src/agent/learning/) · [`phase1-safedriver-iq/src/agent/explainability/`](phase1-safedriver-iq/src/agent/explainability/) — see [`phase1-safedriver-iq/demo_agentic_ai.py`](phase1-safedriver-iq/demo_agentic_ai.py) to run it
 
 > **Note:** This is a Phase 1 add-on around the single tabular safety-score model, not to be confused with **PRISM (Phase 2)**, which independently fuses three separate risk models (environmental, trajectory, VRU) via its own RL agent — see below.
 
@@ -43,7 +43,7 @@ A rule/RL-based decision layer (`src/agent/`) wraps the Phase 1 tabular safety s
 Instead of predicting crashes, we model the **distance from crash** - quantifying how "safe" a driving scenario is by measuring its statistical distance from crash-producing conditions.
 
 ### 🕶️ PRISM-AR: Risk-Adaptive AR Cues for VRUs (extends PRISM / Phase 2)
-PRISM-AR (in [`prism-ar/`](prism-ar/)) takes PRISM's continuous safety score and intervention tier and maps them to **adaptive augmented-reality cues** for pedestrians and cyclists — e.g., a translucent amber safe zone at "advisory", a flashing red no-cross boundary at "emergency". It is being prepared for submission to **IEEE Transactions on Vehicular Technology**. See [`prism-ar/README.md`](prism-ar/README.md) for details.
+PRISM-AR (in [`phase3-prism-ar/`](phase3-prism-ar/)) takes PRISM's continuous safety score and intervention tier and maps them to **adaptive augmented-reality cues** for pedestrians and cyclists — e.g., a translucent amber safe zone at "advisory", a flashing red no-cross boundary at "emergency". It is being prepared for submission to **IEEE Transactions on Vehicular Technology**. See [`phase3-prism-ar/README.md`](phase3-prism-ar/README.md) for details.
 
 ## 📄 Research Publication
 
@@ -67,7 +67,7 @@ This research was developed in collaboration with the **American Center for Mobi
 
 ### Phase 2: PRISM
 
-Phase 2 of this research, an agentic multi-model architecture for proactive safety intervention in autonomous transportation, has been accepted for presentation at the **American Society of Civil Engineers (ASCE) 2027** conference. Validation artifacts are in the [`asce2027/`](asce2027/) directory.
+Phase 2 of this research, an agentic multi-model architecture for proactive safety intervention in autonomous transportation, has been accepted for presentation at the **American Society of Civil Engineers (ASCE) 2027** conference. Validation artifacts are in the [`phase2-prism/asce2027/`](phase2-prism/asce2027/) directory.
 
 ### Key Results (Phase 2)
 
@@ -82,7 +82,7 @@ Phase 2 of this research, an agentic multi-model architecture for proactive safe
 
 **Paper Title:** *Explainable Risk-Adaptive Driving Intelligence for Vulnerable Road User Communication in Automated Vehicles*
 
-Phase 3 extends PRISM's internal AV risk reasoning into external, VRU-facing communication. PRISM-AR (PRISM with Augmented Reality) adds a tiered external communication policy that maps PRISM's fused risk state to adaptive AR cues for pedestrians and cyclists across four escalation levels: silent, information, warning, and emergency. Prepared for submission to **IEEE Transactions on Vehicular Technology (TVT)**, Special Issue on Advanced Driving Intelligence for Autonomous Vehicles (manuscript deadline: 1 August 2026). Source and validation artifacts are in the [`prism-ar/`](prism-ar/) directory.
+Phase 3 extends PRISM's internal AV risk reasoning into external, VRU-facing communication. PRISM-AR (PRISM with Augmented Reality) adds a tiered external communication policy that maps PRISM's fused risk state to adaptive AR cues for pedestrians and cyclists across four escalation levels: silent, information, warning, and emergency. Prepared for submission to **IEEE Transactions on Vehicular Technology (TVT)**, Special Issue on Advanced Driving Intelligence for Autonomous Vehicles (manuscript deadline: 1 August 2026). Source and validation artifacts are in the [`phase3-prism-ar/`](phase3-prism-ar/) directory.
 
 **Authors:** Joyjit Roy, Meng Lu, Arijit Roy, Sushanta Das, Samaresh Kumar Singh
 
@@ -98,7 +98,7 @@ Phase 3 extends PRISM's internal AV risk reasoning into external, VRU-facing com
 Each phase of the SafeDriver-IQ system was **designed, implemented, and validated first**, and the insights, models, and experimental findings from this project directly led to the corresponding research publications: the Phase 1 arXiv paper, the Phase 2 ASCE2027 paper, and the Phase 3 PRISM-AR manuscript prepared for IEEE TVT.
 
 In other words:
-- ✅ This repository = **working system + experiments** (Phase 1: `src/`, Phase 2: `phase2-agentic-multimodel/`, Phase 3: `prism-ar/`)
+- ✅ This repository = **working system + experiments** (Phase 1: `phase1-safedriver-iq/`, Phase 2: `phase2-prism/`, Phase 3: `phase3-prism-ar/`)
 - ✅ The papers = **formalization of methodology, results, and contributions** for each phase
 
 ### 🚀 What the Paper Formalizes
@@ -114,13 +114,13 @@ The research paper builds on this project and formally introduces:
 
 | Research Concept | Implementation in This Repo |
 |----------------|---------------------------|
-| Inverse crash modeling | `src/safety_score.py` |
-| Feature engineering (120+) | `src/feature_engineering.py` |
-| Contextual risk synthesis | `src/contextual_feature_generator.py` |
-| Model training (RF/XGBoost) | `src/models.py` |
-| Behavioral insights | `src/driver_behavior_classifier.py` |
-| Explainability (SHAP) | `notebooks/03_shap_analysis.ipynb` |
-| Real-time scoring system | `src/realtime_calculator.py` |
+| Inverse crash modeling | `phase1-safedriver-iq/src/safety_score.py` |
+| Feature engineering (120+) | `phase1-safedriver-iq/src/feature_engineering.py` |
+| Contextual risk synthesis | `phase1-safedriver-iq/src/contextual_feature_generator.py` |
+| Model training (RF/XGBoost) | `phase1-safedriver-iq/src/models.py` |
+| Behavioral insights | `phase1-safedriver-iq/src/driver_behavior_classifier.py` |
+| Explainability (SHAP) | `phase1-safedriver-iq/notebooks/03_shap_analysis.ipynb` |
+| Real-time scoring system | `phase1-safedriver-iq/src/realtime_calculator.py` |
 
 ### 🧾 Main Contributors
 
@@ -228,19 +228,19 @@ Phase 3 maps PRISM's fused risk state to risk-adaptive AR cues for pedestrians a
 - **91 timesteps per scenario** at 10 Hz (1 s context + 8 s future horizon)
 - Captures: agent trajectories (vehicles, pedestrians, cyclists), road graph, traffic signals, speed limits
 - Used for: Good driver profiling, near-miss detection, behavioral pattern extraction
-- Stored via **Git LFS** in `waymo/motion_dataset/`
+- Stored via **Git LFS** in `data/waymo/motion_dataset/`
 
 **nuScenes v1.0-mini** — Public autonomous-driving benchmark
 - **10 scenes**, 12 sensors (6 cameras, 5 radars, 1 LiDAR)
 - Full 3D bounding-box tracks for vehicles, pedestrians, and cyclists
 - Used for: PRISM/PRISM-AR validation in complex urban intersections and adverse-lighting scenes
-- Stored under `phase2-agentic-multimodel/datasets/nuscenes-mini/`
+- Stored under `phase2-prism/datasets/nuscenes-mini/`
 
 **Argoverse 2** — Large-scale motion forecasting dataset
 - **24,988 scenarios** in the validation split (1,000 sampled as PRISM/PRISM-AR candidate clips)
 - 10 Hz agent tracks (position, velocity, heading) across multiple US cities
 - Used for: PRISM/PRISM-AR validation across diverse urban environments and per-city breakdowns
-- Stored under `phase2-agentic-multimodel/datasets/argoverse2-val/`
+- Stored under `phase2-prism/datasets/argoverse2-val/`
 
 ### Dataset Summary by Paper
 
@@ -255,8 +255,19 @@ Phase 3 maps PRISM's fused risk state to risk-adaptive AR cues for pedestrians a
 | Phase 3 (PRISM-AR/TVT) | Waymo WOMD | 286 candidate → 25 evaluated clips | VRU-interaction clips | Evaluate risk-adaptive AR cues |
 | Phase 3 (PRISM-AR/TVT) | Synthetic near-miss generator | 60 scenarios | Controlled pedestrian-crossing scenes | Supplement rare warning/emergency cases |
 
-Phase 3 candidate clips are drawn from the same three AV datasets as Phase 2 (1,296 total candidate clips), then filtered by a VRU-interaction extractor (20 m ego-approach radius, decreasing distance, ≥5 frames visible) down to 231 total evaluated scenario clips. See [`prism-ar/README.md`](prism-ar/README.md) and `prism-ar/src/prism_ar/dataset_generation/scenario_extractor.py` for the extraction logic.
+Phase 3 candidate clips are drawn from the same three AV datasets as Phase 2 (1,296 total candidate clips), then filtered by a VRU-interaction extractor (20 m ego-approach radius, decreasing distance, ≥5 frames visible) down to 231 total evaluated scenario clips. See [`phase3-prism-ar/README.md`](phase3-prism-ar/README.md) and `phase3-prism-ar/src/prism_ar/dataset_generation/scenario_extractor.py` for the extraction logic.
 
+## Data Management
+
+The repository keeps small, shareable datasets in `data/` and expects large AV datasets to live outside the repo to avoid GitHub file-size and Windows `MAX_PATH` issues.
+
+- `data/crss/` — NHTSA CRSS (2016–2023), used by Phase 1 and Phase 2.
+- `data/waymo/` — Waymo Open Motion Dataset TFRecord files, used by all phases.
+- `data/processed/` — Derived parquet/CSV artifacts.
+- `phase2-prism/datasets/` — Local nuScenes and Argoverse 2 data (not tracked; add this folder to `.gitignore` if you create it).
+- `phase3-prism-ar/data/prism_ar/` — Generated PRISM-AR annotations and rendered AR overlay images.
+
+To point Phase 2 and Phase 3 at external datasets, set the `SDIQ_*` environment variables in `phase2-prism/src/sdiq/config.py` or use Windows directory junctions (e.g. `C:\data_prismar\nuscenes`, `C:\data_prismar\argoverse2`, `C:\data_prismar\waymo`, `C:\data_prismar\crss`).
 ## System Architecture
 
 ### Architecture Diagrams
@@ -312,7 +323,7 @@ The environmental Random Forest is **frozen and reused as-is** from Phase 1 in P
 
 #### PRISM-AR (Phase 3) Risk-Adaptive AR Architecture
 
-![PRISM-AR Architecture](prism-ar/results/figures/F1_PRISM_AR_Architecture.png)
+![PRISM-AR Architecture](phase3-prism-ar/results/figures/F1_PRISM_AR_Architecture.png)
 
 PRISM-AR is the third stage in the SafeDriver-IQ → PRISM → PRISM-AR sequence. It adds an **augmented reality external communication layer** (HMD overlays, projected cues, pedestrian-facing vehicle displays) on top of PRISM's risk reasoning. The reference implementation evaluated in the paper is a **deterministic** four-layer pipeline (not the Q-net RL policy used in Phase 2):
 
@@ -324,7 +335,7 @@ PRISM-AR is the third stage in the SafeDriver-IQ → PRISM → PRISM-AR sequence
 3. **Layer 3 — Risk Fusion and Tier Selection**: Deterministic weighted fusion `r_fused = clip(w_env·r_env + w_traj·r_traj + w_vru·r_vru)`, with **w_env = 0.40, w_traj = 0.30, w_vru = 0.30** for all reported results. Converted to a safety score `S = 100·(1 - r_fused)` and mapped to one of four tiers by fixed thresholds.
 4. **Layer 4 — External VRU Communication Policy**: Deterministic tier-to-cue lookup table (opacity increases with tier; flashing reserved for the highest tier), delivered through configurable VRU-facing channels (HMD, projection, exterior display).
 
-> **Terminology note:** the paper names the four tiers **Silent, Information, Warning, Emergency**, whereas the current codebase (`prism-ar/src/prism_ar/prism/risk_engine.py`) uses **silent, advisory, intervention, emergency**. These refer to the same four escalation levels but with different labels for the two middle tiers — worth reconciling before final submission.
+> **Terminology note:** the paper names the four tiers **Silent, Information, Warning, Emergency**, whereas the current codebase (`phase3-prism-ar/src/prism_ar/prism/risk_engine.py`) uses **silent, advisory, intervention, emergency**. These refer to the same four escalation levels but with different labels for the two middle tiers — worth reconciling before final submission.
 >
 > The architecture supports an **agentic extension** (a DQN policy over the fused risk state, with SHAP explanations and short-term memory, analogous to Phase 2's Layer 3) but this extension is **not evaluated** in the PRISM-AR reference results — all reported numbers use the fixed-weight, threshold-based pipeline above.
 
@@ -334,15 +345,15 @@ PRISM-AR maps the fused internal risk state to external safety cues delivered th
 
 ### $\color{blue}{\text{HMD overlay}}$
 
-![PRISM-AR HMD overlay](prism-ar/results/figures/F10a_HMD_Overlay.png)
+![PRISM-AR HMD overlay](phase3-prism-ar/results/figures/F10a_HMD_Overlay.png)
 
 ### $\color{blue}{\text{Projected road cue}}$
 
-![PRISM-AR projected road cue](prism-ar/results/figures/F10b_Projected_Cue.png)
+![PRISM-AR projected road cue](phase3-prism-ar/results/figures/F10b_Projected_Cue.png)
 
 ### $\color{blue}{\text{Pedestrian-facing vehicle display}}$
 
-![PRISM-AR pedestrian-facing vehicle display](prism-ar/results/figures/F10c_Vehicle_Display.png)
+![PRISM-AR pedestrian-facing vehicle display](phase3-prism-ar/results/figures/F10c_Vehicle_Display.png)
 
 #### Phase 2 → Phase 3 Mapping
 
@@ -357,86 +368,65 @@ PRISM-AR maps the fused internal risk state to external safety cues delivered th
 ## Project Structure
 
 ```
-├── asce2027/                   # ASCE2027 PRISM validation artifacts (reproducibility bundle)
-│   ├── scripts/                # Analysis scripts (AV2, Waymo, nuScenes)
-│   ├── data/                   # Validation results (CSV/JSON)
-│   └── figures/                # Paper figures
-├── phase2-agentic-multimodel/  # PRISM (Phase 2) source: sdiq package, models, tests
-│   ├── src/sdiq/                # config, data loaders, kinematics, social force, agentic layer, LLM co-pilot
-│   ├── tests/                   # pytest suite (61 tests)
-│   └── docs/                    # setup, implementation plan, ASCE2027 architecture docs
-├── prism-ar/                   # PRISM-AR (Phase 3) source: risk-adaptive AR cue mapping for VRUs
-│   ├── src/prism_ar/            # data_ingestion, prism (risk engine), ar_overlay, dataset_generation, evaluation
-│   ├── tests/                   # unit tests
-│   ├── scripts/                 # run_*.py, generate_*.py, measure_*.py
-│   ├── data/                    # scenario annotations + rendered AR overlay images
-│   ├── results/                 # CSVs, JSON, figures, report.md
-│   ├── notebooks/
-│   └── docs/                    # PAPER_PLAN.md, architecture docx, Backups/
-├── docs/
-│   ├── images/                 # Architecture diagrams (SafeDriver-IQ + PRISM)
-│   └── flyers/                 # Research flyers (Phase 1 + Phase 2 + Phase 3)
-├── CRSS_Data/                  # National crash database (2016-2023)
-│   ├── 2016/                   # Year-wise crash data
-│   ├── 2017/
-│   └── ...
-├── waymo/                      # Waymo Open Motion Dataset (Git LFS)
-│   └── motion_dataset/
-│       ├── datasets_scenario/  # Scenario-format TFRecords
-│       └── tf_example_datasets/# TF Example-format TFRecords
-├── data/
-│   ├── raw/                    # Downloaded CRSS files
-│   ├── processed/              # Cleaned datasets
-│   └── external/               # VMT exposure data
-├── notebooks/
-│   ├── 01_data_exploration.ipynb
-│   ├── 02_train_inverse_model.ipynb
-│   ├── 03_shap_analysis.ipynb
-│   └── 04_crash_factor_investigation.ipynb  # 8-investigation deep-dive
-├── src/
-│   ├── data_loader.py              # CRSS data loading
-│   ├── preprocessing.py            # Data cleaning
-│   ├── feature_engineering.py      # 120+ features
-│   ├── models.py                   # Model training/saving
-│   ├── safety_score.py             # Score computation
-│   ├── realtime_calculator.py      # Live safety scoring
-│   ├── scenario_simulator.py       # What-if analysis
-│   ├── contextual_feature_generator.py  # synthesised contextual features
-│   ├── crash_insights.py           # crash investigation utilities
-│   ├── driver_behavior_classifier.py    # behavior clustering
-│   ├── feature_importance.py       # multi-method feature consensus
-│   ├── waymo_data_loader.py        # Waymo TFRecord loader
-│   └── visualization.py            # Plotting utilities
-├── src/agent/                       # Real-time agentic decision layer (Phase 1 extension, see above)
-│   ├── core/                       # decision engine
-│   ├── perception/                 # context engine
-│   ├── control/                    # intervention controller
-│   ├── learning/                   # continuous/online learning
-│   └── explainability/
-├── src/simulation/
-│   └── scenario_simulator.py       # used by demo_agentic_ai.py
-├── tests/
-│   ├── test_data_loader.py
-│   ├── test_feature_engineering.py
-│   ├── test_models.py
-│   ├── test_preprocessing.py
-│   └── test_realtime_calculator.py
-├── results/
-│   ├── figures/               # Visualizations
-│   ├── tables/                # Analysis results
-│   ├── crash_investigation_feature_importance.csv
-│   ├── crash_investigation_behavior_clusters.csv
-│   ├── crash_investigation_rf_model.pkl
-│   └── models/                # Trained models
-└── app/
-    └── streamlit_app.py       # Interactive dashboard
+├── data/                          # Shared datasets (CRSS, Waymo, processed)
+│   ├── crss/                      # NHTSA CRSS crash database (2016-2023)
+│   │   ├── 2016/
+│   │   ├── 2017/
+│   │   └── ...
+│   ├── processed/                 # Cleaned/derived datasets
+│   └── waymo/                     # Waymo Open Motion Dataset (Git LFS)
+│       └── motion_dataset/
+│           ├── datasets_scenario/ # Scenario-format TFRecords
+│           └── tf_example_datasets/ # TF Example-format TFRecords
+├── docs/                          # Shared documentation
+│   ├── images/                    # Architecture diagrams, PRISM mockups
+│   └── flyers/                    # Research flyers (Phase 1 + 2 + 3)
+├── phase1-safedriver-iq/          # Phase 1: inverse crash modeling
+│   ├── app/                       # Streamlit dashboard
+│   ├── notebooks/                 # Jupyter notebooks (01-04)
+│   ├── results/                   # Models, figures, tables
+│   ├── src/                       # Core SafeDriver-IQ package
+│   │   ├── data_loader.py
+│   │   ├── preprocessing.py
+│   │   ├── feature_engineering.py
+│   │   ├── models.py
+│   │   ├── safety_score.py
+│   │   ├── realtime_calculator.py
+│   │   ├── scenario_simulator.py
+│   │   ├── contextual_feature_generator.py
+│   │   ├── crash_insights.py
+│   │   ├── driver_behavior_classifier.py
+│   │   ├── feature_importance.py
+│   │   ├── waymo_data_loader.py
+│   │   └── visualization.py
+│   ├── src/agent/                 # Real-time agentic decision layer
+│   ├── src/simulation/
+│   ├── tests/                     # Pytest suite
+│   └── retrain_model.py, run_complete_demo.py, demo_quick.py, demo_agentic_ai.py, start.sh, ...
+├── phase2-prism/                  # Phase 2: agentic multi-model PRISM
+│   ├── asce2027/                  # ASCE2027 validation artifacts
+│   │   ├── scripts/               # Analysis scripts (AV2, Waymo, nuScenes)
+│   │   ├── data/                  # Validation results (CSV/JSON)
+│   │   └── figures/               # Paper figures
+│   ├── docs/                      # setup, implementation plan, architecture docs
+│   ├── reference/                 # Original sanity scripts
+│   ├── src/sdiq/                  # config, data loaders, models, agentic layer
+│   └── tests/                     # Pytest suite (61 tests)
+└── phase3-prism-ar/               # Phase 3: risk-adaptive AR cues for VRUs
+    ├── data/                      # Scenario annotations + rendered AR images
+    ├── docs/                      # PAPER_PLAN.md, architecture docx, Backups/
+    ├── notebooks/
+    ├── results/                   # CSVs, JSON, figures, report.md
+    ├── scripts/                   # run_*.py, generate_*.py, measure_*.py
+    ├── src/prism_ar/              # data_ingestion, prism, ar_overlay, ...
+    └── tests/                     # Unit tests
 ```
 
 ## Quick Start (5 Minutes)
 
 ### Prerequisites
 - Python 3.12+ installed
-- CRSS data downloaded to `CRSS_Data/` directory
+- CRSS data downloaded to `data/crss/` directory
 - Terminal/Command line access
 
 ### Setup & Run
@@ -458,19 +448,19 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 # Verify data loading (shows 417K+ crashes)
-python test_data_loader.py
+python phase1-safedriver-iq/test_data_loader.py
 
 # Run COMPLETE demonstration (trains model + all features)
-python run_complete_demo.py --quick
+python phase1-safedriver-iq/run_complete_demo.py --quick
 
 # Or run quick data demo
-python demo_quick.py
+python phase1-safedriver-iq/demo_quick.py
 
 # Or explore interactively
-jupyter notebook notebooks/01_data_exploration.ipynb
+jupyter notebook phase1-safedriver-iq/notebooks/01_data_exploration.ipynb
 
 # Launch interactive dashboard (after training model)
-streamlit run app/streamlit_app.py
+streamlit run phase1-safedriver-iq/app/streamlit_app.py
 ```
 
 ### Expected Output
@@ -482,10 +472,10 @@ streamlit run app/streamlit_app.py
 
 ## Quick Start — Phase 2 (PRISM)
 
-Phase 2 lives in its own isolated environment under `phase2-agentic-multimodel/` and does not share Phase 1's virtualenv.
+Phase 2 lives in its own isolated environment under `phase2-prism/` and does not share Phase 1's virtualenv.
 
 ```bash
-cd phase2-agentic-multimodel
+cd phase2-prism
 
 # Show resolved dataset/model paths
 .venv/bin/python -m sdiq.config
@@ -509,21 +499,21 @@ cd phase2-agentic-multimodel
 .venv/bin/python -m sdiq.main latency
 ```
 
-See [phase2-agentic-multimodel/README.md](phase2-agentic-multimodel/README.md) for milestone status and [phase2-agentic-multimodel/docs/setup.md](phase2-agentic-multimodel/docs/setup.md) for environment details.
+See [phase2-prism/README.md](phase2-prism/README.md) for milestone status and [phase2-prism/docs/setup.md](phase2-prism/docs/setup.md) for environment details.
 
 ## Quick Start — Phase 3 (PRISM-AR)
 
-Phase 3 also lives in its own folder (`prism-ar/`) with an editable `src/` layout, independent of Phase 1 and Phase 2's environments.
+Phase 3 also lives in its own folder (`phase3-prism-ar/`) with an editable `src/` layout, independent of Phase 1 and Phase 2's environments.
 
 ```bash
-cd prism-ar
+cd phase3-prism-ar
 
 # 1. Install dependencies (editable install using the src/ layout in pyproject.toml)
 pip install -r requirements.txt
 pip install -e .
 
 # 2. Run tests
-pytest tests/ -v
+pytest phase3-prism-ar/tests/ -v
 
 # 3. Run the full real-data pipeline (Waymo + Argoverse 2 + nuScenes + synthetic near-miss)
 python scripts/run_prism_ar_real_data.py --max_scenes 50
@@ -536,7 +526,7 @@ python scripts/run_ablation_study.py
 python scripts/run_robustness_study.py
 ```
 
-On Windows, `scripts/setup_venv.bat` can be used instead of step 1 to create an isolated virtual environment first. See [prism-ar/README.md](prism-ar/README.md) for dataset path configuration and implementation notes.
+On Windows, `scripts/setup_venv.bat` can be used instead of step 1 to create an isolated virtual environment first. See [phase3-prism-ar/README.md](phase3-prism-ar/README.md) for dataset path configuration and implementation notes.
 
 ## Detailed Setup Instructions
 
@@ -573,7 +563,7 @@ This installs:
 ### Step 4: Extract CRSS Data
 If data is still zipped:
 ```bash
-cd CRSS_Data
+cd data/crss
 for year in 2016 2017 2018 2019 2020 2021 2022 2023; do
     unzip -o ${year}/CRSS${year}CSV.zip -d ${year}/
 done
@@ -582,7 +572,7 @@ cd ..
 
 ### Step 5: Verify Setup
 ```bash
-python test_data_loader.py
+python phase1-safedriver-iq/test_data_loader.py
 ```
 
 Should show successful loading of 417K+ crash records.
@@ -600,13 +590,13 @@ pip install -r requirements-test.txt
 pytest
 
 # Run all tests with verbose output and short traceback (recommended)
-pytest tests/ -v --tb=short
+pytest phase3-prism-ar/tests/ -v --tb=short
 
 # Run all tests with verbose output and one-line traceback (most concise)
-pytest tests/ -v --tb=line
+pytest phase3-prism-ar/tests/ -v --tb=line
 
 # Run tests without coverage calculation (faster)
-pytest tests/ -v --tb=short --no-cov
+pytest phase3-prism-ar/tests/ -v --tb=short --no-cov
 
 # Run tests in quiet mode with one-line traceback (minimal output)
 pytest tests/ -q --tb=line
@@ -676,7 +666,7 @@ Expected: 65 tests total (53 pass + 12 realtime tests with 5 expected failures d
 
 ### Phase 2: PRISM Pipeline
 
-Implemented as milestones M0–M8 in `phase2-agentic-multimodel/`:
+Implemented as milestones M0–M8 in `phase2-prism/`:
 
 - **M0 — Environment & data**: isolated `.venv`, devkit-free nuScenes, config-driven sanity tests
 - **M1 — Unified data loaders**: `DrivingScene` / `AgentTrack` / `EgoState` over nuScenes + Argoverse 2
@@ -690,7 +680,7 @@ Implemented as milestones M0–M8 in `phase2-agentic-multimodel/`:
 
 ### Phase 3: PRISM-AR Pipeline
 
-Implemented in `prism-ar/scripts/run_prism_ar_real_data.py`:
+Implemented in `phase3-prism-ar/scripts/run_prism_ar_real_data.py`:
 
 1. Load Waymo, Argoverse 2, and nuScenes mini scenes (plus the synthetic near-miss generator)
 2. Extract AR-relevant VRU interaction clips via the scenario extractor
@@ -701,7 +691,7 @@ Implemented in `prism-ar/scripts/run_prism_ar_real_data.py`:
 
 ## ASCE2027 Validation Artifacts
 
-The `asce2027/` folder contains the reproducibility bundle for the ASCE2027 conference paper:
+The `phase2-prism/asce2027/` folder contains the reproducibility bundle for the ASCE2027 conference paper:
 
 - **Scripts**: `compute_stats.py`, `check_tier_mapping.py`, `find_thresholds.py`, `sensitivity_final.py`, `av2_and_shap_outputs.py`, `fig2_score_distribution_final.py`, `generate_paper_outputs.py`, `waymo_validation.py`, `waymo_validation_run.py`
 - **Data**: `av2_validation_1000.csv`, `av2_validation_by_city.csv`, `av2_scenario_summary.csv`, `scenario_summary.csv`, `waymo_validation_results.json`, `waymo_scenario_summary.csv`, `fig2_score_distribution_data.csv`
@@ -712,7 +702,7 @@ These artifacts support the paper's results: mean safety score 68/100, 77.6% adv
 ### Reproducing the ASCE2027 figures/tables
 
 ```bash
-cd asce2027/scripts
+cd phase2-prism/asce2027/scripts
 python generate_paper_outputs.py   # regenerates data/ and figures/ from validation results
 python compute_stats.py            # summary statistics used in the paper
 python check_tier_mapping.py       # verifies score-to-tier assignment
@@ -722,14 +712,14 @@ python sensitivity_final.py        # sensitivity analysis
 
 ## PRISM-AR (TVT) Validation Artifacts
 
-The `prism-ar/` folder contains the reproducibility bundle for the PRISM-AR IEEE TVT manuscript:
+The `phase3-prism-ar/` folder contains the reproducibility bundle for the PRISM-AR IEEE TVT manuscript:
 
-- **Scripts** (`prism-ar/scripts/`): `run_prism_ar_real_data.py`, `run_ablation_study.py`, `run_robustness_study.py`, `generate_prism_ar_figures.py`, `generate_prism_ar_report.py`, `generate_prism_ar_dataset.py`, `measure_prism_ar_latency.py`
-- **Data** (`prism-ar/results/`): `prism_ar_results.csv`, `prism_ar_summary.json`, `ablation_results.csv`, `robustness_results.csv`, `latency_results.json`, `report.md`, and per-metric tables in `tables/` (`ablation.csv`, `adverse_condition.csv`, `ground_truth_comparison.csv`, `main_by_dataset.csv`, `robustness.csv`)
-- **Figures** (`prism-ar/results/figures/`): architecture diagram (F1), mean safety scores by dataset (F2), tier distribution (F3), ground-truth comparisons (F4, F5), lead-time distribution (F6), distance-vs-score (F7), dataset metrics (F8), ablation (F9), AR cue mockups — HMD overlay, projected cue, vehicle display (F10a–d), and the evaluation-flow diagram (F11)
-- **Rendered overlay images** (`prism-ar/results/images/`): paired no-AR / static / adaptive / oracle frames for representative Waymo, Argoverse 2, and nuScenes clips
+- **Scripts** (`phase3-prism-ar/scripts/`): `run_prism_ar_real_data.py`, `run_ablation_study.py`, `run_robustness_study.py`, `generate_prism_ar_figures.py`, `generate_prism_ar_report.py`, `generate_prism_ar_dataset.py`, `measure_prism_ar_latency.py`
+- **Data** (`phase3-prism-ar/results/`): `prism_ar_results.csv`, `prism_ar_summary.json`, `ablation_results.csv`, `robustness_results.csv`, `latency_results.json`, `report.md`, and per-metric tables in `tables/` (`ablation.csv`, `adverse_condition.csv`, `ground_truth_comparison.csv`, `main_by_dataset.csv`, `robustness.csv`)
+- **Figures** (`phase3-prism-ar/results/figures/`): architecture diagram (F1), mean safety scores by dataset (F2), tier distribution (F3), ground-truth comparisons (F4, F5), lead-time distribution (F6), distance-vs-score (F7), dataset metrics (F8), ablation (F9), AR cue mockups — HMD overlay, projected cue, vehicle display (F10a–d), and the evaluation-flow diagram (F11)
+- **Rendered overlay images** (`phase3-prism-ar/results/images/`): paired no-AR / static / adaptive / oracle frames for representative Waymo, Argoverse 2, and nuScenes clips
 
-These artifacts support the paper's results: 231 evaluated scenario clips, tier accuracy 0.43 → 0.71, cue-risk monotonicity ρ = -0.703 (p < 0.0001), and sub-millisecond per-frame latency. See [Quick Start — Phase 3 (PRISM-AR)](#quick-start--phase-3-prism-ar) above to regenerate them.
+These artifacts support the paper's results: 231 evaluated scenario clips, tier accuracy 0.43 → 0.71, cue-risk monotonicity ρ = -0.703 (p < 0.0001), and sub-millisecond per-frame latency. See [Quick Start — Phase 3 (PRISM-AR)](#quick-start--phase-3-phase3-prism-ar) above to regenerate them.
 
 ## New Features (Phase 1, Just Completed! 🎉)
 
@@ -742,7 +732,7 @@ These artifacts support the paper's results: 231 evaluated scenario clips, tier 
 - Root cause analysis causal chain framework
 - Results saved: `results/crash_investigation_feature_importance.csv`, `results/crash_investigation_rf_model.pkl`
 
-**2. Contextual Feature Generator (`src/contextual_feature_generator.py`)**
+**2. Contextual Feature Generator (`phase1-safedriver-iq/src/contextual_feature_generator.py`)**
 - Synthesises 16 research-backed risk dimensions missing from CRSS
 - Top risk factors by weight:
 
@@ -759,7 +749,7 @@ These artifacts support the paper's results: 231 evaluated scenario clips, tier 
 
 - Enables what-if simulation across any risk factor combination
 
-**3. Waymo Data Loader (`src/waymo_data_loader.py`)**
+**3. Waymo Data Loader (`phase1-safedriver-iq/src/waymo_data_loader.py`)**
 - Parses Waymo Open Motion Dataset TFRecord format (v1.2)
 - Extracts per-agent state (position, velocity, heading), road graph, traffic signals
 - Computes crash indicators: TTC, min inter-agent distance, near-miss flags
@@ -812,13 +802,13 @@ These artifacts support the paper's results: 231 evaluated scenario clips, tier 
 
 #### 1. Data Loading & Scale
 ```bash
-python test_data_loader.py
+python phase1-safedriver-iq/test_data_loader.py
 ```
 Shows: 417K crashes, 38K VRU crashes, 8 years of national data
 
 #### 2. Quick Demo (All Key Insights)
 ```bash
-python demo_quick.py
+python phase1-safedriver-iq/demo_quick.py
 ```
 Shows:
 - Data loading statistics
@@ -830,7 +820,7 @@ Shows:
 
 #### 3. Interactive Exploration
 ```bash
-jupyter notebook notebooks/01_data_exploration.ipynb
+jupyter notebook phase1-safedriver-iq/notebooks/01_data_exploration.ipynb
 ```
 Includes:
 - Comprehensive data quality analysis
@@ -841,7 +831,7 @@ Includes:
 
 #### 4. Crash Factor Investigation
 ```bash
-jupyter notebook notebooks/04_crash_factor_investigation.ipynb
+jupyter notebook phase1-safedriver-iq/notebooks/04_crash_factor_investigation.ipynb
 ```
 Includes:
 - 8 structured investigations with CRSS + Waymo data
@@ -859,7 +849,7 @@ Includes:
 
 ### Phase 2: PRISM (Agentic Multi-Model AV Safety)
 
-Run from `phase2-agentic-multimodel/`:
+Run from `phase2-prism/`:
 
 ```bash
 # Show resolved dataset/model paths
@@ -886,13 +876,13 @@ Run from `phase2-agentic-multimodel/`:
 
 ### Phase 3: PRISM-AR (Risk-Adaptive AR Cues for VRUs)
 
-Run from `prism-ar/`:
+Run from `phase3-prism-ar/`:
 
 ```bash
 # Install and run tests
 pip install -r requirements.txt
 pip install -e .
-pytest tests/ -v
+pytest phase3-prism-ar/tests/ -v
 
 # Full real-data pipeline (Waymo + Argoverse 2 + nuScenes + synthetic near-miss)
 python scripts/run_prism_ar_real_data.py --max_scenes 50
@@ -910,9 +900,9 @@ python scripts/generate_prism_ar_report.py
 
 | Phase | Entry point | What it demonstrates |
 |---|---|---|
-| Phase 1 | `notebooks/01_data_exploration.ipynb` | CRSS data quality, VRU trends, temporal patterns |
+| Phase 1 | `phase1-safedriver-iq/notebooks/01_data_exploration.ipynb` | CRSS data quality, VRU trends, temporal patterns |
 | Phase 1 | `notebooks/02_train_inverse_model.ipynb` | Full inverse safety model training |
-| Phase 1 | `notebooks/03_shap_analysis.ipynb` | SHAP interpretability deep-dive |
+| Phase 1 | `phase1-safedriver-iq/notebooks/03_shap_analysis.ipynb` | SHAP interpretability deep-dive |
 | Phase 1 | `notebooks/04_crash_factor_investigation.ipynb` | 8-investigation crash factor analysis with Waymo |
 | Phase 2 | `.venv/bin/python -m sdiq.main run` | End-to-end PRISM agentic pipeline |
 | Phase 3 | `scripts/run_prism_ar_real_data.py` | PRISM-AR real-data AR cue evaluation |
@@ -934,26 +924,26 @@ Phase 2 and Phase 3 extend this impact from human-driven vehicles to autonomous 
 - **[README.md](README.md)** — Project overview & setup (this file)
 - **[PROJECT_SETUP_SUMMARY.md](PROJECT_SETUP_SUMMARY.md)** — Detailed Phase 1 setup reference
 - **[notebooks/04_crash_factor_investigation.ipynb](notebooks/04_crash_factor_investigation.ipynb)** — Comprehensive crash factor investigation
-- **[phase2-agentic-multimodel/README.md](phase2-agentic-multimodel/README.md)** — PRISM (Phase 2) overview and quick start
-- **[phase2-agentic-multimodel/docs/setup.md](phase2-agentic-multimodel/docs/setup.md)** — PRISM environment setup details
-- **[prism-ar/README.md](prism-ar/README.md)** — PRISM-AR (Phase 3) overview and quick start
-- **[prism-ar/docs/PAPER_PLAN.md](prism-ar/docs/PAPER_PLAN.md)** — PRISM-AR IEEE TVT submission plan
-- **[prism-ar/results/report.md](prism-ar/results/report.md)** — PRISM-AR generated evaluation report
+- **[phase2-prism/README.md](phase2-prism/README.md)** — PRISM (Phase 2) overview and quick start
+- **[phase2-prism/docs/setup.md](phase2-prism/docs/setup.md)** — PRISM environment setup details
+- **[phase3-prism-ar/README.md](phase3-prism-ar/README.md)** — PRISM-AR (Phase 3) overview and quick start
+- **[phase3-prism-ar/docs/PAPER_PLAN.md](phase3-prism-ar/docs/PAPER_PLAN.md)** — PRISM-AR IEEE TVT submission plan
+- **[phase3-prism-ar/results/report.md](phase3-prism-ar/results/report.md)** — PRISM-AR generated evaluation report
 
 ## Known Issues & Limitations
 
 **Phase 1 limitation:** The current trained inverse crash model does not respond meaningfully to changes in **road condition**, **VRU presence**, or **speed relative to limit**. This is a fundamental limitation of training on crash-only data: the model never learned what "truly safe" driving looks like. It remains useful for weather, lighting, and temporal risk patterns. For test evidence, run `pytest tests/test_realtime_calculator.py -v --tb=short`.
 
-**Phase 2 mitigation:** PRISM addresses the Phase 1 limitation by adding separate trajectory-kinematic and VRU-interaction models, plus a DQN fusion agent. Validation results are in the `asce2027/` directory.
+**Phase 2 mitigation:** PRISM addresses the Phase 1 limitation by adding separate trajectory-kinematic and VRU-interaction models, plus a DQN fusion agent. Validation results are in the `phase2-prism/asce2027/` directory.
 
 **Phase 3 current scope:** PRISM-AR's reported results use a deterministic, fixed-weight risk-fusion pipeline rather than the agentic DQN+SHAP extension. The four-tier labels in the paper (Silent, Information, Warning, Emergency) differ from the current codebase labels (silent, advisory, intervention, emergency); these map to the same escalation levels. The agentic extension is designed but not evaluated in the current reference results.
 
 ## Contributing
 
 This is a research project. For questions or collaboration:
-- Phase 1: Review [notebooks/04_crash_factor_investigation.ipynb](notebooks/04_crash_factor_investigation.ipynb) and run `demo_quick.py`
-- Phase 2: See [phase2-agentic-multimodel/README.md](phase2-agentic-multimodel/README.md), run `.venv/bin/python -m sdiq.main run`
-- Phase 3: See [prism-ar/README.md](prism-ar/README.md), run `scripts/run_prism_ar_real_data.py`
+- Phase 1: Review [notebooks/04_crash_factor_investigation.ipynb](notebooks/04_crash_factor_investigation.ipynb) and run `phase1-safedriver-iq/demo_quick.py`
+- Phase 2: See [phase2-prism/README.md](phase2-prism/README.md), run `.venv/bin/python -m sdiq.main run`
+- Phase 3: See [phase3-prism-ar/README.md](phase3-prism-ar/README.md), run `scripts/run_prism_ar_real_data.py`
 - Check issues for planned features across all phases
 
 ## License
