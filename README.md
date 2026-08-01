@@ -283,6 +283,22 @@ PRISM (Proactive Risk Intelligence and Safety Management) extends SafeDriver-IQ 
 
 Unlike Phase 1's fixed decision boundary, Layer 3's tier selection is a trained Q-net RL policy (not a fixed weighted formula) that maps the 8-dimensional fused risk state to one of the four graduated tiers, using an asymmetric reward that penalizes under-reaction 2x over over-reaction.
 
+#### PRISM Application Examples
+
+The same four-layer PRISM stack is designed to feed ADAS interfaces, fleet command centers, and infrastructure-planning maps without retraining the underlying models. The mockups below illustrate how the risk signal can be exposed to different stakeholders.
+
+### $\color{blue}{\text{ADAS integration}}$
+
+![PRISM ADAS integration](docs/images/prism_adas_integration.png)
+
+### $\color{blue}{\text{Fleet risk management}}$
+
+![PRISM fleet risk dashboard](docs/images/prism_fleet_risk_dashboard.png)
+
+### $\color{blue}{\text{Infrastructure planning}}$
+
+![PRISM infrastructure planning](docs/images/prism_infrastructure_planning.png)
+
 #### Phase 1 → Phase 2 Mapping
 
 | | Phase 1 (SafeDriver-IQ) | Phase 2 (PRISM) |
@@ -316,15 +332,15 @@ PRISM-AR is the third stage in the SafeDriver-IQ → PRISM → PRISM-AR sequence
 
 PRISM-AR maps the fused internal risk state to external safety cues delivered through three VRU-facing channels: an HMD overlay, a projected road cue, and a pedestrian-facing vehicle display. The examples below are conceptual deployment illustrations; they show how tiered risk information can be surfaced to pedestrians and cyclists but are not themselves experimental evidence.
 
-**HMD overlay**
+### $\color{blue}{\text{HMD overlay}}$
 
 ![PRISM-AR HMD overlay](prism-ar/results/figures/F10a_HMD_Overlay.png)
 
-**Projected road cue**
+### $\color{blue}{\text{Projected road cue}}$
 
 ![PRISM-AR projected road cue](prism-ar/results/figures/F10b_Projected_Cue.png)
 
-**Pedestrian-facing vehicle display**
+### $\color{blue}{\text{Pedestrian-facing vehicle display}}$
 
 ![PRISM-AR pedestrian-facing vehicle display](prism-ar/results/figures/F10c_Vehicle_Display.png)
 
