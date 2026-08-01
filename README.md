@@ -150,6 +150,10 @@ Visual one-page summaries for each phase of the work.
 
 Phase 1 introduces inverse crash probability modeling: a continuous 0–100 safety score derived from NHTSA CRSS crash data and Waymo driving behavior, demonstrating that 87% of crashes involve two or more co-occurring risk factors.
 
+The same safety-score signal can be surfaced to drivers through an in-vehicle ADS dashboard, as shown in the EIT2026 paper mockup below.
+
+![SafeDriver-IQ ADS Dashboard](docs/images/safedriver_iq_ads_dashboard.png)
+
 #### Phase 2: PRISM (ASCE2027)
 
 ![PRISM Phase 2 Flyer](docs/flyers/prism_phase2_flyer.png)
