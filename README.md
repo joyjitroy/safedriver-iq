@@ -108,7 +108,7 @@ The research paper builds on this project and formally introduces:
 
 
 <details>
-<summary><strong><span style="color:blue"> 🚗 Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling </span></strong></summary>
+<summary><strong>🚗 Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling </strong></summary>
 
 ## Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling
 
@@ -345,7 +345,7 @@ See `PROJECT_SETUP_SUMMARY.md` for detailed setup.
 </details>
 
 <details>
-<summary>Phase 2: PRISM - An Agentic Multi-Model Architecture for Proactive Safety in Autonomous Transportation Systems</summary>
+<summary><strong> 🧠 Phase 2: PRISM - An Agentic Multi-Model Architecture for Proactive Safety in Autonomous Transportation Systems</strong></summary>
 
 ## Phase 2: PRISM - An Agentic Multi-Model Architecture for Proactive Safety in Autonomous Transportation Systems
 
@@ -451,7 +451,7 @@ PRISM was evaluated on 1,296 scenarios across nuScenes v1.0-mini (10 scenes), Ar
 | Argoverse 2 | 1,000 | 68.6 | 76.7 | 4.6 | 7.3% |
 | Waymo WOMD | 286 | 68.0 | 77.6 | 4.5 | 3.8% |
 
-![Safety Score Distribution](phase2-prism/docs/images/F2_Score_Distribution_Overlay.png)
+<img src="phase2-prism/docs/images/F2_Score_Distribution_Overlay.png" alt="Safety Score Distribution" width="75%" height="75%"/>
 
 **Safety Score Distribution.** Figure 2 shows the safety score distributions across all three datasets. Argoverse 2 and Waymo converge to nearly identical means (68.6 and 68.0) despite independent data collection, sensors, and geography, demonstrating cross-domain generalization without retraining. Both distributions are advisory-dominant (40-70), consistent with structured urban driving under normal conditions. nuScenes scores are lower (mean 59.8) and shift toward the intervention and emergency bands because its scenes were explicitly sampled under adverse conditions.
 
@@ -526,7 +526,7 @@ Immediate future work targets latency optimization through GPU deployment and ON
 </details>
 
 <details>
-<summary>Phase 3: PRISM-AR - Explainable Risk-Adaptive Driving Intelligence for Vulnerable Road User Communication in Automated Vehicles</summary>
+<summary><strong> 🥽 Phase 3: PRISM-AR - Explainable Risk-Adaptive Driving Intelligence for Vulnerable Road User Communication in Automated Vehicles</strong></summary>
 
 ## Phase 3: PRISM-AR - Explainable Risk-Adaptive Driving Intelligence for Vulnerable Road User Communication in Automated Vehicles
 
