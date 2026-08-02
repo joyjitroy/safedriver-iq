@@ -120,12 +120,6 @@ SafeDriver-IQ is the first phase of the Vehicle_Safety_Research program. It intr
 
 Phase 1 introduces inverse crash probability modeling: a continuous 0–100 safety score derived from NHTSA CRSS crash data and Waymo driving behavior, demonstrating that 87% of crashes involve two or more co-occurring risk factors.
 
-The same safety-score signal can be surfaced to drivers through an in-vehicle ADS dashboard, as shown in the EIT2026 paper mockup below.
-
-![SafeDriver-IQ ADS Dashboard](docs/images/safedriver_iq_ads_dashboard.png)
-
-
-
 ### Abstract
 
 Road crashes remain a leading cause of preventable fatalities. Existing prediction models predominantly produce binary outcomes, which offer limited actionable insights for real-time driver feedback. These approaches often lack continuous risk quantification, interpretability, and explicit consideration of vulnerable road users (VRUs), such as pedestrians and cyclists.
