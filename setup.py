@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="VehicleSafetyResearch",
+    name="Vehicle_Safety_Research",
     version="0.1.0",
     description="Multi-Phase Research Framework for Proactive Vehicle Safety and VRU-Aware Risk Communication",
     author="Joyjit Roy",

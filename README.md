@@ -2,7 +2,7 @@
 
 **Tagline:** *"From Crash Prediction to Proactive, Explainable Safety Intelligence"*
 
-> **Note:** The GitHub repository will be renamed from `joyjitroy/safedriver-iq` to `joyjitroy/VehicleSafetyResearch`.
+> **Note:** The GitHub repository will be renamed from `joyjitroy/safedriver-iq` to `joyjitroy/Vehicle_Safety_Research`.
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -112,7 +112,7 @@ The research paper builds on this project and formally introduces:
 
 ### Overview
 
-SafeDriver-IQ is the first phase of the VehicleSafetyResearch program. It introduces a framework that transforms binary crash classifiers into continuous 0-100 safety scores by combining national crash statistics with naturalistic driving data from autonomous vehicles. The framework was presented at IEEE EIT 2026 and is forthcoming in IEEE Xplore.
+SafeDriver-IQ is the first phase of the Vehicle_Safety_Research program. It introduces a framework that transforms binary crash classifiers into continuous 0-100 safety scores by combining national crash statistics with naturalistic driving data from autonomous vehicles. The framework was presented at IEEE EIT 2026 and is forthcoming in IEEE Xplore.
 
 ### Abstract
 
@@ -630,7 +630,7 @@ PRISM-AR maps the fused internal risk state to external safety cues delivered th
 
 ```bash
 # Navigate to project directory
-cd VehicleSafetyResearch
+cd Vehicle_Safety_Research
 
 # Create virtual environment
 python -m venv venv
@@ -730,8 +730,8 @@ On Windows, `scripts/setup_venv.bat` can be used instead of step 1 to create an 
 ### Step 1: Clone/Download Project
 ```bash
 cd /path/to/your/workspace
-git clone https://github.com/joyjitroy/VehicleSafetyResearch.git
-cd VehicleSafetyResearch
+git clone https://github.com/joyjitroy/Vehicle_Safety_Research.git
+cd Vehicle_Safety_Research
 ```
 
 ### Step 2: Create Virtual Environment
