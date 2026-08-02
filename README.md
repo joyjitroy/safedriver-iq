@@ -226,7 +226,7 @@ TreeSHAP computes Shapley values for each feature, supporting both global featur
 
 The model attains an Average Precision (AP) of **0.891**, well above the 0.500 random baseline. At the default threshold of 0.5, the model achieves precision = **0.941** and recall = **0.480**.
 
-![Precision-Recall Curve](phase1-safedriver-iq/docs/images/F2_PR_Curve.png)
+<img src="phase1-safedriver-iq/docs/images/F2_PR_Curve.png" alt="Precision-Recall Curve" width="50%" height="50%"/>
 
 #### Confusion matrix
 
