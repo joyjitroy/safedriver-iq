@@ -108,7 +108,7 @@ The research paper builds on this project and formally introduces:
 
 
 <details>
-<summary><strong>Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling</strong></summary>
+<summary><strong><span style="color:blue"> 🚗 Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling </span></strong></summary>
 
 ## Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling
 
@@ -226,7 +226,7 @@ TreeSHAP computes Shapley values for each feature, supporting both global featur
 
 The model attains an Average Precision (AP) of **0.891**, well above the 0.500 random baseline. At the default threshold of 0.5, the model achieves precision = **0.941** and recall = **0.480**.
 
-<img src="phase1-safedriver-iq/docs/images/F2_PR_Curve.png" alt="Precision-Recall Curve" width="50%" height="50%"/>
+<img src="phase1-safedriver-iq/docs/images/F2_PR_Curve.png" alt="Precision-Recall Curve" width="40%" height="40%"/>
 
 #### Confusion matrix
 
@@ -237,7 +237,7 @@ The Random Forest model on the held-out test set (9,278 samples) shows:
 - Moderate crash-class recall: **0.480**
 - Crash-class F1-score: **0.636**
 
-<img src="phase1-safedriver-iq/docs/images/F3_Confusion_Matrix.png" alt="Confusion Matrix" width="40%" height="40%"/>
+<img src="phase1-safedriver-iq/docs/images/F3_Confusion_Matrix.png" alt="Confusion Matrix" width="60%" height="60%"/>
 
 #### Risk level classification
 
@@ -264,7 +264,7 @@ Lighting is the most critical feature group: removing it drops ROC-AUC by **7.6%
 
 TreeSHAP values identify lighting, weather, and road condition as dominant global drivers of risk, consistent with the ablation findings.
 
-<img src="phase1-safedriver-iq/docs/images/F6_SHAP_Values.png" alt="SHAP Values" width="50%" height="50%"/>
+<img src="phase1-safedriver-iq/docs/images/F6_SHAP_Values.png" alt="SHAP Values" width="60%" height="60%"/>
 
 #### Mean safety scores
 
