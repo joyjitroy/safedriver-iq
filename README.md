@@ -321,15 +321,17 @@ python retrain_model.py
 
 See `PROJECT_SETUP_SUMMARY.md` for detailed setup.
 
-### 🧾 Main Contributors
+### 🧾 Phase 1 Authors
 
-- Samaresh Kumar Singh
 - Joyjit Roy
+- Samaresh Kumar Singh
+- Sushanta Das
+- Mojtaba Bahramgiri
 
 ### 📚 Citation
 ```bibtex
 @article{safedriveriq,
-  author  = {Roy, Joyjit and Singh, Samaresh Kumar and Das, Sushanta},
+  author  = {Roy, Joyjit and Singh, Samaresh Kumar and Das, Sushanta and Bahramgiri, Mojtaba},
   title   = {Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling},
   journal = {arXiv preprint arXiv:2603.14841},
   year    = {2026},
@@ -1226,6 +1228,7 @@ Phase 2 and Phase 3 extend this impact from human-driven vehicles to autonomous 
 | Joyjit Roy | Independent Researcher, IEEE Senior Member, Austin TX | Phase 1, 2, 3 |
 | Samaresh Kumar Singh | Independent Researcher, IEEE Senior Member, Leander TX | Phase 1, 2, 3 |
 | Sushanta Das | American Center for Mobility, Ypsilanti MI | Phase 1, 2, 3 |
+| Mojtaba Bahramgiri | Department of ECE & Applied Computing, Michigan Technological University | Phase 1 |
 | Meng Lu | Aeolix ITS / Macau University of Science and Technology | Phase 3 |
 | Arijit Roy | Independent Researcher, Kolkata, India | Phase 3 |
 
