@@ -333,6 +333,169 @@ See `PROJECT_SETUP_SUMMARY.md` for detailed setup.
 }
 ```
 
+## Phase 2: PRISM - An Agentic Multi-Model Architecture for Proactive Safety in Autonomous Transportation Systems
+
+### Overview
+
+PRISM (Proactive Risk Intelligence and Safety Management) is the second phase of the Vehicle_Safety_Research program. It advances the Phase 1 SafeDriver-IQ inverse crash-probability foundation from a static, national-crash-based scoring model to a dynamic, scene-aware agentic safety architecture. PRISM fuses three parallel risk models - environmental, trajectory kinematic, and VRU interaction - through a deep Q-network reinforcement-learning agent that produces graduated interventions and SHAP-based explanations. The work has been accepted for the **ASCE 2027: The Infrastructure and Engineering Experience** conference (Abstract ID ASCE2027-1804, Transportation Engineering track).
+
+### Abstract
+
+Autonomous and intelligent transportation systems operate in complex urban environments where safety depends on interactions among vehicle behavior, environmental conditions, and vulnerable road users (VRUs). Most advanced driver-assistance systems (ADAS) are reactive: collision detection and emergency braking activate only after hazards have emerged. The continued rise in VRU fatalities shows that vehicle-centric, threshold-based safety strategies leave a critical gap.
+
+This study introduces PRISM, an agentic multi-model architecture that moves from reactive crash avoidance to proactive, continuous risk management. A frozen SafeDriver-IQ random forest supplies environmental risk, while dedicated trajectory-kinematic and VRU-interaction models capture dynamic scene behavior. An agentic reasoning layer fuses these signals through reinforcement learning, contextual memory, and feature-level SHAP attribution, and outputs one of four graduated intervention tiers. Across 1,296 validation scenarios from nuScenes, Argoverse 2, and Waymo WOMD - without dataset-specific retraining - PRISM achieves a mean safety score of 68/100, classifies 77.6% of scenarios as advisory, and flags a near-miss rate of 3.8%. Feature attribution consistently identifies VRU risk and trajectory risk as the dominant safety drivers.
+
+### 1. Introduction
+
+Autonomous and intelligent transportation systems are increasingly deployed in dense urban areas where safety depends on continuous interaction among vehicle behavior, environmental conditions, and VRUs. Although automation can reduce crashes caused by human error, maintaining safety in mixed traffic remains a major challenge. VRU fatalities in the United States have reached record levels, revealing a persistent disconnect between vehicle-centric safety design and the realities of shared urban mobility.
+
+Production ADAS is fundamentally reactive: automatic emergency braking and forward collision warning activate only after a hazard materializes, and rely on fixed thresholds that do not adapt to context. A maneuver treated as safe on an open highway is processed the same way as one near a crowded crosswalk at night, producing unaddressed risks in complex environments and nuisance alerts in benign ones.
+
+An alternative treats safety as a continuous, predictive measure rather than a discrete event trigger. In our prior work, SafeDriver-IQ, we introduced an inverse crash-probability method that converts a binary crash classifier trained on national crash records into a calibrated 0-100 safety score. That study showed that environmental context and the co-occurrence of multiple risk factors, rather than driver aggression alone, dominate crash risk. However, the Phase 1 model is less responsive to dynamic, scene-level indicators of imminent VRU risk such as relative trajectories, closing speeds, and time-to-collision.
+
+PRISM builds on that foundation with an agentic multi-model safety architecture. Three specialized models operate in parallel to assess environmental risk, trajectory kinematics, and VRU interaction. An agentic reasoning layer fuses their outputs through reinforcement learning, contextual memory, and feature-level attribution. The result is a graduated set of interventions, from silent monitoring to emergency alerts, each accompanied by an explanation of contributing factors.
+
+### 2. System Architecture
+
+PRISM is organized as a four-layer pipeline that converts raw multi-agent motion data into a continuous, explainable safety score with graduated intervention outputs. Figure 1 illustrates the overall design.
+
+![PRISM Four-Layer Architecture](phase2-prism/docs/images/F1_Architecture.png)
+
+**Layer 1: Data Ingestion and Normalization**
+
+The three source datasets use incompatible on-disk formats. The ingestion layer converts each dataset into a unified `DrivingScene` object containing `AgentTrack` records with position, velocity, heading, object type, and validity mask sampled at 10 Hz, plus scene-level night and rain flags. Agent types are normalized to vehicle, pedestrian, or cyclist, with pedestrians and cyclists grouped as VRUs. For Waymo data, where type fields are ambiguous, classification falls back to bounding-box dimensions so no track is omitted.
+
+A parallel transformation prepares CRSS-style metadata for the environmental model. This ensures the frozen Phase 1 random forest receives inputs in its original feature space, eliminating retraining. The two-track normalization lets all three Layer 2 models share a single ingestion pass over the raw data.
+
+**Layer 2: Parallel Risk Models**
+
+- **Environmental Risk Scoring.** The environmental model reuses the frozen SafeDriver-IQ random forest as a context estimator. It produces an inverse-crash safety score `S_env` in [0, 100], which is converted to a normalized environmental risk `r_env = clip((100 - S_env) / 100, 0, 1)` and then into a context multiplier `m = 0.5 + r_env`. A benign environment damps dynamic risk (`m < 1`), while a hostile one such as night or rain amplifies it (`m > 1`). The environmental model therefore acts as a multiplier rather than an equal vote, directly addressing the inability of the standalone Phase 1 model to respond to dynamic context.
+
+- **Trajectory Kinematic Analysis.** The trajectory model evaluates each agent's motion quality by computing speed, longitudinal and lateral acceleration, and yaw rate from smoothed finite differences. Per-timestep kinematic risk is derived from normalized exceedances of comfort and aggression thresholds for hard braking, hard acceleration, swerving, and speeding. Track-level risk reflects the aggregated exceedance over the agent's trajectory, and the scene-level trajectory risk is the maximum across all agents.
+
+- **VRU Interaction Prediction.** The VRU model estimates ego-VRU conflict risk using a Social Force Model for reaction-aware rollout combined with a recurrent Social-LSTM-style predictor. For each ego-VRU pair it calculates closest approach distance and a time-to-collision proxy, combining these into an interaction risk `r_vru` in [0, 1]. A near-miss is flagged when minimum distance drops below 2.0 m for pedestrians or 1.5 m for cyclists.
+
+- **Risk Fusion.** The three signals are fused into a single dynamic risk. Trajectory and VRU risks are first blended with VRU-dominant weights `w_t = 0.5` and `w_v = 1.0`, reflecting that VRU conflicts are the safety-critical case:
+
+```
+r_base = (w_t * r_traj + w_v * r_vru) / (w_t + w_v)
+r_fused = clip(m * r_base, 0, 1)
+S = 100 * (1 - r_fused)
+```
+
+These equations define the PRISM heuristic baseline; the RL agent in Layer 3 learns the final intervention policy on top of the same state.
+
+**Layer 3: Agentic Reasoning**
+
+The reasoning layer encodes each scenario as a fixed eight-dimensional state vector comprising environmental risk, environmental multiplier, trajectory risk, VRU risk, normalized proximity and imminence surrogates, and night and rain flags. A deep Q-network maps this state to one of four intervention tiers by selecting the action with the highest estimated value. Learning the policy, rather than thresholding the heuristic score, lets the system weigh combinations of risk factors that fixed rules treat independently.
+
+Each decision includes SHAP attribution across the eight state features, highlighting the factors influencing the selected tier. Short-term memory maintains the current episode for temporal consistency, while long-term memory stores representative past states, enabling the agent to recall similar situations and outcomes and provide a human-readable rationale for each intervention.
+
+**Layer 4: Applications**
+
+The graduated output supports three application domains without retraining. In ADAS integration, the tier sets driver feedback intensity. For fleet risk management, continuous scores are aggregated into route and driver risk profiles. In infrastructure planning, locations with consistently low scores identify high-conflict sites.
+
+**Graduated Intervention Design**
+
+PRISM emits one of four tiers based on the safety score `S`:
+
+| Tier | Score Range | Response |
+|------|-------------|----------|
+| Silent | 70 <= S <= 100 | Monitor only, no driver alert |
+| Advisory | 40 <= S < 70 | Soft cautionary feedback |
+| Intervention | 20 <= S < 40 | Specific corrective guidance |
+| Emergency | 0 <= S < 20 | Urgent alert |
+
+### 3. Dataset Summary
+
+PRISM was evaluated on three motion datasets without dataset-specific retraining. Table 3 summarizes the data sources.
+
+| Dataset | Role | Scale | Hz | Conditions |
+|---------|------|-------|----|------------|
+| NHTSA CRSS 2016-2023 | Environmental model training | 213,003 records | - | All U.S. crash types |
+| nuScenes v1.0-mini | Phase 2 validation | 10 scenes | 2 | Night, rain |
+| Argoverse 2 val split | Phase 2 validation | 24,988 scenarios (1,000 sampled) | 10 | 6 U.S. cities |
+| Waymo WOMD (1 shard) | Phase 2 validation | 286 scenarios | 10 | Mixed urban |
+
+Evaluation reports the mean safety score, tier distribution (silent, advisory, intervention, emergency), near-miss rate, and SHAP feature attribution across all datasets. Cross-dataset consistency is assessed by comparing tier distributions and top-ranked SHAP features without dataset-specific adjustment.
+
+### 4. Results and Discussion
+
+PRISM was evaluated on 1,296 scenarios across nuScenes v1.0-mini (10 scenes), Argoverse 2 Motion Forecasting (1,000 scenarios), and Waymo Open Motion Dataset (286 scenarios). No dataset-specific retraining was conducted. Table 4 summarizes the key performance metrics.
+
+| Dataset | n | Mean Score | Advisory % | Emergency % | Near-Miss Rate |
+|---------|---|-----------:|-----------:|------------:|---------------:|
+| nuScenes | 10 | 59.8 | 70.0 | 20.0 | 10.0% |
+| Argoverse 2 | 1,000 | 68.6 | 76.7 | 4.6 | 7.3% |
+| Waymo WOMD | 286 | 68.0 | 77.6 | 4.5 | 3.8% |
+
+![Safety Score Distribution](phase2-prism/docs/images/F2_Score_Distribution_Overlay.png)
+
+**Safety Score Distribution.** Figure 2 shows the safety score distributions across all three datasets. Argoverse 2 and Waymo converge to nearly identical means (68.6 and 68.0) despite independent data collection, sensors, and geography, demonstrating cross-domain generalization without retraining. Both distributions are advisory-dominant (40-70), consistent with structured urban driving under normal conditions. nuScenes scores are lower (mean 59.8) and shift toward the intervention and emergency bands because its scenes were explicitly sampled under adverse conditions.
+
+**Geographic Generalizability.** Table 5 summarizes PRISM performance across six U.S. cities in Argoverse 2. Mean safety scores vary within a narrow 5.3-point range (66.4-71.7), confirming generalization across diverse traffic environments without city-specific retraining.
+
+| City | n | Mean Score | Emergency % |
+|------|---|-----------:|------------:|
+| Miami | 260 | 66.4 | 7.3% |
+| Washington D.C. | 124 | 68.3 | 5.6% |
+| Austin | 229 | 70.4 | 3.5% |
+| Dearborn | 122 | 71.2 | 0.8% |
+| Pittsburgh | 205 | 67.3 | 5.4% |
+| Palo Alto | 60 | 71.7 | 0.0% |
+
+![Intervention Tier Distribution](phase2-prism/docs/images/F3_tier_Distribution.png)
+
+**Intervention Tier Analysis.** The advisory tier is consistently dominant: 70% on nuScenes, 76.7% on Argoverse 2, and 77.6% on Waymo. The emergency tier represents 20% of nuScenes scenes versus 4.6% in Argoverse 2 and 4.5% in Waymo, reflecting the adverse-condition sampling bias in nuScenes rather than model miscalibration. The intervention tier (6.1% Argoverse 2, 6.3% Waymo) and silent tier (12.6% Argoverse 2, 11.5% Waymo) are well-matched across the two large datasets, reinforcing calibration consistency across all four tiers.
+
+**VRU Proximity and Near-Miss Detection.** PRISM detects VRU near-miss events by applying the Social Force Model with a conservative collision-course threshold. Across nuScenes, only scene-0061 triggered a confirmed near-miss, involving 60 pedestrians at a minimum ego-VRU distance of 2.4 m, resulting in a VRU risk of 0.72 and an emergency-tier classification. On Waymo, 11 of 286 scenarios (3.8%) triggered near-miss detections, with a mean VRU risk of 0.063, reflecting lower pedestrian density. Figure 4 shows the cumulative ego-VRU proximity distribution for Argoverse 2: 18.5% of VRU-present scenarios had a minimum distance below 5 m, all classified as intervention or emergency tier.
+
+![VRU Proximity Cumulative Distribution](phase2-prism/docs/images/F4_VRU_Proximity_Cumulative_Distribution.png)
+
+**Adverse Condition Sensitivity.** nuScenes is the only dataset with labeled adverse conditions. Night conditions increase the environmental multiplier from 0.97 to 1.33, lowering mean safety scores by 10.5 points compared with clear daytime. In the night-and-rain scene (scene-1094), the score drops to 23.3 due to a multiplier of 1.35 combined with 55 pedestrians at 3.1 m, placing the scene firmly in the emergency tier. The clear daytime emergency scene (scene-0061) shows that emergency classification can result solely from high VRU density, while the only silent-tier scene (score 85.6) had low VRU density and clear conditions, confirming PRISM does not over-escalate in genuinely safe situations.
+
+![SHAP Analysis](phase2-prism/docs/images/F7_SHAP_Analysis.png)
+
+**SHAP Feature Attribution.** Figure 5 presents the top SHAP feature attributions for the PRISM RL agent. On nuScenes, VRU risk is the primary driver (mean |SHAP| = 2.10 per scene), followed by VRU imminence (0.28) and trajectory risk (0.25). On Argoverse 2, VRU risk remains dominant (1.75 per scene), with trajectory risk (0.30) ranking second and VRU imminence third (0.22). Environmental features follow the same secondary pattern. The ranking is consistent across independently collected datasets without retraining.
+
+![Ablation Study](phase2-prism/docs/images/F5_Ablation_Study.png)
+
+**Ablation Study.** Figure 6 presents the marginal contribution of each model component on nuScenes. With only the Phase 1 environmental model, all ten scenes are classified as silent, confirming that the RF bridge accurately captures environmental context but does not respond to dynamic trajectory or VRU signals. Including the trajectory model escalates 8 of 10 scenes to advisory. Adding the VRU model independently escalates the two highest-proximity scenes to intervention. Neither component alone reaches the emergency tier. The full PRISM system, with the RL agent synthesizing all three signals, correctly classifies both scenes as emergencies and maintains advisory for the remaining seven kinematically active scenes.
+
+**Tier Boundary Sensitivity.** To assess robustness, each composite-score boundary was adjusted by +/-5 points and tier distributions were recalculated for all 1,000 Argoverse 2 scenarios. The combined emergency and intervention escalation rate varied from 8.8% (shift -5) to 12.6% (shift +5), a range of less than 4 percentage points, confirming that safety-critical tier assignments are robust to minor calibration errors.
+
+![Computational Latency](phase2-prism/docs/images/F6_Per_Component_Computational_Latency.png)
+
+**Computational Latency.** Figure 7 profiles per-component mean latency on CPU. The trajectory LSTM is the dominant cost at 245.3 ms, followed by the environmental RF bridge at 163.8 ms, the VRU module (SFM + LSTM) at 95.9 ms, and SHAP attribution at 90.3 ms. The RL decision step itself is negligible at 0.3 ms. Total end-to-end latency is approximately 596 ms on CPU, consistent with an offline post-processing role rather than hard real-time control.
+
+**Risk Factor Co-occurrence.** Both emergency-tier scenes in nuScenes involve two or more risk dimensions occurring simultaneously: scene-0061 (confirmed VRU near-miss and high trajectory risk) and scene-1094 (VRU near-miss, high trajectory risk, and adverse night/rain conditions). Scenes with only a single elevated risk dimension remained at the advisory tier, consistent with Phase 1 findings that compound risk factors lead to the most severe outcomes. The RL agent's ability to synthesize signals across three independent model streams is what enables detection of these compound events, which no single model alone would escalate to an emergency.
+
+### 5. Application Examples
+
+The graduated PRISM output supports three application domains without retraining. The mockups below show how the safety score and tier can be surfaced to drivers, fleet operators, and infrastructure planners.
+
+**ADAS Integration.** The tier sets driver feedback intensity in the vehicle. In safe conditions the system remains silent; as risk increases it escalates through advisory, intervention, and emergency alerts, each with a SHAP-based explanation of the dominant factors.
+
+![ADAS Integration Mockup](phase2-prism/docs/images/F8_ADAS_integration.png)
+
+**Fleet Risk Management.** Continuous scores are aggregated across trips to identify dangerous routes, peak risk periods, and unsafe driving patterns without requiring an actual crash. The same signal supports driver coaching and proactive maintenance.
+
+![Fleet Risk Management Mockup](phase2-prism/docs/images/F9_Fleet_risk_management.png)
+
+**Infrastructure Planning.** Locations with consistently low safety scores identify high-conflict sites. Planners can use these metrics to guide crosswalk placement, signal timing, and school zone protections, with explicit attention to VRU safety.
+
+![Infrastructure Planning Mockup](phase2-prism/docs/images/F10_Infrastructure_planning.png)
+
+### 6. Limitations
+
+PRISM's evaluation has several limitations. The nuScenes subset comprises only ten scenes, which limits the statistical power of conclusions about adverse conditions. None of the datasets include annotated near-miss ground truth, so VRU detection is reported as a detection rate against a threshold-based proxy rather than precision and recall against labeled events. The intervention tier boundaries are derived from domain knowledge rather than learned from labeled intervention data, and their optimality has not been independently validated. The RL agent was trained exclusively on nuScenes; while cross-dataset tier consistency is encouraging, it does not guarantee formal generalization. Finally, the end-to-end latency of approximately 596 ms on CPU prevents hard real-time deployment; GPU or ONNX-optimized inference is required for on-vehicle integration.
+
+### 7. Conclusion and Future Directions
+
+PRISM advances the Phase 1 SafeDriver-IQ foundation from static crash-probability scoring to dynamic, scene-aware intervention decisions. By fusing environmental, trajectory-kinematic, and VRU-interaction risk models through a DQN reinforcement-learning agent with SHAP explainability, the architecture provides a unified, interpretable, and dataset-agnostic proactive safety assessment. Across 1,296 scenarios from nuScenes, Argoverse 2, and Waymo WOMD without retraining, PRISM achieved a mean safety score of 68/100, classified 77.6% of scenarios as advisory, and flagged a near-miss rate of 3.8%. SHAP attribution confirmed VRU risk as the primary decision driver, and all emergency-tier classifications involved two or more active risk dimensions.
+
+Immediate future work targets latency optimization through GPU deployment and ONNX-optimized inference, with the trajectory LSTM and environmental RF bridge as the main compression targets. Data-driven tier calibration using labeled intervention logs would replace fixed thresholds and improve sensitivity near tier boundaries. Extending RL training to Argoverse 2 and Waymo would provide a formal generalization guarantee beyond the observed cross-dataset consistency. Collaborating with fleet operators or simulation environments to obtain annotated near-miss labels would enable precision-recall evaluation of the VRU detector. Finally, vehicle-to-infrastructure (V2X) signals and federated learning extensions would extend PRISM beyond ego-vehicle perception while keeping sensitive trip data decentralized.
+
 ### 📢 Research Flyers
 
 Visual one-page summaries for each phase of the work.
