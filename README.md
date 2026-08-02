@@ -496,6 +496,194 @@ PRISM advances the Phase 1 SafeDriver-IQ foundation from static crash-probabilit
 
 Immediate future work targets latency optimization through GPU deployment and ONNX-optimized inference, with the trajectory LSTM and environmental RF bridge as the main compression targets. Data-driven tier calibration using labeled intervention logs would replace fixed thresholds and improve sensitivity near tier boundaries. Extending RL training to Argoverse 2 and Waymo would provide a formal generalization guarantee beyond the observed cross-dataset consistency. Collaborating with fleet operators or simulation environments to obtain annotated near-miss labels would enable precision-recall evaluation of the VRU detector. Finally, vehicle-to-infrastructure (V2X) signals and federated learning extensions would extend PRISM beyond ego-vehicle perception while keeping sensitive trip data decentralized.
 
+## Phase 3: PRISM-AR - Explainable Risk-Adaptive Driving Intelligence for Vulnerable Road User Communication in Automated Vehicles
+
+### Overview
+
+PRISM-AR (PRISM with Augmented Reality) is the third phase of the Vehicle_Safety_Research program. It extends the internal risk reasoning of PRISM into an external, VRU-facing communication layer for automated vehicles (AVs). While Phase 2 produces a continuous safety score and intervention tier for the vehicle, PRISM-AR maps those same risk states to adaptive augmented-reality cues for pedestrians and cyclists. The framework is designed for the IEEE Transactions on Vehicular Technology (TVT) special issue on Advanced Driving Intelligence for Autonomous Vehicles.
+
+### Abstract
+
+Automated vehicles must assess risk internally and communicate safety-relevant intent to vulnerable road users (VRUs) in real time. Existing external human-machine interface (eHMI) designs rely on static, predefined signals that do not adapt to the vehicle's internal safety state, limiting their ability to reflect dynamic risks from the environment, trajectory, and VRU interactions.
+
+PRISM-AR addresses this gap by extending the Proactive Risk Intelligence and Safety Management (PRISM) framework from internal AV risk reasoning to external VRU-facing communication. It builds on the inverse crash-probability safety-scoring foundation of SafeDriver-IQ and the multi-model risk engine of PRISM, integrating environmental, trajectory, and VRU-interaction risk streams. A transparent reference decision layer performs fused risk scoring and tier selection, while a tiered external communication policy maps risk states to adaptive cues for pedestrians and cyclists across four escalation levels: silent, information, warning, and emergency.
+
+PRISM-AR was evaluated on 231 scenario clips from three public AV datasets and controlled near-miss scenarios, with paired comparisons against no-interface, static eHMI, and oracle upper-bound policies. Compared with a static eHMI baseline, PRISM-AR improves proxy ground-truth tier accuracy from 0.43 to 0.71, activates warning and emergency cues in risk-critical cases where the static baseline does not escalate, and achieves strong monotonic alignment between cue intensity and risk severity (Spearman rho = -0.703, Wilcoxon p < 0.0001). The reference implementation runs the complete per-frame pipeline at sub-millisecond latency, supporting integration into real-time AV decision architectures.
+
+### 1. Introduction
+
+Global road traffic fatalities remain a persistent public health challenge. The World Health Organization estimates 1.19 million annual deaths from road traffic crashes, with pedestrians, cyclists, and motorcyclists representing more than half of global road traffic deaths. In the United States, NHTSA reported over 39,000 traffic fatalities in 2024, and pedestrian deaths continue to rise despite advances in vehicle safety technology.
+
+As automated vehicles operate alongside VRUs in urban environments, a key safety challenge emerges: non-motorized road users must infer vehicle intent from limited and often ambiguous visual cues, without access to the AV's internal risk state. The present work focuses on pedestrians and cyclists, the VRU categories annotated in the datasets used. Addressing this perceptual gap requires more than vehicle kinematics; it requires an active, context-aware external communication channel.
+
+External human-machine interface (eHMI) systems have been proposed to bridge this gap by projecting visual signals onto the vehicle exterior, surrounding road surface, or wearable displays. These systems signal yielding or stopping intent and can reduce pedestrian hesitation at crossing scenarios. However, most current eHMI designs use predefined, rule-based signal states that do not adapt to changing scene context. They communicate discrete intent states, such as stopping or proceeding, but do not convey information about risk magnitude, closing distance, trajectory conflict, adverse lighting, or road conditions. As a result, a vehicle may display the same signal in clear daylight as in rain or low visibility, despite very different underlying risk.
+
+This limitation highlights a structural gap: AV internal risk reasoning and external VRU communication have largely developed in isolation. PRISM-AR integrates explainable, multi-model risk intelligence with an external communication layer in a unified pipeline, allowing the AV's internal risk state to directly drive adaptive, graduated external cues.
+
+### 2. System Architecture
+
+PRISM-AR is the third stage in the SafeDriver-IQ, PRISM, and PRISM-AR sequence. SafeDriver-IQ's Random Forest model, trained on 213,003 NHTSA CRSS records, provides the inherited 0-100 safety score. PRISM adds the dynamic multi-model risk engine. PRISM-AR adds the augmented reality external communication layer, supporting HMD overlays, projected road cues, and pedestrian-facing vehicle displays. Figure 1 shows the complete system architecture.
+
+![PRISM-AR System Architecture](phase3-prism-ar/results/figures/F1_PRISM_AR_Architecture.png)
+
+**Data Ingestion and Scene Abstraction.** The system operates on a unified `DrivingScene` abstraction that standardizes heterogeneous AV dataset formats into a common representation consumed by all downstream risk modules. Each scene includes an identifier, dataset origin, an agent dictionary with the ego vehicle and detected traffic participants, and scene-level attributes including weather condition, ambient lighting state, road surface condition, time of day, speed limit, and location. Agents are represented by per-frame two-dimensional position and velocity arrays sampled at 10 Hz. VRUs are defined as agents classified as pedestrians or cyclists.
+
+This abstraction decouples the risk engine from dataset-specific formats and enables consistent evaluation across multiple AV data sources without modifying the risk computation pipeline. NHTSA CRSS records are not treated as time-series AV scenes; instead, CRSS provides the crash-statistical foundation for the environmental risk bridge inherited from SafeDriver-IQ. Waymo, Argoverse 2, and nuScenes provide scene-level AV data that are converted into the `DrivingScene` representation and passed to the trajectory, VRU-interaction, and tier-assignment modules.
+
+**Multi-Model Risk Engine.** The PRISM risk engine processes each `DrivingScene` through three parallel modules that assess environmental, kinematic, and VRU-interaction risk dimensions. All three modules operate on the unified scene representation and produce risk estimates on a common [0, 1] scale. The trajectory and VRU-interaction modules use transparent, closed-form analytic risk functions to ensure reproducible cross-dataset evaluation, while the environmental risk module uses a trained model bridge.
+
+- **Environmental Risk Module.** Estimates the impact of scene context on overall driving risk. It converts weather, ambient lighting, road surface, time of day, and VRU density into a normalized scalar risk value `r_env` in [0, 1]. In the evaluated implementation, `r_env` is generated by blending a trained scene-context model with the SafeDriver-IQ CRSS-derived estimate: `r_env = 0.95 * r_model + 0.05 * r_crss`. A simplified discrete rule-based mapping is available as a fallback for environments without the trained bridge.
+
+- **Trajectory Risk Module.** Generates a per-frame risk array `r_traj(t)` based on time-to-collision (TTC) and closing motion between the ego vehicle and nearby VRUs. Relative speed is incorporated as the primary driver of TTC. Risk is assigned using a saturating TTC function: 0.99 when TTC < 1.0 s, 0.95 * exp(-(TTC-1.0)/0.7) for 1.0 <= TTC < 2.0 s, and exp(-TTC/2.0) otherwise.
+
+- **VRU Interaction Risk Module.** Generates a per-frame interaction risk `r_vru(t)` from the closest pedestrian or cyclist relative to the ego vehicle, using minimum Euclidean distance `d_min(t)`: 0.99 when d_min < 2 m, 0.95 * exp(-(d_min-2.0)/1.5) for 2 <= d_min < 4 m, and exp(-d_min/4.0) otherwise.
+
+**Risk Fusion and Tier Selection.** The three normalized risk outputs are combined into a single fused risk value using deterministic weighted fusion:
+
+```
+r_fused(t) = clip[0,1] (w_env * r_env + w_traj * r_traj(t) + w_vru * r_vru(t))
+S(t) = 100 * (1 - r_fused(t))
+```
+
+The weights used for all reported results are `w_env = 0.40`, `w_traj = 0.30`, and `w_vru = 0.30`, giving environmental context, kinematic trajectory risk, and VRU-interaction risk comparable influence. The score `S(t)` is mapped to one of four communication tiers:
+
+| Tier | Score Range | Cue Intensity | Message |
+|------|-------------|---------------|---------|
+| Silent | 70 <= S(t) <= 100 | None | - |
+| Information | 40 <= S(t) < 70 | 0.35 opacity, no flash | Caution |
+| Warning | 20 <= S(t) < 40 | 0.65 opacity, no flash | Do not cross |
+| Emergency | 0 <= S(t) < 20 | 0.90 opacity, flashing | STOP |
+
+The architecture supports an agentic extension where fixed-weight fusion and threshold-based tier selection are replaced by a learned decision policy. In this extension, a deep Q-network policy selects among the four communication tiers using a state vector that includes the safety score, component risk magnitudes, dominant risk factor, and short-term tier history. SHAP attribution provides frame-level explanations, and a short-term memory buffer helps reduce unstable tier transitions. These features are part of the broader PRISM design lineage but are not evaluated in the PRISM-AR reference implementation presented here.
+
+**External VRU Communication Policy.** The external VRU communication policy maps each per-frame tier to a structured cue specification. Opacity increases with each tier, and flashing is reserved for the emergency tier to maximize salience while limiting habituation at lower risk levels. The policy uses a deterministic lookup table indexed by the tier label, ensuring each external cue is directly traceable to the internally computed safety score. Cues can be delivered through three VRU-facing channels:
+
+| Channel | Cue Realization | Key Considerations |
+|---------|-----------------|--------------------|
+| HMD overlay | AR cue rendered in the VRU's field of view | Personalized guidance, but requires wearable-device adoption, localization, and vehicle-to-device communication. |
+| Projected cue | Light projection onto the road, crosswalk, or pedestrian zone | Spatially intuitive and visible to nearby VRUs, but sensitive to lighting, weather, road surface, and occlusion. |
+| Pedestrian-facing vehicle display | LED panel, light band, or exterior vehicle screen | Vehicle-integrated and deployment-friendly, but limited by viewing angle, distance, and cue-standardization needs. |
+
+The complete risk-to-cue inference pipeline ingests the `DrivingScene`, computes environmental, trajectory, and VRU risks, fuses them, selects a tier, determines the dominant factor, maps the tier to a cue, and delivers it to the active VRU-facing channel.
+
+### 3. Dataset Summary
+
+The PRISM-AR evaluation uses public automated-driving datasets and a controlled near-miss supplement to assess adaptive VRU-facing cue generation. All experiments use the reference implementation described in the architecture section.
+
+| Dataset | Candidate Clips | Evaluated Clips | Source |
+|---------|----------------:|----------------:|--------|
+| Waymo WOMD | 286 | 25 | Public AV validation data |
+| Argoverse 2 | 1,000 | 50 | Public AV validation data |
+| nuScenes v1.0-mini | 10 | 96 | Public AV validation data |
+| Synthetic near-miss | - | 60 | Controlled simulation scenarios |
+| **Total** | **1,296** | **231** | |
+
+NHTSA CRSS records are excluded as time-series AV scenes; they serve as the crash-statistical foundation for the environmental risk bridge.
+
+**Scenario Extraction.** Scenarios are extracted using a consistent VRU-interaction filter: a clip is retained if at least one pedestrian or cyclist enters a 20 m ego-approach radius, the ego-VRU distance decreases over a continuous window, and the VRU remains visible for at least five frames. Retained clips are normalized to the `DrivingScene` representation and limited to 3-10 s (30-100 frames at 10 Hz). Multiple candidate windows favor clips with adverse lighting, weather, or road-surface conditions.
+
+A controlled near-miss generator supplements the dataset-derived clips with pedestrian-crossing scenarios parameterized by weather, lighting, road condition, ego speed, and pedestrian behavior. These synthetic scenes include warning and emergency situations, which are uncommon in public AV datasets.
+
+**Tier Rules and Evaluation Metrics.** Proxy ground-truth tier labels are derived from fixed distance and time-to-collision thresholds:
+
+| Tier | Score Rule | Proxy Ground-Truth Rule |
+|------|------------|-------------------------|
+| Silent | 70 <= S(t) <= 100 | Otherwise |
+| Information | 40 <= S(t) < 70 | Distance < 5 m or TTC < 2.5 s |
+| Warning | 20 <= S(t) < 40 | Distance < 2 m or TTC < 1.0 s |
+| Emergency | 0 <= S(t) < 20 | Distance < 1 m or TTC < 0.5 s |
+
+When multiple ground-truth rules are satisfied, the highest-severity tier is assigned. Key metrics include tier accuracy, warning recall, emergency recall, cue-risk monotonicity, escalation lead time, cue flicker, and visual clutter.
+
+Three baseline policies are evaluated alongside PRISM-AR: no-AR (no external cue), static AR (fixed information-level cue regardless of risk), and oracle (tiers assigned directly from ground-truth distance and TTC thresholds).
+
+### 4. Results and Discussion
+
+The PRISM-AR evaluation pipeline is summarized in Figure 2.
+
+![PRISM-AR Evaluation Flow](phase3-prism-ar/results/figures/F11_PRISM_AR_Evaluation_Flow.png)
+
+**Aggregate Risk and Tier Distribution.** The overall mean safety score across 231 evaluated scenarios is 61.2 out of 100, with a standard deviation of 11.0. Dataset-derived clips average 66.2, while the controlled near-miss subset averages 47.1, confirming that the synthetic supplement broadens coverage of lower-score, higher-risk cases. The score distribution spans 40.2-81.8. Waymo and Argoverse 2 scenarios straddle the information-silent boundary (median 70.2 and 65.6), while nuScenes clips are more widely distributed within the information range. Synthetic near-miss scenarios fall within the 40-55 band.
+
+![Mean PRISM-AR Safety Scores by Dataset](phase3-prism-ar/results/figures/F2_Mean_PRISM_AR_Safety_Scores_by_Dataset.png)
+
+PRISM-AR assigned tiers and proxy ground-truth tiers are shown in Figures 3 and 4. Information and silent tiers dominate dataset-derived clips, while warning frames appear mainly in the synthetic subset, with smaller contributions from nuScenes and Waymo. Emergency assignments are almost entirely synthetic, confirming that the controlled near-miss scenarios provide the high-risk cases needed to assess escalated-tier recall. Compared with assigned tiers, ground-truth labels include more warning and emergency frames, indicating that the reference implementation is conservative in assigning escalated tiers.
+
+![PRISM-AR Tier Distribution by Dataset](phase3-prism-ar/results/figures/F3_Tier_Distribution_By_Dataset.png)
+
+![Proxy Ground Truth Tier Distribution](phase3-prism-ar/results/figures/F4_Ground_Truth_Comparison.png)
+
+**Tier Accuracy and High-Risk Recall.** PRISM-AR achieves a mean tier accuracy of 70.9% across 231 scenarios, compared to 42.6% for the static baseline, yielding a 28.3-point improvement from risk-adaptive tier selection. Across datasets, adaptive tier accuracy ranges from 60.7% on the synthetic near-miss subset to 84.3% on Waymo, with nuScenes and Argoverse 2 at 74.6% and 69.2%, respectively. The static baseline emits a fixed information-level cue, resulting in zero warning and emergency recall by construction. PRISM-AR recovers 19.6% of warning frames and 9.1% of emergency frames on average across all scenarios. In the synthetic near-miss subset, it recovers 46.2% of warning frames and 35.1% of emergency frames.
+
+![Tier Accuracy and Recall](phase3-prism-ar/results/figures/F5_Ground_Truth_Comparison.png)
+
+**Escalation Lead Time.** Timely warning delivery is essential for a proactive safety interface. Of 231 scenarios evaluated, 86 generated a warning with measurable lead time. In these warned scenarios, the mean lead time is 2.99 s and the median is 2.70 s, with values ranging from 1.0 s to 9.5 s. The synthetic near-miss subset is capped at 3.0 s by design, with a mean of 2.38 s. Dataset-derived subsets exhibit longer lead times when warnings occur: nuScenes averages 4.55 s across 18 warned scenarios and Waymo averages 4.00 s across 8 warned scenarios. A mean lead time near 3 s indicates that when PRISM-AR escalates, it usually provides an actionable warning window.
+
+![Escalation Lead Time Distribution](phase3-prism-ar/results/figures/F6_Lead_Time_Distribution.png)
+
+**Spatial Validity of the Safety Score.** To enable effective cue selection, the safety score must reflect the spatial severity of ego-VRU interactions. Figure 7 plots the mean per-scenario PRISM-AR safety score against the minimum ego-VRU distance. These measures are strongly correlated, with a Pearson correlation of 0.82 and a Spearman rank correlation of 0.84 across all 231 scenarios (p < 10^-56). Scenarios with closer ego-VRU approaches consistently receive lower safety scores, confirming that the fused score captures proximity-driven risk.
+
+![Distance vs Safety Score](phase3-prism-ar/results/figures/F7_Distance_vs_Score.png)
+
+**Cue Stability and Visual Load.** Beyond tier correctness, a VRU-facing interface must avoid unstable or visually cluttered cue behavior. Cue flicker is measured as the frequency of tier transitions per second, averaging 0.66 Hz across all scenarios, with dataset-level means below 1.2 Hz across all subsets. Waymo and the synthetic near-miss subset exhibit the highest mean flicker rates (1.16 Hz and 1.09 Hz), reflecting more dynamic interactions. Visual clutter, defined as the mean AR overlay opacity across all frames in a scenario, averages 0.25 across all scenarios, with dataset-derived subsets below 0.19 and the synthetic near-miss subset at 0.44. The graduated tier policy maintains a sparse visual channel under typical conditions and increases visual load only when higher risk is present.
+
+![Cue Stability and Visual Load](phase3-prism-ar/results/figures/F8_Dataset_Metrics.png)
+
+**Policy Comparison, Cue-Risk Monotonicity, and Runtime.** Table VIII summarizes the policy-level comparison. The no-interface baseline has zero recall. The static eHMI baseline has 42.6% tier accuracy and zero escalated-tier recall. PRISM-AR achieves 70.9% tier accuracy, 19.6% warning recall, and 9.1% emergency recall. The oracle upper bound is 100% on all metrics.
+
+| Policy | Tier Accuracy | Warning Recall | Emergency Recall |
+|--------|---------------|----------------|------------------|
+| No interface | N/A | 0.0% | 0.0% |
+| Static eHMI | 42.6% | 0.0% | 0.0% |
+| PRISM-AR | 70.9% | 19.6% | 9.1% |
+| Oracle upper bound | 100.0% | 100.0% | 100.0% |
+
+Cue-risk monotonicity, assessed by comparing cue opacity with the fused safety score, shows a strong negative relationship (Spearman rho = -0.703, Wilcoxon p < 0.0001), indicating that cue intensity increases as the inferred safety score decreases. The per-frame reference pipeline runs at sub-millisecond latency, supporting integration with real-time AV decision architectures.
+
+**Ablation Study.** To quantify each risk model's contribution, the reference implementation was re-evaluated on a 151-scenario subset under four conditions: the full system and three ablations that individually remove the trajectory, environmental risk, or VRU interaction model. Removing the trajectory model increases the mean score to 65.8, but warning recall drops from 17.4% to 0.1% and tier accuracy falls from 71.6% to 46.7%, confirming that kinematic risk primarily drives escalated tier selection. Removing the environmental risk model causes a smaller decline: tier accuracy decreases to 67.4% and warning recall to 0.8%, showing that environmental context helps determine when kinematic risk should trigger an external warning. Removing the VRU interaction model produces the opposite failure mode: the mean score drops to 52.5, warning recall rises sharply to 78.8%, and the static baseline's under-warning rate reaches 79.5%, more than double the full-system value of 31.8%. Without VRU-model gating, trajectory risk escalates indiscriminately. The full system balances sensitivity and specificity.
+
+![Ablation Study](phase3-prism-ar/results/figures/F9_Ablation.png)
+
+### 5. Application Examples
+
+PRISM-AR links the internal AV risk assessment to external safety cues delivered through three channels: an HMD overlay, a projected road cue, and a pedestrian-facing vehicle display. These deployment examples are conceptual and have not been validated in hardware or human-subject studies in this work. They illustrate how PRISM-AR can connect AV driving intelligence with future research on human-centered VRU interaction.
+
+**HMD Overlay.** An AR cue rendered in the VRU's field of view provides personalized guidance, but requires wearable-device adoption, localization, and vehicle-to-device communication.
+
+![HMD Overlay](phase3-prism-ar/results/figures/F10a_HMD_Overlay.png)
+
+**Projected Road Cue.** Light projection onto the road, crosswalk, or pedestrian zone is spatially intuitive and visible to nearby VRUs, but sensitive to lighting, weather, road surface, and occlusion.
+
+![Projected Road Cue](phase3-prism-ar/results/figures/F10b_Projected_Cue.png)
+
+**Pedestrian-Facing Vehicle Display.** An LED panel, light band, or exterior vehicle screen is vehicle-integrated and deployment-friendly, but limited by viewing angle, distance, and cue-standardization needs.
+
+![Pedestrian-Facing Vehicle Display](phase3-prism-ar/results/figures/F10c_Vehicle_Display.png)
+
+### 6. Limitations
+
+Several limitations constrain the scope of the conclusions drawn from this evaluation.
+
+**Dataset scale and imbalance.** The evaluated corpus of 231 clips is unevenly distributed across sources: nuScenes v1.0-mini clips were extracted from only 9 of 10 source scenes, Waymo from 13, and Argoverse 2 from 16. The ablation study further limits evaluation to a 151-scenario subset, so model contributions should be viewed as indicative rather than comprehensive. Because Argoverse 2 lacks timed warnings, lead-time results are not demonstrated in the intersection and merge scenarios that Argoverse 2 primarily represents.
+
+**Proxy ground-truth labels.** Proxy ground-truth tier labels are derived from fixed distance and time-to-collision thresholds, not human annotation or crash data. This method ensures consistency and reproducibility but does not account for context-dependent risk perception, such as VRU attentiveness, yielding intent, or right-of-way ambiguity. Furthermore, since distance and TTC together contribute 0.60 to the fused risk score, the reported tier accuracy partly reflects structural alignment between the scoring formula and label definition.
+
+**Consequence severity not modeled.** The fused risk score incorporates likelihood signals, proximity, closing rate, and environmental context, but does not explicitly model the severity of a potential collision, such as closing speed at impact, VRU vulnerability, or expected injury severity. Including consequence severity is a recommended direction for future refinement of the fusion formula.
+
+**Conservative escalation behavior.** The reference implementation demonstrates conservative escalation, as shown by the gap between assigned and proxy ground-truth tier distributions and the low emergency recall. The four risk tiers are delimited by fixed score thresholds selected as round numbers rather than empirically calibrated cutoffs. This conservative approach was not adjusted for a target false-alarm rate.
+
+**Synthetic and conceptual deployment elements.** The synthetic near-miss subset is generated through simulation rather than collected from naturalistic VRU interactions. The cue delivery channels are conceptual and have not been validated in hardware. No human-subject studies on cue perception, reaction time, trust, or habituation were conducted.
+
+**Offline evaluation.** Evaluation was conducted offline on pre-recorded clips. Closed-loop performance under real-time sensing noise, actuation latency, communication delay, and adversarial or unusual VRU behavior remains untested.
+
+### 7. Conclusion and Future Directions
+
+PRISM-AR extends the inverse crash-probability safety-scoring foundation of SafeDriver-IQ and the multi-model risk engine of PRISM to real-time, VRU-facing proactive safety cues. By integrating environmental, trajectory, and VRU-interaction risk streams through a transparent decision layer, PRISM-AR generates a graduated four-tier cue policy, moving beyond binary alerts. Evaluation across 231 dataset-derived and synthetic near-miss scenarios shows that the adaptive tier policy achieves 70.9% proxy tier accuracy, compared with 42.6% for a static baseline. Warning and emergency recall rates rise from 0% under the static baseline to 19.6% and 9.1%, respectively. Escalated warnings provide a mean escalation lead time of 2.99 s before the closest ego-VRU approach, while the fused safety score correlates strongly with minimum approach distance (Pearson r = 0.82). Cue behavior remains temporally stable, with dataset-level mean flicker rates below 1.2 Hz, and visual load is concentrated primarily in high-risk synthetic near-miss encounters rather than routine dataset-derived driving.
+
+The ablation study confirms that each risk model contributes uniquely, with the VRU interaction model acting as a specificity filter, balancing the trajectory and environmental models' sensitivity to escalating risk. Overall, these findings support graduated, proximity-aware cue delivery as a promising approach for VRU-facing AR and eHMI safety interfaces.
+
+Immediate future directions include expanded naturalistic-dataset evaluation to rebalance the dataset composition and support stronger per-dataset conclusions; false-alarm-aware policy tuning to allow deliberate selection of the recall-specificity tradeoff; human-subject validation of the VRU-facing cue channels to link proximity and timing metrics to measured pedestrian reaction time, comprehension, trust, and habituation; closed-loop deployment testing first in simulation and then on a physical platform; and application of the risk-tiering and cue-generation approach to driver-facing feedback in partially automated (SAE L2/L3) vehicles.
+
 ### 📢 Research Flyers
 
 Visual one-page summaries for each phase of the work.
