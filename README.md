@@ -2,8 +2,6 @@
 
 **Tagline:** *"From Crash Prediction to Proactive, Explainable Safety Intelligence"*
 
-> **Note:** The GitHub repository has been renamed from `joyjitroy/safedriver-iq` to `joyjitroy/Vehicle_Safety_Research`.
-
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Status: Multi-Phase Research](https://img.shields.io/badge/Status-Multi--Phase%20Research%20Active-success.svg)](https://github.com/joyjitroy/Vehicle_Safety_Research)
@@ -12,7 +10,7 @@
 
 Vehicle_Safety_Research is a multi-phase research program that moves from reactive crash prediction to proactive, explainable safety intelligence for both human-driven and automated vehicles. Phase 1, SafeDriver-IQ, transforms national crash and naturalistic driving data into a continuous 0-100 safety score that tells drivers in real time how close they are to crash conditions and what specific actions would make them safer. Phase 2, PRISM, extends this into an agentic multi-model architecture that fuses environmental, trajectory, and VRU-interaction risks through reinforcement learning. Phase 3, PRISM-AR, maps these internal risk states to adaptive augmented-reality cues for pedestrians and cyclists. All three phases share the same inverse risk-scoring foundation and focus on protecting vulnerable road users (VRUs).
 
-### 🆕 NEW: Comprehensive Crash Factor Investigation (Notebook 04)
+### Comprehensive Crash Factor Investigation (Notebook 04)
 A deep-dive multi-dataset investigation combining **CRSS** (417K crashes) and **Waymo Open Motion Dataset** to answer 8 core research questions:
 1. What factors contribute to vehicle crashes?
 2. Which features best predict crash probability?
@@ -512,6 +510,12 @@ PRISM advances the Phase 1 SafeDriver-IQ foundation from static crash-probabilit
 
 Immediate future work targets latency optimization through GPU deployment and ONNX-optimized inference, with the trajectory LSTM and environmental RF bridge as the main compression targets. Data-driven tier calibration using labeled intervention logs would replace fixed thresholds and improve sensitivity near tier boundaries. Extending RL training to Argoverse 2 and Waymo would provide a formal generalization guarantee beyond the observed cross-dataset consistency. Collaborating with fleet operators or simulation environments to obtain annotated near-miss labels would enable precision-recall evaluation of the VRU detector. Finally, vehicle-to-infrastructure (V2X) signals and federated learning extensions would extend PRISM beyond ego-vehicle perception while keeping sensitive trip data decentralized.
 
+### Phase 2 Authors
+
+- Joyjit Roy
+- Samaresh Kumar Singh
+- Sushanta Das
+
 ## Phase 3: PRISM-AR - Explainable Risk-Adaptive Driving Intelligence for Vulnerable Road User Communication in Automated Vehicles
 
 ### Overview
@@ -708,6 +712,14 @@ The ablation study confirms that each risk model contributes uniquely, with the 
 
 Immediate future directions include expanded naturalistic-dataset evaluation to rebalance the dataset composition and support stronger per-dataset conclusions; false-alarm-aware policy tuning to allow deliberate selection of the recall-specificity tradeoff; human-subject validation of the VRU-facing cue channels to link proximity and timing metrics to measured pedestrian reaction time, comprehension, trust, and habituation; closed-loop deployment testing first in simulation and then on a physical platform; and application of the risk-tiering and cue-generation approach to driver-facing feedback in partially automated (SAE L2/L3) vehicles.
 
+### Phase 3 Authors
+
+- Joyjit Roy
+- Meng Lu
+- Arijit Roy
+- Sushanta Das
+- Samaresh Kumar Singh
+
 ## Key Innovations
 
 ### Phase 1: SafeDriver-IQ
@@ -765,7 +777,7 @@ Immediate future directions include expanded naturalistic-dataset evaluation to 
 
 **CRSS (Crash Report Sampling System)** — NHTSA national crash database
 - **417,335 crash records** (2016–2023, 8 years)
-- **38,462 VRU crashes** (pedestrians + cyclists)
+- **38,462 VRU crashes** (pedestrians + cyclists, raw CRSS records); Phase 1 uses **23,194 unique VRU crash records** after filtering and deduplication
 - **1,032,571 person records**
 - Tables: `ACCIDENT`, `VEHICLE`, `PERSON`, `PBTYPE`, `FACTOR`, `DISTRACT`, `DRIMPAIR`, `WEATHER`, and more
 
@@ -1178,7 +1190,7 @@ These artifacts support the paper's results: 231 evaluated scenario clips, tier 
 | Phase 1 | `notebooks/02_train_inverse_model.ipynb` | Full inverse safety model training |
 | Phase 1 | `phase1-safedriver-iq/notebooks/03_shap_analysis.ipynb` | SHAP interpretability deep-dive |
 | Phase 1 | `notebooks/04_crash_factor_investigation.ipynb` | 8-investigation crash factor analysis with Waymo |
-| Phase 2 | `.venv/bin/python -m sdiq.main run` | End-to-end PRISM agentic pipeline |
+| Phase 2 | `python -m sdiq.main run` (inside `phase2-prism/.venv`) | End-to-end PRISM agentic pipeline |
 | Phase 3 | `scripts/run_prism_ar_real_data.py` | PRISM-AR real-data AR cue evaluation |
 
 ## Expected Impact
