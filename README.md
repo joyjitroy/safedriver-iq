@@ -106,6 +106,10 @@ The research paper builds on this project and formally introduces:
 | Explainability (SHAP) | `phase1-safedriver-iq/notebooks/03_shap_analysis.ipynb` |
 | Real-time scoring system | `phase1-safedriver-iq/src/realtime_calculator.py` |
 
+
+<details>
+<summary>Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling</summary>
+
 ## Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling
 
 ### Overview
@@ -338,6 +342,10 @@ See `PROJECT_SETUP_SUMMARY.md` for detailed setup.
   note    = {Presented at IEEE EIT 2026, forthcoming in IEEE Xplore}
 }
 ```
+</details>
+
+<details>
+<summary>Phase 2: PRISM - An Agentic Multi-Model Architecture for Proactive Safety in Autonomous Transportation Systems</summary>
 
 ## Phase 2: PRISM - An Agentic Multi-Model Architecture for Proactive Safety in Autonomous Transportation Systems
 
@@ -515,6 +523,10 @@ Immediate future work targets latency optimization through GPU deployment and ON
 - Joyjit Roy
 - Samaresh Kumar Singh
 - Sushanta Das
+</details>
+
+<details>
+<summary>Phase 3: PRISM-AR - Explainable Risk-Adaptive Driving Intelligence for Vulnerable Road User Communication in Automated Vehicles</summary>
 
 ## Phase 3: PRISM-AR - Explainable Risk-Adaptive Driving Intelligence for Vulnerable Road User Communication in Automated Vehicles
 
@@ -719,6 +731,7 @@ Immediate future directions include expanded naturalistic-dataset evaluation to 
 - Arijit Roy
 - Sushanta Das
 - Samaresh Kumar Singh
+</details>
 
 ## Key Innovations
 
