@@ -108,7 +108,7 @@ The research paper builds on this project and formally introduces:
 
 
 <details>
-<summary>Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling</summary>
+<summary><strong>Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling</strong></summary>
 
 ## Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling
 
@@ -237,7 +237,7 @@ The Random Forest model on the held-out test set (9,278 samples) shows:
 - Moderate crash-class recall: **0.480**
 - Crash-class F1-score: **0.636**
 
-![Confusion Matrix](phase1-safedriver-iq/docs/images/F3_Confusion_Matrix.png)
+<img src="phase1-safedriver-iq/docs/images/F3_Confusion_Matrix.png" alt="Confusion Matrix" width="40%" height="40%"/>
 
 #### Risk level classification
 
@@ -264,13 +264,13 @@ Lighting is the most critical feature group: removing it drops ROC-AUC by **7.6%
 
 TreeSHAP values identify lighting, weather, and road condition as dominant global drivers of risk, consistent with the ablation findings.
 
-![SHAP Values](phase1-safedriver-iq/docs/images/F6_SHAP_Values.png)
+<img src="phase1-safedriver-iq/docs/images/F6_SHAP_Values.png" alt="SHAP Values" width="50%" height="50%"/>
 
 #### Mean safety scores
 
 Safety scores by scenario category confirm that risk compounds non-linearly under adverse conditions.
 
-![Mean Safety Scores](phase1-safedriver-iq/docs/images/F11_Mean_Safety_Scores.png)
+<img src="phase1-safedriver-iq/docs/images/F11_Mean_Safety_Scores.png" alt="Mean Safety Scores" width="50%" height="50%"/>
 
 #### Key findings
 
