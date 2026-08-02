@@ -2,15 +2,15 @@
 
 **Tagline:** *"From Crash Prediction to Proactive, Explainable Safety Intelligence"*
 
-> **Note:** The GitHub repository will be renamed from `joyjitroy/safedriver-iq` to `joyjitroy/Vehicle_Safety_Research`.
+> **Note:** The GitHub repository has been renamed from `joyjitroy/safedriver-iq` to `joyjitroy/Vehicle_Safety_Research`.
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Status: Agentic AI](https://img.shields.io/badge/Status-Agentic%20AI%20Phase%201%20Complete-success.svg)](phase1-safedriver-iq/src/agent/)
+[![Status: Multi-Phase Research](https://img.shields.io/badge/Status-Multi--Phase%20Research%20Active-success.svg)](https://github.com/joyjitroy/Vehicle_Safety_Research)
 
 ## Project Overview
 
-SafeDriver-IQ transforms crash data into a continuous safety score that tells drivers in real-time how close they are to crash conditions and what specific actions would make them safer, with special focus on protecting vulnerable road users (VRUs).
+Vehicle_Safety_Research is a multi-phase research program that moves from reactive crash prediction to proactive, explainable safety intelligence for both human-driven and automated vehicles. Phase 1, SafeDriver-IQ, transforms national crash and naturalistic driving data into a continuous 0-100 safety score that tells drivers in real time how close they are to crash conditions and what specific actions would make them safer. Phase 2, PRISM, extends this into an agentic multi-model architecture that fuses environmental, trajectory, and VRU-interaction risks through reinforcement learning. Phase 3, PRISM-AR, maps these internal risk states to adaptive augmented-reality cues for pedestrians and cyclists. All three phases share the same inverse risk-scoring foundation and focus on protecting vulnerable road users (VRUs).
 
 ### 🆕 NEW: Comprehensive Crash Factor Investigation (Notebook 04)
 A deep-dive multi-dataset investigation combining **CRSS** (417K crashes) and **Waymo Open Motion Dataset** to answer 8 core research questions:
