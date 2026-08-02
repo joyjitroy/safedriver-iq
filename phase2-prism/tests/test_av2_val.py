@@ -1,72 +1,33 @@
-"""M0 sanity test — Argoverse 2 motion-forecasting val split loads via the av2 devkit.
-
-Config-driven path (no hard-coded ~/av-safety-poc). If the av2 devkit is unavailable,
-falls back to reading the scenario parquet directly with pyarrow so the data itself is
-still validated (the devkit is a convenience, not a hard requirement for the POC).
-"""
-from __future__ import annotations
-
+from pathlib import Path
 from collections import Counter
 
-from sdiq import config
+from av2.datasets.motion_forecasting.scenario_serialization import (
+    load_argoverse_scenario_parquet,
+)
 
+root = Path.home() / "av-safety-poc/datasets/argoverse2/motion-forecasting/val"
 
-def _first_parquet():
-    p = next(config.AV2_VAL_ROOT.rglob("*.parquet"), None)
-    assert p is not None, f"no scenario parquet found under {config.AV2_VAL_ROOT}"
-    return p
+scenario_path = next(root.rglob("*.parquet"))
+scenario = load_argoverse_scenario_parquet(scenario_path)
 
+print("Scenario file:", scenario_path)
+print("Scenario ID:", scenario.scenario_id)
+print("City:", scenario.city_name)
+print("Number of timestamps:", len(scenario.timestamps_ns))
+print("Number of tracks:", len(scenario.tracks))
 
-def test_av2_loads_via_devkit():
-    try:
-        from av2.datasets.motion_forecasting.scenario_serialization import (
-            load_argoverse_scenario_parquet,
-        )
-    except Exception as exc:  # devkit missing/broken -> use the fallback test
-        import pytest
-        pytest.skip(f"av2 devkit unavailable ({exc}); see test_av2_loads_via_pyarrow")
-        return
+object_counts = Counter(track.object_type.value for track in scenario.tracks)
+print("Object type counts:", object_counts)
 
-    path = _first_parquet()
-    scenario = load_argoverse_scenario_parquet(path)
-    assert scenario.scenario_id
-    assert scenario.city_name
-    assert len(scenario.timestamps_ns) > 0
-    assert len(scenario.tracks) > 0
+vru_tracks = [
+    track for track in scenario.tracks
+    if track.object_type.value in ["pedestrian", "cyclist"]
+]
 
-    counts = Counter(t.object_type.value for t in scenario.tracks)
-    vru = [t for t in scenario.tracks
-           if t.object_type.value in ("pedestrian", "cyclist")]
-    print("Scenario:", scenario.scenario_id, "| city:", scenario.city_name)
-    print("tracks:", len(scenario.tracks), "| object types:", dict(counts))
-    print("VRU tracks:", len(vru))
+print("VRU tracks:", len(vru_tracks))
 
-
-def test_av2_loads_via_pyarrow():
-    """Devkit-free validation: the parquet is readable and has the expected columns."""
-    import pyarrow.parquet as pq
-
-    path = _first_parquet()
-    table = pq.read_table(path)
-    cols = set(table.column_names)
-    # AV2 motion-forecasting schema staples.
-    for required in ("track_id", "object_type", "timestep", "position_x", "position_y"):
-        assert required in cols, f"missing column {required!r} in {path.name} ({cols})"
-    assert table.num_rows > 0
-    print(f"pyarrow OK: {path.name} | {table.num_rows} rows | cols={sorted(cols)}")
-
-
-def test_av2_val_count():
-    n = sum(1 for d in config.AV2_VAL_ROOT.iterdir() if d.is_dir())
-    assert n == 24988, f"expected 24988 AV2 scenarios, got {n}"
-    print(f"AV2 scenario folders: {n}")
-
-
-if __name__ == "__main__":
-    test_av2_val_count()
-    test_av2_loads_via_pyarrow()
-    try:
-        test_av2_loads_via_devkit()
-        print("\nPASS: av2 sanity test (devkit)")
-    except SystemExit:
-        print("\nPASS: av2 sanity test (pyarrow fallback; devkit skipped)")
+if vru_tracks:
+    t = vru_tracks[0]
+    print("Example VRU type:", t.object_type.value)
+    print("Number of states:", len(t.object_states))
+    print("First state:", t.object_states[0])

@@ -49,22 +49,6 @@ PRISM-AR (in [`phase3-prism-ar/`](phase3-prism-ar/)) takes PRISM's continuous sa
 
 This repository serves as the **reference implementation and experimental foundation** for the following research:
 
-### Phase 1: SafeDriver-IQ
-
-**Paper Title:** *Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling*
-
-This research was developed in collaboration with the **American Center for Mobility (ACM)**, a federally designated proving ground for connected and automated vehicle technology. ACM is featuring the work through its publication channels, reflecting growing industry interest in proactive safety intelligence. The paper was presented at the **2026 IEEE International Conference on Electro/Information Technology (EIT)** in La Crosse, Wisconsin, and at the **IEEE CTSoc Technical Talks Webinar**, and is forthcoming in **IEEE Xplore**.
-
-**Read the paper:** https://arxiv.org/abs/2603.14841
-
-### Key Results (Phase 1)
-
-- **87%** of crashes involve **2+ co-occurring risk factors**
-- **4.5x** non-linear risk compounding over baseline
-- Model performance: **AP = 0.891**, **precision = 0.941**, **recall = 0.480**
-- SHAP-ablation correlation: **r = 0.94**
-- Estimated **22.7% crash reduction** with adoption
-
 ### Phase 2: PRISM
 
 Phase 2 of this research, an agentic multi-model architecture for proactive safety intervention in autonomous transportation, has been accepted for presentation at the **American Society of Civil Engineers (ASCE) 2027** conference. Validation artifacts are in the [`phase2-prism/asce2027/`](phase2-prism/asce2027/) directory.
@@ -122,6 +106,213 @@ The research paper builds on this project and formally introduces:
 | Explainability (SHAP) | `phase1-safedriver-iq/notebooks/03_shap_analysis.ipynb` |
 | Real-time scoring system | `phase1-safedriver-iq/src/realtime_calculator.py` |
 
+## Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling
+
+### Overview
+
+SafeDriver-IQ is the first phase of the VehicleSafetyResearch program. It introduces a framework that transforms binary crash classifiers into continuous 0-100 safety scores by combining national crash statistics with naturalistic driving data from autonomous vehicles. The framework was presented at IEEE EIT 2026 and is forthcoming in IEEE Xplore.
+
+### Abstract
+
+Road crashes remain a leading cause of preventable fatalities. Existing prediction models predominantly produce binary outcomes, which offer limited actionable insights for real-time driver feedback. These approaches often lack continuous risk quantification, interpretability, and explicit consideration of vulnerable road users (VRUs), such as pedestrians and cyclists.
+
+SafeDriver-IQ fuses National Highway Traffic Safety Administration (NHTSA) crash records with Waymo Open Motion Dataset scenarios, engineers domain-informed features, and incorporates a calibration layer grounded in transportation safety literature. Evaluation across 15 complementary analyses indicates that the framework reliably differentiates high-risk from low-risk driving conditions with strong discriminative performance. Findings reveal that 87% of crashes involve multiple co-occurring risk factors, with non-linear compounding effects that increase the risk to 4.5x baseline. SafeDriver-IQ delivers proactive, explainable safety intelligence relevant to advanced driver-assistance systems (ADAS), fleet management, and urban infrastructure planning.
+
+### 1. Introduction
+
+Road traffic crashes are a leading cause of preventable mortality worldwide, with approximately 1.19 million fatalities annually. In the United States, NHTSA documented 40,990 traffic fatalities in 2023, and pedestrian and cyclist fatalities have increased by more than 50% over the past decade. Vehicle safety technologies have advanced, yet VRU fatalities continue to rise, highlighting a significant gap in vehicle-centric safety strategies.
+
+Crash prediction models estimate the likelihood of a crash based on environmental and operational conditions. While valuable for infrastructure planning and hotspot identification, they offer limited utility for real-time driver feedback. Binary outputs such as "crash likely" or "crash unlikely" provide minimal actionable information. They do not convey the degree of risk or identify which factors contribute to it.
+
+This project introduces **Inverse Crash Modeling**, a paradigm that converts binary crash classifiers into continuous safety scoring systems. SafeDriver-IQ quantifies the distance between current driving conditions and crash-producing scenarios as a continuous score from 0 to 100. The transformation uses posterior class probabilities from a trained crash classifier, with the probability of not crashing as the safety score. A well-calibrated classifier preserves these gradations, whereas conventional binary thresholding discards them.
+
+#### Key contributions
+
+1. **Inverse Crash Modeling Formulation** - formalizes the transformation of binary crash classifiers into continuous safety scoring functions.
+2. **Dual-Dataset VRU Safety Assessment** - integrates NHTSA CRSS crash data with the Waymo Open Motion Dataset.
+3. **Domain-Knowledge Calibration** - a rule-based calibration layer bridges statistical prediction with transportation safety expertise.
+4. **Driver Behavior Classification and Multi-Factor Risk Analysis** - identifies four crash-involved driver profiles and demonstrates non-linear compounding effects reaching 4.5x baseline crash risk.
+5. **Comprehensive Empirical Validation** - 15 analyses including ablation, cross-validation, SHAP interpretability, and real-world impact simulation demonstrate framework robustness.
+
+### 2. Architecture
+
+![SafeDriver-IQ System Architecture](phase1-safedriver-iq/docs/images/SafeDriver-IQ-Architecture_New.png)
+
+The full system architecture has four main layers:
+
+#### Data layer
+
+SafeDriver-IQ employs a dual-dataset strategy:
+
+- **NHTSA CRSS (2016-2023)** - 417,335 crash-level records across 11 linked tables. After VRU filtering and deduplication, 23,194 unique VRU crash records remain.
+- **Waymo Open Motion Dataset v1.2** - 500 parsed scenarios at 10 Hz over 9.1-second windows, including 9 collisions, 27 near-misses, and 464 safe-driving episodes.
+
+Synthetic safe samples are generated by modifying high-risk CRSS features to safer values and validating them against Waymo safe-driving behavior, yielding a balanced 1:1 training set of 46,388 records.
+
+#### Feature engineering
+
+The pipeline produces 64 numeric features organized into 7 groups:
+
+- **Temporal** (10): HOUR, MINUTE, MONTH, DAY WEEK, IS RUSH HOUR, IS WEEKEND
+- **Environmental** (6): WEATHER, ADVERSE WEATHER, LGT COND, POOR LIGHTING
+- **Location** (8): TYP INT, REL ROAD, WRK ZONE, INT HWY
+- **VRU-Specific** (5): pedestrian count, cyclist count, total VRU, max VRU injury, fatal VRU
+- **Interaction** (3): NIGHT AND DARK, WEEKEND NIGHT, ADVERSE CONDITIONS
+- **Crash & Vehicle** (24): HARM EV, MAN COLL, ALCOHOL, MAX SEV, VE TOTAL, PEDS
+- **Metadata** (8): STRATUM, REGION, URBANICITY, PJ, PSU VAR
+
+Interaction features explicitly model compound risk scenarios such as dark combined with adverse weather.
+
+#### Model training
+
+Two training pipelines are used:
+
+- **Pipeline 1: Model selection** - Random Forest, XGBoost, and Gradient Boosting are evaluated with 100 estimators and a stratified 80/20 train-test split. Random Forest is selected as the production model.
+- **Pipeline 2: Feature importance and SHAP analysis** - RF and XGBoost are retrained with 200 estimators to produce stable TreeSHAP values, ablation AUC deltas, and permutation importance rankings.
+
+#### Inverse safety score formulation
+
+The central component of SafeDriver-IQ is the inversion of crash probability into a continuous safety score. Given a trained binary classifier and a feature vector representing current driving conditions, the raw safety score is:
+
+**S_raw(x) = P(y = 0 | x) x 100**
+
+where P(y = 0 | x) is the posterior safe class probability. The score is bounded, monotonic, continuous, and interpretable. A score of 75 means the model estimates a 75% probability that current conditions do not match crash patterns.
+
+#### Domain-knowledge calibration
+
+A multiplicative calibration layer corrects systematic model bias. Condition-specific penalty factors are derived from safety literature for road surface, weather, lighting, speed, VRU presence, and compound conditions. For example, an icy road applies a 40% penalty (alpha = 0.60), and darkness applies up to a 25% penalty.
+
+#### Real-time system
+
+The calibrated safety score is produced in under one millisecond from a 64-feature driving context vector. It supports configurable intervention thresholds for ADAS, fleet management, and insurance telematics.
+
+#### SHAP-based interpretability
+
+TreeSHAP computes Shapley values for each feature, supporting both global feature ranking and local explanation of individual scores. A negative SHAP value pushes the prediction toward crash conditions, lowering the safety score and enabling targeted recommendations.
+
+### 3. Dataset Summary
+
+| Component | Records | Description |
+|---|---|---|
+| CRSS ACCIDENT | 417,335 | Crash-level records (2016-2023) |
+| CRSS VEHICLE | 469,443 | Vehicle involvement |
+| CRSS PERSON | 655,675 | Person involvement |
+| PBTYPE | 25,519 | Pedestrian/cyclist typing |
+| +7 supplementary | - | Factor, distraction, impairment |
+| WOMD parsed | 500 | 10 Hz, 9.1 s windows |
+| WOMD collisions | 9 | 1.8% of scenarios |
+| WOMD near-misses | 27 | 5.4% of scenarios |
+| WOMD safe driving | 464 | 92.8% of scenarios |
+| VRU crashes (after filter) | 23,194 | Pedestrian or cyclist involved |
+| Safe samples | 23,194 | Synthetic + Waymo-validated |
+| Total balanced | 46,388 | 1:1 crash-to-safe ratio |
+| Training set | 37,110 | 80% stratified split |
+| Test set | 9,278 | 20% stratified split |
+| Numeric features | 64 | 7 feature groups |
+
+### 4. Results
+
+#### Precision-recall
+
+The model attains an Average Precision (AP) of **0.891**, well above the 0.500 random baseline. At the default threshold of 0.5, the model achieves precision = **0.941** and recall = **0.480**.
+
+![Precision-Recall Curve](phase1-safedriver-iq/docs/images/F2_PR_Curve.png)
+
+#### Confusion matrix
+
+The Random Forest model on the held-out test set (9,278 samples) shows:
+
+- High safe-class recall: **0.970**
+- High crash-class precision: **0.941**
+- Moderate crash-class recall: **0.480**
+- Crash-class F1-score: **0.636**
+
+![Confusion Matrix](phase1-safedriver-iq/docs/images/F3_Confusion_Matrix.png)
+
+#### Risk level classification
+
+A synthetic evaluation grid of 864 driving scenarios achieves **87.0%** overall accuracy across five risk levels. Every misclassification falls between adjacent levels, showing ordinal consistency.
+
+#### Crash factor analysis
+
+From the CRSS 2016-2023 subset (213,003 crashes), the most prevalent primary factors are:
+
+- Rush hour: 75,100 (35.3%)
+- Poor lighting: 62,186 (29.2%)
+- Weekend driving: 53,462 (25.1%)
+- Adverse weather: 49,588 (23.3%)
+- Night driving: 45,616 (21.4%)
+- VRU involvement: 18,605 (8.7%)
+
+VRU crashes rank last by count but carry disproportionate severity, motivating the VRU focus of SafeDriver-IQ.
+
+#### Ablation study
+
+Lighting is the most critical feature group: removing it drops ROC-AUC by **7.6%**. Environmental features rank second at **-6.5%**. Removing lighting and environmental features together produces a **16.4%** AUC drop, demonstrating non-linear compounding beyond the additive expectation of 14.1%. VRU-specific features contribute **0.8%** independently.
+
+#### SHAP interpretability
+
+TreeSHAP values identify lighting, weather, and road condition as dominant global drivers of risk, consistent with the ablation findings.
+
+![SHAP Values](phase1-safedriver-iq/docs/images/F6_SHAP_Values.png)
+
+#### Mean safety scores
+
+Safety scores by scenario category confirm that risk compounds non-linearly under adverse conditions.
+
+![Mean Safety Scores](phase1-safedriver-iq/docs/images/F11_Mean_Safety_Scores.png)
+
+#### Key findings
+
+- **87%** of crashes involve two or more co-occurring risk factors.
+- Risk compounds non-linearly, reaching **4.5x** baseline under certain combinations.
+- SHAP-ablation correlation is strong (r = 0.94).
+- Estimated **22.7%** crash reduction under realistic deployment.
+
+### 5. Application Example
+
+The calibrated score is mapped to five operational levels for real-world deployment:
+
+| Level | Score | Action |
+|---|---|---|
+| Critical | 0-20 | Emergency warning, immediate intervention |
+| High | 21-40 | ADAS alert; speed advisory issued |
+| Medium | 41-60 | Caution advisory, improvement suggestion |
+| Low | 61-75 | Monitoring, minor corrective feedback |
+| Excellent | 76-100 | Positive feedback, insurance discount eligible |
+
+The dashboard below illustrates a driver-facing ADS interface that shows the real-time SafeDriver-IQ score, current risk factors, and contextual feedback.
+
+![SafeDriver-IQ ADS Dashboard](phase1-safedriver-iq/docs/images/safedriver_iq_ads_dashboard.png)
+
+### 6. Limitations
+
+1. **Synthetic safe sample bias.** Safe samples are derived from CRSS crash records with modified environmental features. The Waymo integration provides only 500 scenarios from a single shard, limiting generalizability. VRU-specific features contribute only 0.8% to model performance because both crash and safe samples involve VRU interactions.
+2. **No real-time driver behavior.** The current model assesses environmental context but not individual driving behavior such as speed limit violations, aggressive braking, or lane drift.
+3. **Static feature vector.** Each prediction is treated independently, with no temporal context from the driving session.
+4. **Calibration layer subjectivity.** Penalty values are grounded in safety literature but involve expert judgment. A data-driven approach using Platt scaling with fleet outcome data would reduce subjectivity.
+
+### 7. Conclusion and Future Directions
+
+SafeDriver-IQ addresses the limitation of binary crash prediction by inverting a trained crash classifier into a continuous 0-100 safety score. The framework provides real-time, interpretable risk feedback informed by eight years of national crash data and real-world autonomous vehicle trajectories. The primary finding demonstrates that environmental context and multi-factor compounding dominate crash risk far more than driver aggression alone, with certain factor combinations reaching 4.5x baseline risk.
+
+Future work will:
+
+- Expand Waymo integration to thousands of scenarios.
+- Fuse live telemetry (OBD-II, GPS-derived speed, accelerometer data) to enable real-time behavioral scoring.
+- Conduct field validation with fleet operators.
+- Develop a prototype online learner with prioritized experience replay for incremental risk-weight updates.
+
+More broadly, the framework establishes a reusable paradigm: any domain-specific binary risk classifier can be inverted into a proactive, explainable safety scoring system using the same pipeline, without building new models from scratch.
+
+For full retraining:
+
+```powershell
+python retrain_model.py
+```
+
+See `PROJECT_SETUP_SUMMARY.md` for detailed setup.
+
 ### 🧾 Main Contributors
 
 - Samaresh Kumar Singh
@@ -136,7 +327,7 @@ The research paper builds on this project and formally introduces:
   year    = {2026},
   doi     = {10.48550/arXiv.2603.14841},
   url     = {https://arxiv.org/abs/2603.14841},
-  note    = {Submitted to IEEE EIT 2026, University of Wisconsin-La Crosse}
+  note    = {Presented at IEEE EIT 2026, forthcoming in IEEE Xplore}
 }
 ```
 
@@ -803,6 +994,8 @@ These artifacts support the paper's results: 231 evaluated scenario clips, tier 
 ## Demonstration & Results
 
 ### Phase 1: SafeDriver-IQ (Inverse Crash Scoring)
+
+Full paper summary, architecture, dataset, results, and application examples: [phase1-safedriver-iq/README.md](phase1-safedriver-iq/README.md).
 
 #### 1. Data Loading & Scale
 ```bash
