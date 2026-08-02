@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Status: Multi-Phase Research](https://img.shields.io/badge/Status-Multi--Phase%20Research%20Active-success.svg)](https://github.com/joyjitroy/Vehicle_Safety_Research)
 
-## Project Overview
+# <span style="color:blue">Project Overview</span>
 
 Vehicle_Safety_Research is a multi-phase research program that moves from reactive crash prediction to proactive, explainable safety intelligence for both human-driven and automated vehicles. Phase 1, SafeDriver-IQ, transforms national crash and naturalistic driving data into a continuous 0-100 safety score that tells drivers in real time how close they are to crash conditions and what specific actions would make them safer. Phase 2, PRISM, extends this into an agentic multi-model architecture that fuses environmental, trajectory, and VRU-interaction risks through reinforcement learning. Phase 3, PRISM-AR, maps these internal risk states to adaptive augmented-reality cues for pedestrians and cyclists. All three phases share the same inverse risk-scoring foundation and focus on protecting vulnerable road users (VRUs).
 
@@ -45,7 +45,7 @@ Instead of predicting crashes, we model the **distance from crash** - quantifyin
 ### 🕶️ PRISM-AR: Risk-Adaptive AR Cues for VRUs (extends PRISM / Phase 2)
 PRISM-AR (in [`phase3-prism-ar/`](phase3-prism-ar/)) takes PRISM's continuous safety score and intervention tier and maps them to **adaptive augmented-reality cues** for pedestrians and cyclists — e.g., a translucent amber safe zone at "advisory", a flashing red no-cross boundary at "emergency". It is being prepared for submission to **IEEE Transactions on Vehicular Technology**. See [`phase3-prism-ar/README.md`](phase3-prism-ar/README.md) for details.
 
-## 📄 Research Publication
+# <span style="color:blue">Research Publication</span>
 
 This repository serves as the **reference implementation and experimental foundation** for the following research:
 
@@ -107,10 +107,8 @@ The research paper builds on this project and formally introduces:
 | Real-time scoring system | `phase1-safedriver-iq/src/realtime_calculator.py` |
 
 
-<details>
-<summary><strong>🚗 Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling </strong></summary>
 
-## Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling
+# <span style="color:blue">Phase 1: SafeDriver-IQ - Real-Time Driver Safety Scoring Through Inverse Crash Probability Modeling</span>
 
 ### Overview
 
@@ -342,12 +340,9 @@ See `PROJECT_SETUP_SUMMARY.md` for detailed setup.
   note    = {Presented at IEEE EIT 2026, forthcoming in IEEE Xplore}
 }
 ```
-</details>
 
-<details>
-<summary><strong> 🧠 Phase 2: PRISM - An Agentic Multi-Model Architecture for Proactive Safety in Autonomous Transportation Systems</strong></summary>
 
-## Phase 2: PRISM - An Agentic Multi-Model Architecture for Proactive Safety in Autonomous Transportation Systems
+# <span style="color:blue">Phase 2: PRISM - An Agentic Multi-Model Architecture for Proactive Safety in Autonomous Transportation Systems</span>
 
 ### Overview
 
@@ -523,12 +518,9 @@ Immediate future work targets latency optimization through GPU deployment and ON
 - Joyjit Roy
 - Samaresh Kumar Singh
 - Sushanta Das
-</details>
 
-<details>
-<summary><strong> 🥽 Phase 3: PRISM-AR - Explainable Risk-Adaptive Driving Intelligence for Vulnerable Road User Communication in Automated Vehicles</strong></summary>
 
-## Phase 3: PRISM-AR - Explainable Risk-Adaptive Driving Intelligence for Vulnerable Road User Communication in Automated Vehicles
+# <span style="color:blue">Phase 3: PRISM-AR - Explainable Risk-Adaptive Driving Intelligence for Vulnerable Road User Communication in Automated Vehicles</span>
 
 ### Overview
 
@@ -731,9 +723,8 @@ Immediate future directions include expanded naturalistic-dataset evaluation to 
 - Arijit Roy
 - Sushanta Das
 - Samaresh Kumar Singh
-</details>
 
-## Key Innovations
+# <span style="color:blue">Key Innovations</span>
 
 ### Phase 1: SafeDriver-IQ
 
@@ -786,7 +777,7 @@ Immediate future directions include expanded naturalistic-dataset evaluation to 
 4. **Real-Time Feasibility** - Sub-millisecond per-frame reference implementation
 5. **Multi-Baseline Evaluation Protocol** - Paired comparison against no-interface, static eHMI, and oracle upper-bound policies
 
-## Dataset
+# <span style="color:blue">Dataset</span>
 
 **CRSS (Crash Report Sampling System)** — NHTSA national crash database
 - **417,335 crash records** (2016–2023, 8 years)
@@ -828,7 +819,7 @@ Immediate future directions include expanded naturalistic-dataset evaluation to 
 
 Phase 3 candidate clips are drawn from the same three AV datasets as Phase 2 (1,296 total candidate clips), then filtered by a VRU-interaction extractor (20 m ego-approach radius, decreasing distance, ≥5 frames visible) down to 231 total evaluated scenario clips. See [`phase3-prism-ar/README.md`](phase3-prism-ar/README.md) and `phase3-prism-ar/src/prism_ar/dataset_generation/scenario_extractor.py` for the extraction logic.
 
-## Data Management
+# <span style="color:blue">Data Management</span>
 
 The repository keeps small, shareable datasets in `data/` and expects large AV datasets to live outside the repo to avoid GitHub file-size and Windows `MAX_PATH` issues.
 
