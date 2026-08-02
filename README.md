@@ -641,29 +641,29 @@ Three baseline policies are evaluated alongside PRISM-AR: no-AR (no external cue
 
 The PRISM-AR evaluation pipeline is summarized in Figure 2.
 
-![PRISM-AR Evaluation Flow](phase3-prism-ar/results/figures/F11_PRISM_AR_Evaluation_Flow.png)
+<img src="phase3-prism-ar/results/figures/F11_PRISM_AR_Evaluation_Flow.png" alt="PRISM-AR Evaluation Flow" width="65%" height="65%"/>
 
 **Aggregate Risk and Tier Distribution.** The overall mean safety score across 231 evaluated scenarios is 61.2 out of 100, with a standard deviation of 11.0. Dataset-derived clips average 66.2, while the controlled near-miss subset averages 47.1, confirming that the synthetic supplement broadens coverage of lower-score, higher-risk cases. The score distribution spans 40.2-81.8. Waymo and Argoverse 2 scenarios straddle the information-silent boundary (median 70.2 and 65.6), while nuScenes clips are more widely distributed within the information range. Synthetic near-miss scenarios fall within the 40-55 band.
 
-![Mean PRISM-AR Safety Scores by Dataset](phase3-prism-ar/results/figures/F2_Mean_PRISM_AR_Safety_Scores_by_Dataset.png)
+<img src="phase3-prism-ar/results/figures/F2_Mean_PRISM_AR_Safety_Scores_by_Dataset.png" alt="Mean PRISM-AR Safety Scores by Dataset" width="70%" height="70%"/>
 
 PRISM-AR assigned tiers and proxy ground-truth tiers are shown in Figures 3 and 4. Information and silent tiers dominate dataset-derived clips, while warning frames appear mainly in the synthetic subset, with smaller contributions from nuScenes and Waymo. Emergency assignments are almost entirely synthetic, confirming that the controlled near-miss scenarios provide the high-risk cases needed to assess escalated-tier recall. Compared with assigned tiers, ground-truth labels include more warning and emergency frames, indicating that the reference implementation is conservative in assigning escalated tiers.
 
-![PRISM-AR Tier Distribution by Dataset](phase3-prism-ar/results/figures/F3_Tier_Distribution_By_Dataset.png)
+<img src="phase3-prism-ar/results/figures/F3_Tier_Distribution_By_Dataset.png" alt="PRISM-AR Tier Distribution by Dataset" width="80%" height="80%"/>
 
-![Proxy Ground Truth Tier Distribution](phase3-prism-ar/results/figures/F4_Ground_Truth_Comparison.png)
+<img src="phase3-prism-ar/results/figures/F4_Ground_Truth_Comparison.png" alt="Proxy Ground Truth Tier Distribution" width="80%" height="80%"/>
 
 **Tier Accuracy and High-Risk Recall.** PRISM-AR achieves a mean tier accuracy of 70.9% across 231 scenarios, compared to 42.6% for the static baseline, yielding a 28.3-point improvement from risk-adaptive tier selection. Across datasets, adaptive tier accuracy ranges from 60.7% on the synthetic near-miss subset to 84.3% on Waymo, with nuScenes and Argoverse 2 at 74.6% and 69.2%, respectively. The static baseline emits a fixed information-level cue, resulting in zero warning and emergency recall by construction. PRISM-AR recovers 19.6% of warning frames and 9.1% of emergency frames on average across all scenarios. In the synthetic near-miss subset, it recovers 46.2% of warning frames and 35.1% of emergency frames.
 
-![Tier Accuracy and Recall](phase3-prism-ar/results/figures/F5_Ground_Truth_Comparison.png)
+<img src="phase3-prism-ar/results/figures/F5_Ground_Truth_Comparison.png" alt="Tier Accuracy and Recall" width="60%" height="60%"/>
 
 **Escalation Lead Time.** Timely warning delivery is essential for a proactive safety interface. Of 231 scenarios evaluated, 86 generated a warning with measurable lead time. In these warned scenarios, the mean lead time is 2.99 s and the median is 2.70 s, with values ranging from 1.0 s to 9.5 s. The synthetic near-miss subset is capped at 3.0 s by design, with a mean of 2.38 s. Dataset-derived subsets exhibit longer lead times when warnings occur: nuScenes averages 4.55 s across 18 warned scenarios and Waymo averages 4.00 s across 8 warned scenarios. A mean lead time near 3 s indicates that when PRISM-AR escalates, it usually provides an actionable warning window.
 
-![Escalation Lead Time Distribution](phase3-prism-ar/results/figures/F6_Lead_Time_Distribution.png)
+<img src="phase3-prism-ar/results/figures/F6_Lead_Time_Distribution.png" alt="Escalation Lead Time Distribution" width="65%" height="65%"/>
 
 **Spatial Validity of the Safety Score.** To enable effective cue selection, the safety score must reflect the spatial severity of ego-VRU interactions. Figure 7 plots the mean per-scenario PRISM-AR safety score against the minimum ego-VRU distance. These measures are strongly correlated, with a Pearson correlation of 0.82 and a Spearman rank correlation of 0.84 across all 231 scenarios (p < 10^-56). Scenarios with closer ego-VRU approaches consistently receive lower safety scores, confirming that the fused score captures proximity-driven risk.
 
-![Distance vs Safety Score](phase3-prism-ar/results/figures/F7_Distance_vs_Score.png)
+<img src="phase3-prism-ar/results/figures/F7_Distance_vs_Score.png" alt="Distance vs Safety Score" width="65%" height="65%"/>
 
 **Cue Stability and Visual Load.** Beyond tier correctness, a VRU-facing interface must avoid unstable or visually cluttered cue behavior. Cue flicker is measured as the frequency of tier transitions per second, averaging 0.66 Hz across all scenarios, with dataset-level means below 1.2 Hz across all subsets. Waymo and the synthetic near-miss subset exhibit the highest mean flicker rates (1.16 Hz and 1.09 Hz), reflecting more dynamic interactions. Visual clutter, defined as the mean AR overlay opacity across all frames in a scenario, averages 0.25 across all scenarios, with dataset-derived subsets below 0.19 and the synthetic near-miss subset at 0.44. The graduated tier policy maintains a sparse visual channel under typical conditions and increases visual load only when higher risk is present.
 
@@ -682,7 +682,7 @@ Cue-risk monotonicity, assessed by comparing cue opacity with the fused safety s
 
 **Ablation Study.** To quantify each risk model's contribution, the reference implementation was re-evaluated on a 151-scenario subset under four conditions: the full system and three ablations that individually remove the trajectory, environmental risk, or VRU interaction model. Removing the trajectory model increases the mean score to 65.8, but warning recall drops from 17.4% to 0.1% and tier accuracy falls from 71.6% to 46.7%, confirming that kinematic risk primarily drives escalated tier selection. Removing the environmental risk model causes a smaller decline: tier accuracy decreases to 67.4% and warning recall to 0.8%, showing that environmental context helps determine when kinematic risk should trigger an external warning. Removing the VRU interaction model produces the opposite failure mode: the mean score drops to 52.5, warning recall rises sharply to 78.8%, and the static baseline's under-warning rate reaches 79.5%, more than double the full-system value of 31.8%. Without VRU-model gating, trajectory risk escalates indiscriminately. The full system balances sensitivity and specificity.
 
-![Ablation Study](phase3-prism-ar/results/figures/F9_Ablation.png)
+<img src="phase3-prism-ar/results/figures/F9_Ablation.png" alt="Ablation Study" width="70%" height="70%"/>
 
 ### 5. Application Examples
 
