@@ -451,7 +451,7 @@ PRISM was evaluated on 1,296 scenarios across nuScenes v1.0-mini (10 scenes), Ar
 | Argoverse 2 | 1,000 | 68.6 | 76.7 | 4.6 | 7.3% |
 | Waymo WOMD | 286 | 68.0 | 77.6 | 4.5 | 3.8% |
 
-<img src="phase2-prism/docs/images/F2_Score_Distribution_Overlay.png" alt="Safety Score Distribution" width="75%" height="75%"/>
+<img src="phase2-prism/docs/images/F2_Score_Distribution_Overlay.png" alt="Safety Score Distribution" width="85%" height="85%"/>
 
 **Safety Score Distribution.** Figure 2 shows the safety score distributions across all three datasets. Argoverse 2 and Waymo converge to nearly identical means (68.6 and 68.0) despite independent data collection, sensors, and geography, demonstrating cross-domain generalization without retraining. Both distributions are advisory-dominant (40-70), consistent with structured urban driving under normal conditions. nuScenes scores are lower (mean 59.8) and shift toward the intervention and emergency bands because its scenes were explicitly sampled under adverse conditions.
 
@@ -466,27 +466,27 @@ PRISM was evaluated on 1,296 scenarios across nuScenes v1.0-mini (10 scenes), Ar
 | Pittsburgh | 205 | 67.3 | 5.4% |
 | Palo Alto | 60 | 71.7 | 0.0% |
 
-![Intervention Tier Distribution](phase2-prism/docs/images/F3_tier_Distribution.png)
+<img src="phase2-prism/docs/images/F3_tier_Distribution.png" alt="Intervention Tier Distribution" width="75%" height="75%"/>
 
 **Intervention Tier Analysis.** The advisory tier is consistently dominant: 70% on nuScenes, 76.7% on Argoverse 2, and 77.6% on Waymo. The emergency tier represents 20% of nuScenes scenes versus 4.6% in Argoverse 2 and 4.5% in Waymo, reflecting the adverse-condition sampling bias in nuScenes rather than model miscalibration. The intervention tier (6.1% Argoverse 2, 6.3% Waymo) and silent tier (12.6% Argoverse 2, 11.5% Waymo) are well-matched across the two large datasets, reinforcing calibration consistency across all four tiers.
 
 **VRU Proximity and Near-Miss Detection.** PRISM detects VRU near-miss events by applying the Social Force Model with a conservative collision-course threshold. Across nuScenes, only scene-0061 triggered a confirmed near-miss, involving 60 pedestrians at a minimum ego-VRU distance of 2.4 m, resulting in a VRU risk of 0.72 and an emergency-tier classification. On Waymo, 11 of 286 scenarios (3.8%) triggered near-miss detections, with a mean VRU risk of 0.063, reflecting lower pedestrian density. Figure 4 shows the cumulative ego-VRU proximity distribution for Argoverse 2: 18.5% of VRU-present scenarios had a minimum distance below 5 m, all classified as intervention or emergency tier.
 
-![VRU Proximity Cumulative Distribution](phase2-prism/docs/images/F4_VRU_Proximity_Cumulative_Distribution.png)
+<img src="phase2-prism/docs/images/F4_VRU_Proximity_Cumulative_Distribution.png" alt="VRU Proximity Cumulative Distribution" width="80%" height="80%"/>
 
 **Adverse Condition Sensitivity.** nuScenes is the only dataset with labeled adverse conditions. Night conditions increase the environmental multiplier from 0.97 to 1.33, lowering mean safety scores by 10.5 points compared with clear daytime. In the night-and-rain scene (scene-1094), the score drops to 23.3 due to a multiplier of 1.35 combined with 55 pedestrians at 3.1 m, placing the scene firmly in the emergency tier. The clear daytime emergency scene (scene-0061) shows that emergency classification can result solely from high VRU density, while the only silent-tier scene (score 85.6) had low VRU density and clear conditions, confirming PRISM does not over-escalate in genuinely safe situations.
 
-![SHAP Analysis](phase2-prism/docs/images/F7_SHAP_Analysis.png)
+<img src="phase2-prism/docs/images/F7_SHAP_Analysis.png" alt="VSHAP Analysis" width="85%" height="85%"/>
 
 **SHAP Feature Attribution.** Figure 5 presents the top SHAP feature attributions for the PRISM RL agent. On nuScenes, VRU risk is the primary driver (mean |SHAP| = 2.10 per scene), followed by VRU imminence (0.28) and trajectory risk (0.25). On Argoverse 2, VRU risk remains dominant (1.75 per scene), with trajectory risk (0.30) ranking second and VRU imminence third (0.22). Environmental features follow the same secondary pattern. The ranking is consistent across independently collected datasets without retraining.
 
-![Ablation Study](phase2-prism/docs/images/F5_Ablation_Study.png)
+<img src="phase2-prism/docs/images/F5_Ablation_Study.png" alt="Ablation Study" width="60%" height="60%"/>
 
 **Ablation Study.** Figure 6 presents the marginal contribution of each model component on nuScenes. With only the Phase 1 environmental model, all ten scenes are classified as silent, confirming that the RF bridge accurately captures environmental context but does not respond to dynamic trajectory or VRU signals. Including the trajectory model escalates 8 of 10 scenes to advisory. Adding the VRU model independently escalates the two highest-proximity scenes to intervention. Neither component alone reaches the emergency tier. The full PRISM system, with the RL agent synthesizing all three signals, correctly classifies both scenes as emergencies and maintains advisory for the remaining seven kinematically active scenes.
 
 **Tier Boundary Sensitivity.** To assess robustness, each composite-score boundary was adjusted by +/-5 points and tier distributions were recalculated for all 1,000 Argoverse 2 scenarios. The combined emergency and intervention escalation rate varied from 8.8% (shift -5) to 12.6% (shift +5), a range of less than 4 percentage points, confirming that safety-critical tier assignments are robust to minor calibration errors.
 
-![Computational Latency](phase2-prism/docs/images/F6_Per_Component_Computational_Latency.png)
+<img src="phase2-prism/docs/images//F6_Per_Component_Computational_Latency.png" alt="Computational Latency" width="75%" height="75%"/>
 
 **Computational Latency.** Figure 7 profiles per-component mean latency on CPU. The trajectory LSTM is the dominant cost at 245.3 ms, followed by the environmental RF bridge at 163.8 ms, the VRU module (SFM + LSTM) at 95.9 ms, and SHAP attribution at 90.3 ms. The RL decision step itself is negligible at 0.3 ms. Total end-to-end latency is approximately 596 ms on CPU, consistent with an offline post-processing role rather than hard real-time control.
 
