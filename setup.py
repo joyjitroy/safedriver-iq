@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="safedriver-iq",
+    name="VehicleSafetyResearch",
     version="0.1.0",
-    description="Inverse Crash Modeling for Driver Competency Quantification",
-    author="Your Name",
-    author_email="your.email@example.com",
+    description="Multi-Phase Research Framework for Proactive Vehicle Safety and VRU-Aware Risk Communication",
+    author="Joyjit Roy",
+    author_email="joyjit.roy.tech@gmail.com",
     packages=find_packages(where="phase1-safedriver-iq/src"),
     package_dir={"": "phase1-safedriver-iq/src"},
     py_modules=[

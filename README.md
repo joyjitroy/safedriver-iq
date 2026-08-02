@@ -1,6 +1,8 @@
-# SafeDriver-IQ: Inverse Crash Modeling for Driver Competency
+# VehicleSafetyResearch: Multi-Phase Research Framework for Proactive Vehicle Safety and VRU-Aware Risk Communication
 
-**Tagline:** *"Quantifying Driver Competency Through Inverse Crash Modeling"*
+**Tagline:** *"From Crash Prediction to Proactive, Explainable Safety Intelligence"*
+
+> **Note:** The GitHub repository will be renamed from `joyjitroy/safedriver-iq` to `joyjitroy/VehicleSafetyResearch`.
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -628,7 +630,7 @@ PRISM-AR maps the fused internal risk state to external safety cues delivered th
 
 ```bash
 # Navigate to project directory
-cd safedriver-iq
+cd VehicleSafetyResearch
 
 # Create virtual environment
 python -m venv venv
@@ -728,8 +730,8 @@ On Windows, `scripts/setup_venv.bat` can be used instead of step 1 to create an 
 ### Step 1: Clone/Download Project
 ```bash
 cd /path/to/your/workspace
-git clone https://github.com/joyjitroy/safedriver-iq.git
-cd safedriver-iq
+git clone https://github.com/joyjitroy/VehicleSafetyResearch.git
+cd VehicleSafetyResearch
 ```
 
 ### Step 2: Create Virtual Environment
