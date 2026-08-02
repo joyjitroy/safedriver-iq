@@ -114,6 +114,18 @@ The research paper builds on this project and formally introduces:
 
 SafeDriver-IQ is the first phase of the Vehicle_Safety_Research program. It introduces a framework that transforms binary crash classifiers into continuous 0-100 safety scores by combining national crash statistics with naturalistic driving data from autonomous vehicles. The framework was presented at IEEE EIT 2026 and is forthcoming in IEEE Xplore.
 
+### Research Flyer
+
+![SafeDriver-IQ Phase 1 Flyer](docs/flyers/safedriver_iq_phase1_flyer.png)
+
+Phase 1 introduces inverse crash probability modeling: a continuous 0–100 safety score derived from NHTSA CRSS crash data and Waymo driving behavior, demonstrating that 87% of crashes involve two or more co-occurring risk factors.
+
+The same safety-score signal can be surfaced to drivers through an in-vehicle ADS dashboard, as shown in the EIT2026 paper mockup below.
+
+![SafeDriver-IQ ADS Dashboard](docs/images/safedriver_iq_ads_dashboard.png)
+
+
+
 ### Abstract
 
 Road crashes remain a leading cause of preventable fatalities. Existing prediction models predominantly produce binary outcomes, which offer limited actionable insights for real-time driver feedback. These approaches often lack continuous risk quantification, interpretability, and explicit consideration of vulnerable road users (VRUs), such as pedestrians and cyclists.
@@ -339,6 +351,14 @@ See `PROJECT_SETUP_SUMMARY.md` for detailed setup.
 
 PRISM (Proactive Risk Intelligence and Safety Management) is the second phase of the Vehicle_Safety_Research program. It advances the Phase 1 SafeDriver-IQ inverse crash-probability foundation from a static, national-crash-based scoring model to a dynamic, scene-aware agentic safety architecture. PRISM fuses three parallel risk models - environmental, trajectory kinematic, and VRU interaction - through a deep Q-network reinforcement-learning agent that produces graduated interventions and SHAP-based explanations. The work has been accepted for the **ASCE 2027: The Infrastructure and Engineering Experience** conference (Abstract ID ASCE2027-1804, Transportation Engineering track).
 
+### Research Flyer
+
+![PRISM Phase 2 Flyer](docs/flyers/prism_phase2_flyer.png)
+
+Phase 2 extends the foundation into an agentic multi-model architecture with environmental, trajectory, and VRU risk models fused by a DQN agent. PRISM was validated across nuScenes, Argoverse 2, and Waymo WOMD, achieving a mean safety score of 68/100 with 77.6% of scenarios classified as advisory.
+
+
+
 ### Abstract
 
 Autonomous and intelligent transportation systems operate in complex urban environments where safety depends on interactions among vehicle behavior, environmental conditions, and vulnerable road users (VRUs). Most advanced driver-assistance systems (ADAS) are reactive: collision detection and emergency braking activate only after hazards have emerged. The continued rise in VRU fatalities shows that vehicle-centric, threshold-based safety strategies leave a critical gap.
@@ -501,6 +521,14 @@ Immediate future work targets latency optimization through GPU deployment and ON
 ### Overview
 
 PRISM-AR (PRISM with Augmented Reality) is the third phase of the Vehicle_Safety_Research program. It extends the internal risk reasoning of PRISM into an external, VRU-facing communication layer for automated vehicles (AVs). While Phase 2 produces a continuous safety score and intervention tier for the vehicle, PRISM-AR maps those same risk states to adaptive augmented-reality cues for pedestrians and cyclists. The framework is designed for the IEEE Transactions on Vehicular Technology (TVT) special issue on Advanced Driving Intelligence for Autonomous Vehicles.
+
+### Research Flyer
+
+![PRISM-AR Phase 3 Flyer](docs/flyers/prism_ar_flyer.png)
+
+Phase 3 maps PRISM's fused risk state to risk-adaptive AR cues for pedestrians and cyclists. It was evaluated on 231 scenario clips across three public AV datasets plus synthetic near-miss cases, improving proxy tier accuracy from 0.43 (static eHMI) to 0.71 (PRISM-AR) and achieving Spearman cue-risk monotonicity ρ = -0.703.
+
+
 
 ### Abstract
 
@@ -683,32 +711,6 @@ PRISM-AR extends the inverse crash-probability safety-scoring foundation of Safe
 The ablation study confirms that each risk model contributes uniquely, with the VRU interaction model acting as a specificity filter, balancing the trajectory and environmental models' sensitivity to escalating risk. Overall, these findings support graduated, proximity-aware cue delivery as a promising approach for VRU-facing AR and eHMI safety interfaces.
 
 Immediate future directions include expanded naturalistic-dataset evaluation to rebalance the dataset composition and support stronger per-dataset conclusions; false-alarm-aware policy tuning to allow deliberate selection of the recall-specificity tradeoff; human-subject validation of the VRU-facing cue channels to link proximity and timing metrics to measured pedestrian reaction time, comprehension, trust, and habituation; closed-loop deployment testing first in simulation and then on a physical platform; and application of the risk-tiering and cue-generation approach to driver-facing feedback in partially automated (SAE L2/L3) vehicles.
-
-### 📢 Research Flyers
-
-Visual one-page summaries for each phase of the work.
-
-#### Phase 1: SafeDriver-IQ
-
-![SafeDriver-IQ Phase 1 Flyer](docs/flyers/safedriver_iq_phase1_flyer.png)
-
-Phase 1 introduces inverse crash probability modeling: a continuous 0–100 safety score derived from NHTSA CRSS crash data and Waymo driving behavior, demonstrating that 87% of crashes involve two or more co-occurring risk factors.
-
-The same safety-score signal can be surfaced to drivers through an in-vehicle ADS dashboard, as shown in the EIT2026 paper mockup below.
-
-![SafeDriver-IQ ADS Dashboard](docs/images/safedriver_iq_ads_dashboard.png)
-
-#### Phase 2: PRISM (ASCE2027)
-
-![PRISM Phase 2 Flyer](docs/flyers/prism_phase2_flyer.png)
-
-Phase 2 extends the foundation into an agentic multi-model architecture with environmental, trajectory, and VRU risk models fused by a DQN agent. PRISM was validated across nuScenes, Argoverse 2, and Waymo WOMD, achieving a mean safety score of 68/100 with 77.6% of scenarios classified as advisory.
-
-#### Phase 3: PRISM-AR (IEEE TVT)
-
-![PRISM-AR Phase 3 Flyer](docs/flyers/prism_ar_flyer.png)
-
-Phase 3 maps PRISM's fused risk state to risk-adaptive AR cues for pedestrians and cyclists. It was evaluated on 231 scenario clips across three public AV datasets plus synthetic near-miss cases, improving proxy tier accuracy from 0.43 (static eHMI) to 0.71 (PRISM-AR) and achieving Spearman cue-risk monotonicity ρ = -0.703.
 
 ## Key Innovations
 
