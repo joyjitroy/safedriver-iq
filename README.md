@@ -1212,11 +1212,22 @@ Phase 2 and Phase 3 extend this impact from human-driven vehicles to autonomous 
 
 ## Contributing
 
-This is a research project. For questions or collaboration:
-- Phase 1: Review [notebooks/04_crash_factor_investigation.ipynb](notebooks/04_crash_factor_investigation.ipynb) and run `phase1-safedriver-iq/demo_quick.py`
-- Phase 2: See [phase2-prism/README.md](phase2-prism/README.md), run `.venv/bin/python -m sdiq.main run`
-- Phase 3: See [phase3-prism-ar/README.md](phase3-prism-ar/README.md), run `scripts/run_prism_ar_real_data.py`
-- Check issues for planned features across all phases
+| Phase | Where to start |
+|---|---|
+| Phase 1 | Review [notebooks/04_crash_factor_investigation.ipynb](notebooks/04_crash_factor_investigation.ipynb) and run `phase1-safedriver-iq/demo_quick.py` |
+| Phase 2 | See [phase2-prism/README.md](phase2-prism/README.md) and run `.venv/bin/python -m sdiq.main run` |
+| Phase 3 | See [phase3-prism-ar/README.md](phase3-prism-ar/README.md) and run `scripts/run_prism_ar_real_data.py` |
+| All phases | Check the issues tab for planned features and collaboration ideas |
+
+## Authors
+
+| Author | Affiliation / Role | Phases |
+|---|---|---|
+| Joyjit Roy | Independent Researcher, IEEE Senior Member, Austin TX | Phase 1, 2, 3 |
+| Samaresh Kumar Singh | Independent Researcher, IEEE Senior Member, Leander TX | Phase 1, 2, 3 |
+| Sushanta Das | American Center for Mobility, Ypsilanti MI | Phase 1, 2, 3 |
+| Meng Lu | Aeolix ITS / Macau University of Science and Technology | Phase 3 |
+| Arijit Roy | Independent Researcher, Kolkata, India | Phase 3 |
 
 ## License
 
@@ -1228,6 +1239,5 @@ This is a research project. For questions or collaboration:
 - **NHTSA** for CRSS data availability
 - **Waymo, Argoverse 2, and nuScenes** teams for open autonomous-driving datasets used in Phases 2 and 3
 - **SafeDriver-IQ** novel methodology development
-- Co-authors and collaborators across all phases: Samaresh Kumar Singh, Sushanta Das, Meng Lu, and Arijit Roy
 - Python scientific computing community (pandas, scikit-learn, etc.)
 
