@@ -1,4 +1,6 @@
-# Vehicle Safety Research: Multi-Phase Research Framework for Proactive Vehicle Safety and VRU-Aware Risk Communication
+<h1 style="color:blue;">
+Vehicle Safety Research: Multi-Phase Research Framework for Proactive Vehicle Safety and VRU-Aware Risk Communication
+</h1>
 
 **Tagline:** *"From Crash Prediction to Proactive, Explainable Safety Intelligence"*
 
